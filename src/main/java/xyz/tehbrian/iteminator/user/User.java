@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import xyz.tehbrian.iteminator.Permissions;
-import xyz.tehbrian.yetanothersigneditor.Constants;
 
 import java.util.Objects;
 import java.util.UUID;
