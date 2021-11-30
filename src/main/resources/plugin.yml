@@ -1,0 +1,22 @@
+name: Iteminator
+description: A modern, concise item editing plugin.
+authors: [ TehBrian ]
+website: https://github.com/TehBrian/Iteminator
+
+version: ${version}
+main: xyz.tehbrian.iteminator.Iteminator
+api-version: 1.17
+
+permissions:
+  iteminator.color:
+    description: Permission to color text.
+    default: true
+  iteminator.color.minimessage:
+    description: Permission to use the MiniMessage format type.
+    default: op
+  iteminator.color.legacy:
+    description: Permission to use the Legacy format type.
+    default: true
+  iteminator.reload:
+    description: Permission to run /iteminator reload.
+    default: op
