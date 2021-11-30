@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import xyz.tehbrian.iteminator.command.CommandService;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.UserService;
-import xyz.tehbrian.yetanothersigneditor.command.CommandService;
 
 public class SingletonModule extends AbstractModule {
 

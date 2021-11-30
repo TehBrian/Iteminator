@@ -20,6 +20,9 @@ repositories {
     maven("https://repo.thbn.me/snapshots/") {
         name = "thbn-snapshots"
     }
+    maven("https://repo.broccol.ai/snapshots/") {
+        name = "broccolai-snapshots"
+    }
 }
 
 dependencies {
@@ -35,6 +38,7 @@ dependencies {
     implementation("cloud.commandframework:cloud-minecraft-extras:1.5.0")
 
     implementation("dev.tehbrian:tehlib-paper:0.1.0-SNAPSHOT")
+    implementation("broccolai.corn:corn-minecraft-paper:3.0.0-SNAPSHOT")
 }
 
 tasks {
