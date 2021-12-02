@@ -9,6 +9,8 @@
 
 main: "Yoo!\nVery cool!"
 
+todo: "placeholder lol"
+
 reload:
   successful: "<aqua>The configuration has been successfully reloaded."
   unsuccessful: "<red>Failed to load configuration, please check the console."
