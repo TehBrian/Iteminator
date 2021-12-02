@@ -102,7 +102,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cLoreSet = cLore.literal("set")
                 .meta(CommandMeta.DESCRIPTION, "Set a specific line of lore.")
-                .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0))
+                .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
                 .argument(StringArgument.greedy("text"))
                 .senderType(Player.class)
                 .handler(c -> {
@@ -123,7 +123,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cLoreRemove = cLore.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a specific line of lore.")
-                .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0))
+                .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
