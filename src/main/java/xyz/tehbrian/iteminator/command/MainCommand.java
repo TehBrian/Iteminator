@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
 import xyz.tehbrian.iteminator.FormatUtil;
 import xyz.tehbrian.iteminator.Iteminator;
@@ -21,7 +22,10 @@ import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.UserService;
 
-import java.util.function.UnaryOperator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
@@ -42,12 +46,12 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
     @Override
     public void register(final @NonNull PaperCommandManager<CommandSender> commandManager) {
-        final var main = commandManager.commandBuilder("iteminator", ArgumentDescription.of("The main command for Iteminator."))
+        final var cMain = commandManager.commandBuilder("iteminator", ArgumentDescription.of("The main command for Iteminator."))
                 .handler(c -> {
                     c.getSender().sendMessage(this.langConfig.c(NodePath.path("main")));
                 });
 
-        final var reload = main.literal("reload")
+        final var cReload = cMain.literal("reload")
                 .meta(CommandMeta.DESCRIPTION, "Reloads the plugin's config.")
                 .permission(Permissions.RELOAD)
                 .handler(c -> {
@@ -58,36 +62,101 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     }
                 });
 
-        final var name = main.literal("name")
+        final var cName = cMain.literal("name")
                 .meta(CommandMeta.DESCRIPTION, "Sets the name.")
-                .argument(StringArgument.greedy("name"))
+                .argument(StringArgument.greedy("text"))
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-
-                    this.replaceItemInMainHand(
-                            i -> PaperItemBuilder.of(i).name(this.translateWithUserFormat(c.get("name"), sender)).build(),
-                            sender
-                    );
+                    this.modify(sender, b -> b.name(this.translateWithUserFormat(c.get("text"), sender)));
                 });
 
-        final var amount = main.literal("amount")
+        final var cAmount = cMain.literal("amount")
                 .meta(CommandMeta.DESCRIPTION, "Sets the amount.")
                 .argument(IntegerArgument.of("amount"))
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-
-                    this.replaceItemInMainHand(
-                            i -> PaperItemBuilder.of(i).amount(c.get("amount")).build(),
-                            sender
-                    );
+                    this.modify(sender, b -> b.amount(c.get("amount")));
                 });
 
-        commandManager.command(main)
-                .command(reload)
-                .command(name)
-                .command(amount);
+        final var cLore = cMain.literal("lore")
+                .meta(CommandMeta.DESCRIPTION, "Lore-related commands.");
+
+        final var cLoreAdd = cLore.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a line of lore.")
+                .argument(StringArgument.greedy("text"))
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> {
+                        final @NonNull List<Component> lore = Optional
+                                .ofNullable(b.lore())
+                                .map(ArrayList::new)
+                                .orElse(new ArrayList<>());
+
+                        lore.add(this.translateWithUserFormat(c.get("text"), sender));
+                        return b.lore(lore);
+                    });
+                });
+
+        final var cLoreSet = cLore.literal("set")
+                .meta(CommandMeta.DESCRIPTION, "Set a specific line of lore.")
+                .argument(IntegerArgument.of("line"))
+                .argument(StringArgument.greedy("text"))
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> {
+                        final @Nullable List<Component> lore = b.lore();
+
+                        final int line = c.get("line");
+                        if (lore == null || lore.size() <= line) {
+                            sender.sendMessage(this.langConfig.c(NodePath.path("todo")));
+                            return null;
+                        }
+
+                        lore.set(line, this.translateWithUserFormat(c.get("text"), sender));
+                        return b.lore(lore);
+                    });
+                });
+
+        final var cLoreRemove = cLore.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove a specific line of lore.")
+                .argument(IntegerArgument.of("line"))
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> {
+                        final @Nullable List<Component> lore = b.lore();
+
+                        final int line = c.get("line");
+                        if (lore == null || lore.size() <= line) {
+                            sender.sendMessage(this.langConfig.c(NodePath.path("todo")));
+                            return null;
+                        }
+
+                        lore.remove(line);
+                        return b.lore(lore);
+                    });
+                });
+
+        final var cLoreClear = cLore.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the lore.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.lore(new ArrayList<>()));
+                });
+
+        commandManager.command(cMain)
+                .command(cReload)
+                .command(cName)
+                .command(cAmount)
+                .command(cLoreAdd)
+                .command(cLoreSet)
+                .command(cLoreRemove)
+                .command(cLoreClear);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
@@ -97,13 +166,45 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         };
     }
 
-    private void replaceItemInMainHand(final @NonNull UnaryOperator<@NonNull ItemStack> operator, final @NonNull Player player) {
+    /**
+     * Applies the given operator to the item in the player's main hand.
+     * If the operator returns null, nothing will happen to the item.
+     *
+     * @param player   which player to target
+     * @param operator the operator to apply to the item in the main hand
+     */
+    private void modify(
+            final @NonNull Player player, final @NonNull Function<@NonNull PaperItemBuilder, @Nullable PaperItemBuilder> operator
+    ) {
+        modifyItem(player, i -> {
+            final @Nullable PaperItemBuilder modifiedBuilder = operator.apply(PaperItemBuilder.of(i));
+            if (modifiedBuilder == null) {
+                return null;
+            }
+            return modifiedBuilder.build();
+        });
+    }
+
+    /**
+     * Applies the given operator to the item in the player's main hand.
+     * If the operator returns null, nothing will happen to the item.
+     *
+     * @param player   which player to target
+     * @param operator the operator to apply to the item in the main hand
+     */
+    private void modifyItem(
+            final @NonNull Player player, final @NonNull Function<@NonNull ItemStack, @Nullable ItemStack> operator
+    ) {
         final @NonNull PlayerInventory inventory = player.getInventory();
         final @NonNull ItemStack item = inventory.getItemInMainHand();
-        if (item.getItemMeta() == null) {
+        if (item.getItemMeta() == null) { // if it's air and therefore cannot be modified
             return;
         }
-        inventory.setItemInMainHand(operator.apply(item));
+        final var modifiedItem = operator.apply(item);
+        if (modifiedItem == null) {
+            return;
+        }
+        inventory.setItemInMainHand(modifiedItem);
     }
 
 }
