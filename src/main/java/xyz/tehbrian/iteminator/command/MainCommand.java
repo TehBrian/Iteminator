@@ -27,6 +27,7 @@ import xyz.tehbrian.iteminator.user.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -179,9 +180,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> {
-                        return b/*.enchants(Map.of()) blocked due to BROCOLI*/;
-                    });
+                    this.modify(sender, b -> b.enchants(Map.of()));
                 });
 
         final var cUnbreakable = cMain.literal("unbreakable")
