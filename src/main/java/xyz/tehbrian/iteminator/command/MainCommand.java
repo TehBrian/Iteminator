@@ -2,14 +2,17 @@ package xyz.tehbrian.iteminator.command;
 
 import broccolai.corn.paper.item.PaperItemBuilder;
 import cloud.commandframework.ArgumentDescription;
+import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -24,6 +27,7 @@ import xyz.tehbrian.iteminator.user.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -64,8 +68,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cName = cMain.literal("name")
                 .meta(CommandMeta.DESCRIPTION, "Sets the name.")
-                .argument(StringArgument.greedy("text"))
                 .senderType(Player.class)
+                .argument(StringArgument.greedy("text"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> b.name(this.translateWithUserFormat(c.get("text"), sender)));
@@ -73,8 +77,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cAmount = cMain.literal("amount")
                 .meta(CommandMeta.DESCRIPTION, "Sets the amount.")
-                .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
                 .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> b.amount(c.get("amount")));
@@ -85,8 +89,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cLoreAdd = cLore.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a line of lore.")
-                .argument(StringArgument.greedy("text"))
                 .senderType(Player.class)
+                .argument(StringArgument.greedy("text"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> {
@@ -102,9 +106,9 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cLoreSet = cLore.literal("set")
                 .meta(CommandMeta.DESCRIPTION, "Set a specific line of lore.")
+                .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
                 .argument(StringArgument.greedy("text"))
-                .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> {
@@ -123,8 +127,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cLoreRemove = cLore.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a specific line of lore.")
-                .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
                 .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> {
@@ -149,6 +153,45 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.lore(new ArrayList<>()));
                 });
 
+        final var cEnchantment = cMain.literal("enchantment")
+                .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.");
+
+        final var cEnchantmentAdd = cEnchantment.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
+                .senderType(Player.class)
+                .argument(EnchantmentArgument.of("type"))
+                .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.addEnchant(c.get("type"), c.get("level")));
+                });
+
+        final var cEnchantmentRemove = cEnchantment.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove an enchantment.")
+                .senderType(Player.class)
+                .argument(EnchantmentArgument.of("type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.removeEnchant(c.<Enchantment>get("type")));
+                });
+
+        final var cEnchantmentClear = cEnchantment.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the enchantments.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.enchants(Map.of()));
+                });
+
+        final var cUnbreakable = cMain.literal("unbreakable")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the item is unbreakable.")
+                .senderType(Player.class)
+                .argument(BooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.unbreakable(c.get("boolean")));
+                });
+
         commandManager.command(cMain)
                 .command(cReload)
                 .command(cName)
@@ -156,7 +199,11 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(cLoreAdd)
                 .command(cLoreSet)
                 .command(cLoreRemove)
-                .command(cLoreClear);
+                .command(cLoreClear)
+                .command(cEnchantmentAdd)
+                .command(cEnchantmentRemove)
+                .command(cEnchantmentClear)
+                .command(cUnbreakable);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
@@ -197,7 +244,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
     ) {
         final @NonNull PlayerInventory inventory = player.getInventory();
         final @NonNull ItemStack item = inventory.getItemInMainHand();
-        if (item.getItemMeta() == null) { // if it's air and therefore cannot be modified
+        if (item.getItemMeta() == null) { // it's air and therefore cannot be modified
             return;
         }
         final var modifiedItem = operator.apply(item);
