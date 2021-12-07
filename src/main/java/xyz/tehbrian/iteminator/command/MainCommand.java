@@ -3,9 +3,11 @@ package xyz.tehbrian.iteminator.command;
 import broccolai.corn.paper.item.PaperItemBuilder;
 import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
+import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
+import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
@@ -14,6 +16,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -27,7 +30,6 @@ import xyz.tehbrian.iteminator.user.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -150,7 +152,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.lore(new ArrayList<>()));
+                    this.modify(sender, b -> b.lore(new ArrayList<>())); // TODO: replace with null if corn pr gets merged
                 });
 
         final var cEnchantment = cMain.literal("enchantment")
@@ -163,7 +165,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.addEnchant(c.get("type"), c.get("level")));
+                    this.modify(sender, b -> b.addEnchant(c.get("type"), c.<Integer>get("level")));
                 });
 
         final var cEnchantmentRemove = cEnchantment.literal("remove")
@@ -180,7 +182,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.enchants(Map.of()));
+                    this.modify(sender, b -> b.enchants(null));
                 });
 
         final var cUnbreakable = cMain.literal("unbreakable")
@@ -190,6 +192,44 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> b.unbreakable(c.get("boolean")));
+                });
+
+        final var cMaterial = cMain.literal("material")
+                .meta(CommandMeta.DESCRIPTION, "Set the material of the item.")
+                .senderType(Player.class)
+                .argument(MaterialArgument.of("material"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.material(c.get("material")));
+                });
+
+        final var cFlags = cMain.literal("flags")
+                .meta(CommandMeta.DESCRIPTION, "Flag-related commands.");
+
+        final var cFlagsAdd = cFlags.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a flag.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(ItemFlag.class, "flag"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.addFlag(c.<ItemFlag>get("flag")));
+                });
+
+        final var cFlagsRemove = cFlags.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove a flag.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(ItemFlag.class, "flag"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.removeFlag(c.<ItemFlag>get("flag")));
+                });
+
+        final var cFlagsClear = cFlags.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the flags.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b/*.flags(null) waiting for corn*/);
                 });
 
         commandManager.command(cMain)
@@ -203,7 +243,11 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(cEnchantmentAdd)
                 .command(cEnchantmentRemove)
                 .command(cEnchantmentClear)
-                .command(cUnbreakable);
+                .command(cUnbreakable)
+                .command(cMaterial)
+                .command(cFlagsAdd)
+                .command(cFlagsRemove)
+                .command(cFlagsClear);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
