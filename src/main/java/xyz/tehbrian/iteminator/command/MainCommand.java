@@ -125,7 +125,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
                         final int line = c.get("line");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("todo")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("no_line")));
                             return null;
                         }
 
@@ -145,7 +145,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
                         final int line = c.get("line");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("todo")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("no_line")));
                             return null;
                         }
 
@@ -320,7 +320,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         return this.langConfig.c(
                 NodePath.path("wrong_type"),
                 TemplateResolver.templates(Template.template(
-                        "types", String.join(", ", requiredTypes.stream().map(Enum::toString).toList())
+                        "type", String.join(", ", requiredTypes.stream().map(Enum::toString).toList())
                 ))
         );
     }
