@@ -1,6 +1,8 @@
 package xyz.tehbrian.iteminator.command;
 
+import broccolai.corn.paper.item.AbstractPaperItemBuilder;
 import broccolai.corn.paper.item.PaperItemBuilder;
+import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
@@ -13,9 +15,14 @@ import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -152,7 +159,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.lore(new ArrayList<>())); // TODO: replace with null if corn pr gets merged
+                    this.modify(sender, b -> b.lore((List<Component>) null)); // :)
                 });
 
         final var cEnchantment = cMain.literal("enchantment")
@@ -229,7 +236,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b/*.flags(null) waiting for corn*/);
+                    this.modify(sender, b -> b.flags(null));
                 });
 
         commandManager.command(cMain)
@@ -248,6 +255,58 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(cFlagsAdd)
                 .command(cFlagsRemove)
                 .command(cFlagsClear);
+
+        final var cSpecial = cMain.literal("special")
+                .meta(CommandMeta.DESCRIPTION, "Commands special to a specific item type.");
+
+        final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.");
+
+        final var sTropicalFishBucketPattern = sTropicalFishBucket.literal("pattern")
+                .meta(CommandMeta.DESCRIPTION, "Set the pattern.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(TropicalFish.Pattern.class, "pattern"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.pattern(c.get("pattern")),
+                            TropicalFishBucketBuilder::of,
+                            List.of(Material.TROPICAL_FISH_BUCKET)
+                    );
+                });
+
+        final var sTropicalFishBucketBodyColor = sTropicalFishBucket.literal("body-color")
+                .meta(CommandMeta.DESCRIPTION, "Set the body color.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(DyeColor.class, "body-color"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.bodyColor(c.get("body-color")),
+                            TropicalFishBucketBuilder::of,
+                            List.of(Material.TROPICAL_FISH_BUCKET)
+                    );
+                });
+
+        final var sTropicalFishBucketPatternColor = sTropicalFishBucket.literal("pattern-color")
+                .meta(CommandMeta.DESCRIPTION, "Set the pattern color.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(DyeColor.class, "pattern-color"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.patternColor(c.get("pattern-color")),
+                            TropicalFishBucketBuilder::of,
+                            List.of(Material.TROPICAL_FISH_BUCKET)
+                    );
+                });
+
+        commandManager.command(sTropicalFishBucketPattern);
+        commandManager.command(sTropicalFishBucketBodyColor);
+        commandManager.command(sTropicalFishBucketPatternColor);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
@@ -257,11 +316,50 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         };
     }
 
+    private @NonNull Component wrongTypeMessage(final List<Material> requiredTypes) {
+        return this.langConfig.c(
+                NodePath.path("wrong_type"),
+                TemplateResolver.templates(Template.template(
+                        "types", String.join(", ", requiredTypes.stream().map(Enum::toString).toList())
+                ))
+        );
+    }
+
+    /**
+     * I am most certainly going to the deepest, darkest level of programmer hell
+     * for this terribleness. At least I don't have to re-type the same thing
+     * everywhere! \_o¬o_/
+     *
+     * @param player        the player to target
+     * @param operator      the operator to apply to the item in the main hand
+     * @param requiredTypes the required types
+     * @param <T>           the builder type
+     */
+    private <T extends AbstractPaperItemBuilder<?, ?>> void modifySpecial(
+            final @NonNull Player player, final @NonNull Function<@NonNull T, @Nullable T> operator,
+            final Function<ItemStack, T> builderCreator, final List<Material> requiredTypes
+    ) {
+        modifyItem(player, i -> {
+            final @NonNull T builder;
+            try {
+                builder = builderCreator.apply(i);
+            } catch (final IllegalArgumentException e) {
+                player.sendMessage(this.wrongTypeMessage(requiredTypes));
+                return null;
+            }
+            final @Nullable T modifiedBuilder = operator.apply(builder);
+            if (modifiedBuilder == null) {
+                return null;
+            }
+            return modifiedBuilder.build();
+        });
+    }
+
     /**
      * Applies the given operator to the item in the player's main hand.
      * If the operator returns null, nothing will happen to the item.
      *
-     * @param player   which player to target
+     * @param player   the player to target
      * @param operator the operator to apply to the item in the main hand
      */
     private void modify(
@@ -280,7 +378,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
      * Applies the given operator to the item in the player's main hand.
      * If the operator returns null, nothing will happen to the item.
      *
-     * @param player   which player to target
+     * @param player   the player to target
      * @param operator the operator to apply to the item in the main hand
      */
     private void modifyItem(

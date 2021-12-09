@@ -8,7 +8,7 @@
 # https://chat.tehbrian.xyz
 
 main: "Yoo!\nVery cool!"
-
+wrong_type: "The item must be of type <types>."
 todo: "placeholder lol"
 
 reload:
