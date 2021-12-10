@@ -60,12 +60,10 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
     @Override
     public void register(final @NonNull PaperCommandManager<CommandSender> commandManager) {
         final var cMain = commandManager.commandBuilder("iteminator", ArgumentDescription.of("The main command for Iteminator."))
-                .handler(c -> {
-                    c.getSender().sendMessage(this.langConfig.c(NodePath.path("main")));
-                });
+                .handler(c -> c.getSender().sendMessage(this.langConfig.c(NodePath.path("main"))));
 
         final var cReload = cMain.literal("reload")
-                .meta(CommandMeta.DESCRIPTION, "Reloads the plugin's config.")
+                .meta(CommandMeta.DESCRIPTION, "Reload the plugin's config.")
                 .permission(Permissions.RELOAD)
                 .handler(c -> {
                     if (this.iteminator.loadConfiguration()) {
@@ -76,7 +74,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cName = cMain.literal("name")
-                .meta(CommandMeta.DESCRIPTION, "Sets the name.")
+                .meta(CommandMeta.DESCRIPTION, "Set the name.")
                 .senderType(Player.class)
                 .argument(StringArgument.greedy("text"))
                 .handler(c -> {
@@ -85,7 +83,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cAmount = cMain.literal("amount")
-                .meta(CommandMeta.DESCRIPTION, "Sets the amount.")
+                .meta(CommandMeta.DESCRIPTION, "Set the amount.")
                 .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
                 .handler(c -> {
@@ -279,12 +277,12 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sTropicalFishBucketBodyColor = sTropicalFishBucket.literal("body-color")
                 .meta(CommandMeta.DESCRIPTION, "Set the body color.")
                 .senderType(Player.class)
-                .argument(EnumArgument.of(DyeColor.class, "body-color"))
+                .argument(EnumArgument.of(DyeColor.class, "body_color"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.bodyColor(c.get("body-color")),
+                            b -> b.bodyColor(c.get("body_color")),
                             TropicalFishBucketBuilder::of,
                             List.of(Material.TROPICAL_FISH_BUCKET)
                     );
@@ -293,12 +291,12 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sTropicalFishBucketPatternColor = sTropicalFishBucket.literal("pattern-color")
                 .meta(CommandMeta.DESCRIPTION, "Set the pattern color.")
                 .senderType(Player.class)
-                .argument(EnumArgument.of(DyeColor.class, "pattern-color"))
+                .argument(EnumArgument.of(DyeColor.class, "pattern_color"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.patternColor(c.get("pattern-color")),
+                            b -> b.patternColor(c.get("pattern_color")),
                             TropicalFishBucketBuilder::of,
                             List.of(Material.TROPICAL_FISH_BUCKET)
                     );
