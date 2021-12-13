@@ -8,14 +8,14 @@ main: xyz.tehbrian.iteminator.Iteminator
 api-version: 1.17
 
 permissions:
-  iteminator.color:
-    description: Permission to color text.
+  iteminator.format:
+    description: Permission to format text.
     default: true
-  iteminator.color.minimessage:
-    description: Permission to use the MiniMessage format type.
+  iteminator.format.minimessage:
+    description: Permission to use the MiniMessage formatting type.
     default: op
-  iteminator.color.legacy:
-    description: Permission to use the Legacy format type.
+  iteminator.format.legacy:
+    description: Permission to use the Legacy formatting type.
     default: true
   iteminator.reload:
     description: Permission to run /iteminator reload.

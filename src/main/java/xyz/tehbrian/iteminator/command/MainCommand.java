@@ -33,6 +33,7 @@ import xyz.tehbrian.iteminator.FormatUtil;
 import xyz.tehbrian.iteminator.Iteminator;
 import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.config.LangConfig;
+import xyz.tehbrian.iteminator.user.User;
 import xyz.tehbrian.iteminator.user.UserService;
 
 import java.util.ArrayList;
@@ -72,6 +73,36 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                         c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "unsuccessful")));
                     }
                 });
+
+        final var cFormat = cMain.literal("format", ArgumentDescription.of("Toggle your ability to format text."))
+                .permission(Permissions.FORMAT)
+                .senderType(Player.class)
+                .handler(c -> {
+                    final Player sender = (Player) c.getSender();
+                    if (this.userService.getUser(sender).toggleFormatEnabled()) {
+                        sender.sendMessage(this.langConfig.c(NodePath.path("format", "enabled")));
+                    } else {
+                        sender.sendMessage(this.langConfig.c(NodePath.path("format", "disabled")));
+                    }
+                });
+
+        final var cFormatFormattingType = cFormat
+                .argument(EnumArgument.of(User.FormattingType.class, "formatting_type"))
+                .handler(c -> {
+                    final @NonNull Player player = (Player) c.getSender();
+                    final User.@NonNull FormattingType formattingType = c.get("formatting_type");
+
+                    this.userService.getUser(player).formattingType(formattingType);
+                    player.sendMessage(this.langConfig.c(
+                            NodePath.path("format", "set"),
+                            TemplateResolver.templates(Template.template("formatting_type", formattingType.toString()))
+                    ));
+                });
+
+        commandManager.command(cMain)
+                .command(cReload)
+                .command(cFormat)
+                .command(cFormatFormattingType);
 
         final var cName = cMain.literal("name")
                 .meta(CommandMeta.DESCRIPTION, "Set the name.")
@@ -237,8 +268,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.flags(null));
                 });
 
-        commandManager.command(cMain)
-                .command(cReload)
+        commandManager
                 .command(cName)
                 .command(cAmount)
                 .command(cLoreAdd)
