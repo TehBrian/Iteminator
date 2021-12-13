@@ -12,14 +12,13 @@ main: |-
   <#333344>I| <#FFEEFF>Running version <#88EEFF><version></#88EEFF>
   <#333344>I| <#FFEEFF>Made with <#DD5577><3</#DD5577> by <#88EEFF>TehBrian</#88EEFF>
 wrong_type: "<#44BBDD>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
-no_line: "<#44BBDD>I| <#DD5577>That line is out of bounds."
+wrong_line: "<#44BBDD>I| <#DD5577>That line is out of bounds."
 
 format:
-  enabled: "<#44BBDD>I| <#FFEEFF>Enabled text formatting."
-  disabled: "<#44BBDD>I| <#FFEEFF>Disabled text formatting."
+  enable: "<#44BBDD>I| <#FFEEFF>Enabled text formatting."
+  disable: "<#44BBDD>I| <#FFEEFF>Disabled text formatting."
   set: "<#44BBDD>I| <#FFEEFF>Set your formatting type to <#88EEFF><formatting_type></#88EEFF>."
 
 reload:
-  successful: "<#44BBDD>I| <#FFEEFF>The configuration has been successfully reloaded."
-  unsuccessful: "<#44BBDD>I| <#DD5577>Failed to load configuration, please check the console."
-
+  success: "<#44BBDD>I| <#FFEEFF>The configuration has been successfully reloaded."
+  fail: "<#44BBDD>I| <#DD5577>Failed to load configuration, please check the console."

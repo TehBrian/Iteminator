@@ -68,9 +68,9 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .permission(Permissions.RELOAD)
                 .handler(c -> {
                     if (this.iteminator.loadConfiguration()) {
-                        c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "successful")));
+                        c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "success")));
                     } else {
-                        c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "unsuccessful")));
+                        c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "fail")));
                     }
                 });
 
@@ -80,9 +80,9 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .handler(c -> {
                     final Player sender = (Player) c.getSender();
                     if (this.userService.getUser(sender).toggleFormatEnabled()) {
-                        sender.sendMessage(this.langConfig.c(NodePath.path("format", "enabled")));
+                        sender.sendMessage(this.langConfig.c(NodePath.path("format", "enable")));
                     } else {
-                        sender.sendMessage(this.langConfig.c(NodePath.path("format", "disabled")));
+                        sender.sendMessage(this.langConfig.c(NodePath.path("format", "disable")));
                     }
                 });
 
@@ -154,7 +154,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
                         final int line = c.get("line");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("no_line")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("wrong_line")));
                             return null;
                         }
 
@@ -174,7 +174,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
                         final int line = c.get("line");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("no_line")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("wrong_line")));
                             return null;
                         }
 
@@ -188,7 +188,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.lore((List<Component>) null)); // :)
+                    this.modify(sender, b -> b.lore((List<Component>) null)); // TODO: replace with null once corn pr gets merged
                 });
 
         final var cEnchantment = cMain.literal("enchantment")
