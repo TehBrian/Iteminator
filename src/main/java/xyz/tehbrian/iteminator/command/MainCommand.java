@@ -108,6 +108,24 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(cFormat)
                 .command(cFormatFormattingType);
 
+        final var cAmount = cMain.literal("amount")
+                .meta(CommandMeta.DESCRIPTION, "Set the amount.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.amount(c.get("amount")));
+                });
+
+        final var cMaterial = cMain.literal("material")
+                .meta(CommandMeta.DESCRIPTION, "Set the material of the item.")
+                .senderType(Player.class)
+                .argument(MaterialArgument.of("material"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modify(sender, b -> b.material(c.get("material")));
+                });
+
         final var cName = cMain.literal("name")
                 .meta(CommandMeta.DESCRIPTION, "Set the name.")
                 .senderType(Player.class)
@@ -117,14 +135,19 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.name(this.translateWithUserFormat(c.get("text"), sender)));
                 });
 
-        final var cAmount = cMain.literal("amount")
-                .meta(CommandMeta.DESCRIPTION, "Set the amount.")
+        final var cUnbreakable = cMain.literal("unbreakable")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the item is unbreakable.")
                 .senderType(Player.class)
-                .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.amount(c.get("amount")));
+                    this.modify(sender, b -> b.unbreakable(c.get("boolean")));
                 });
+
+        commandManager.command(cAmount)
+                .command(cMaterial)
+                .command(cName)
+                .command(cUnbreakable);
 
         final var cLore = cMain.literal("lore")
                 .meta(CommandMeta.DESCRIPTION, "Lore-related commands.");
@@ -225,24 +248,6 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.enchants(null));
                 });
 
-        final var cUnbreakable = cMain.literal("unbreakable")
-                .meta(CommandMeta.DESCRIPTION, "Set whether the item is unbreakable.")
-                .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.unbreakable(c.get("boolean")));
-                });
-
-        final var cMaterial = cMain.literal("material")
-                .meta(CommandMeta.DESCRIPTION, "Set the material of the item.")
-                .senderType(Player.class)
-                .argument(MaterialArgument.of("material"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.material(c.get("material")));
-                });
-
         final var cFlags = cMain.literal("flags")
                 .meta(CommandMeta.DESCRIPTION, "Flag-related commands.");
 
@@ -273,8 +278,6 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         commandManager
-                .command(cName)
-                .command(cAmount)
                 .command(cLoreAdd)
                 .command(cLoreSet)
                 .command(cLoreRemove)
@@ -282,8 +285,6 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(cEnchantmentAdd)
                 .command(cEnchantmentRemove)
                 .command(cEnchantmentClear)
-                .command(cUnbreakable)
-                .command(cMaterial)
                 .command(cFlagsAdd)
                 .command(cFlagsRemove)
                 .command(cFlagsClear);
@@ -336,9 +337,9 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     );
                 });
 
-        commandManager.command(sTropicalFishBucketPattern);
-        commandManager.command(sTropicalFishBucketBodyColor);
-        commandManager.command(sTropicalFishBucketPatternColor);
+        commandManager.command(sTropicalFishBucketPattern)
+                .command(sTropicalFishBucketBodyColor)
+                .command(sTropicalFishBucketPatternColor);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
