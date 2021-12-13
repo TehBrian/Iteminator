@@ -2,6 +2,7 @@ package xyz.tehbrian.iteminator.command;
 
 import broccolai.corn.paper.item.AbstractPaperItemBuilder;
 import broccolai.corn.paper.item.PaperItemBuilder;
+import broccolai.corn.paper.item.special.ArmorStandBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
@@ -12,6 +13,7 @@ import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
 import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.paper.PaperCommandManager;
+import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import net.kyori.adventure.text.Component;
@@ -118,7 +120,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cMaterial = cMain.literal("material")
-                .meta(CommandMeta.DESCRIPTION, "Set the material of the item.")
+                .meta(CommandMeta.DESCRIPTION, "Set the material.")
                 .senderType(Player.class)
                 .argument(MaterialArgument.of("material"))
                 .handler(c -> {
@@ -136,7 +138,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cUnbreakable = cMain.literal("unbreakable")
-                .meta(CommandMeta.DESCRIPTION, "Set whether the item is unbreakable.")
+                .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
                 .senderType(Player.class)
                 .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
@@ -340,6 +342,85 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         commandManager.command(sTropicalFishBucketPattern)
                 .command(sTropicalFishBucketBodyColor)
                 .command(sTropicalFishBucketPatternColor);
+
+        final var sArmorStand = cSpecial.literal("armor-stand")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Armor Stands.");
+
+        final var sArmorStandShowArms = sArmorStand.literal("show-arms")
+                .meta(CommandMeta.DESCRIPTION, "Set the show arms flag.")
+                .senderType(Player.class)
+                .argument(BooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.showArms(c.get("boolean")),
+                            ArmorStandBuilder::of,
+                            ArmorStandMeta.class
+                    );
+                });
+
+        final var sArmorStandInvisible = sArmorStand.literal("invisible")
+                .meta(CommandMeta.DESCRIPTION, "Set the invisible flag.")
+                .senderType(Player.class)
+                .argument(BooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.invisible(c.get("boolean")),
+                            ArmorStandBuilder::of,
+                            ArmorStandMeta.class
+                    );
+                });
+
+        final var sArmorStandMarker = sArmorStand.literal("marker")
+                .meta(CommandMeta.DESCRIPTION, "Set the marker flag.")
+                .senderType(Player.class)
+                .argument(BooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.marker(c.get("boolean")),
+                            ArmorStandBuilder::of,
+                            ArmorStandMeta.class
+                    );
+                });
+
+        final var sArmorStandNoBasePlate = sArmorStand.literal("no-base-plate")
+                .meta(CommandMeta.DESCRIPTION, "Set the no base plate flag.")
+                .senderType(Player.class)
+                .argument(BooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.noBasePlate((c.get("boolean"))),
+                            ArmorStandBuilder::of,
+                            ArmorStandMeta.class
+                    );
+                });
+
+        final var sArmorStandSmall = sArmorStand.literal("small")
+                .meta(CommandMeta.DESCRIPTION, "Set the small flag.")
+                .senderType(Player.class)
+                .argument(BooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.small(c.get("boolean")),
+                            ArmorStandBuilder::of,
+                            ArmorStandMeta.class
+                    );
+                });
+
+        commandManager.command(sArmorStandShowArms)
+                .command(sArmorStandInvisible)
+                .command(sArmorStandMarker)
+                .command(sArmorStandNoBasePlate)
+                .command(sArmorStandSmall);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
