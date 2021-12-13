@@ -338,7 +338,12 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
-        return switch (this.userService.getUser(player.getUniqueId()).formattingType()) {
+        final @NonNull User user = this.userService.getUser(player.getUniqueId());
+        if (!user.formatEnabled()) {
+            return FormatUtil.plain(string);
+        }
+
+        return switch (user.formattingType()) {
             case LEGACY -> FormatUtil.legacy(string);
             case MINI_MESSAGE -> FormatUtil.miniMessage(string);
         };
