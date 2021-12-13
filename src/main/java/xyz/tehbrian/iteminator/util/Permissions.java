@@ -1,4 +1,4 @@
-package xyz.tehbrian.iteminator;
+package xyz.tehbrian.iteminator.util;
 
 /**
  * Holds permission constants.
