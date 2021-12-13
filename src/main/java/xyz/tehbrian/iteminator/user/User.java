@@ -12,31 +12,31 @@ import java.util.UUID;
 
 public final class User extends PaperUser {
 
-    private boolean colorEnabled;
+    private boolean formatEnabled;
     private @NonNull FormattingType formattingType = FormattingType.LEGACY;
 
     public User(final @NonNull UUID uuid) {
         super(uuid);
 
         final @NonNull Player player = Objects.requireNonNull(this.getPlayer());
-        this.colorEnabled = player.hasPermission(Permissions.COLOR);
+        this.formatEnabled = player.hasPermission(Permissions.FORMAT);
     }
 
     public @Nullable Player getPlayer() {
         return Bukkit.getPlayer(this.uuid);
     }
 
-    public boolean colorEnabled() {
-        return this.colorEnabled;
+    public boolean formatEnabled() {
+        return this.formatEnabled;
     }
 
-    public void colorEnabled(final boolean colorEnabled) {
-        this.colorEnabled = colorEnabled;
+    public void formatEnabled(final boolean formatEnabled) {
+        this.formatEnabled = formatEnabled;
     }
 
-    public boolean toggleColorEnabled() {
-        this.colorEnabled(!this.colorEnabled());
-        return this.colorEnabled();
+    public boolean toggleFormatEnabled() {
+        this.formatEnabled(!this.formatEnabled());
+        return this.formatEnabled();
     }
 
     public @NonNull FormattingType formattingType() {
