@@ -1,5 +1,6 @@
 package xyz.tehbrian.iteminator.util;
 
+import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
@@ -18,6 +19,7 @@ public class ItemMetaToRequiredTypes {
     static {
         converter = new HashMap<>();
         converter.put(TropicalFishBucketMeta.class, List.of(Material.TROPICAL_FISH_BUCKET));
+        converter.put(ArmorStandMeta.class, List.of(Material.ARMOR_STAND));
     }
 
     private ItemMetaToRequiredTypes() {
