@@ -31,13 +31,13 @@ import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
-import xyz.tehbrian.iteminator.FormatUtil;
-import xyz.tehbrian.iteminator.ItemMetaToRequiredTypes;
 import xyz.tehbrian.iteminator.Iteminator;
-import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.User;
 import xyz.tehbrian.iteminator.user.UserService;
+import xyz.tehbrian.iteminator.util.FormatUtil;
+import xyz.tehbrian.iteminator.util.ItemMetaToRequiredTypes;
+import xyz.tehbrian.iteminator.util.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;

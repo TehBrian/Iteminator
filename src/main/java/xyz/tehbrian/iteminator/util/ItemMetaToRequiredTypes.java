@@ -1,4 +1,4 @@
-package xyz.tehbrian.iteminator;
+package xyz.tehbrian.iteminator.util;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
