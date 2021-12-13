@@ -26,10 +26,13 @@ import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
 import xyz.tehbrian.iteminator.FormatUtil;
+import xyz.tehbrian.iteminator.ItemMetaToRequiredTypes;
 import xyz.tehbrian.iteminator.Iteminator;
 import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.config.LangConfig;
@@ -38,6 +41,7 @@ import xyz.tehbrian.iteminator.user.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -300,7 +304,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             sender,
                             b -> b.pattern(c.get("pattern")),
                             TropicalFishBucketBuilder::of,
-                            List.of(Material.TROPICAL_FISH_BUCKET)
+                            TropicalFishBucketMeta.class
                     );
                 });
 
@@ -314,7 +318,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             sender,
                             b -> b.bodyColor(c.get("body_color")),
                             TropicalFishBucketBuilder::of,
-                            List.of(Material.TROPICAL_FISH_BUCKET)
+                            TropicalFishBucketMeta.class
                     );
                 });
 
@@ -328,7 +332,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             sender,
                             b -> b.patternColor(c.get("pattern_color")),
                             TropicalFishBucketBuilder::of,
-                            List.of(Material.TROPICAL_FISH_BUCKET)
+                            TropicalFishBucketMeta.class
                     );
                 });
 
@@ -349,7 +353,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         };
     }
 
-    private @NonNull Component wrongTypeMessage(final List<Material> requiredTypes) {
+    private @NonNull Component generateWrongTypeMessage(final List<Material> requiredTypes) {
         return this.langConfig.c(
                 NodePath.path("wrong_type"),
                 TemplateResolver.templates(Template.template(
@@ -363,21 +367,24 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
      * for this terribleness. At least I don't have to re-type the same thing
      * everywhere! \_o¬o_/
      *
-     * @param player        the player to target
-     * @param operator      the operator to apply to the item in the main hand
-     * @param requiredTypes the required types
-     * @param <T>           the builder type
+     * @param player   the player to target
+     * @param operator the operator to apply to the item in the main hand
+     * @param metaType the meta type to get the required types from
+     * @param <T>      the builder type
      */
     private <T extends AbstractPaperItemBuilder<?, ?>> void modifySpecial(
             final @NonNull Player player, final @NonNull Function<@NonNull T, @Nullable T> operator,
-            final Function<ItemStack, T> builderCreator, final List<Material> requiredTypes
+            final Function<ItemStack, T> builderCreator, final Class<? extends ItemMeta> metaType
     ) {
         modifyItem(player, i -> {
             final @NonNull T builder;
             try {
                 builder = builderCreator.apply(i);
             } catch (final IllegalArgumentException e) {
-                player.sendMessage(this.wrongTypeMessage(requiredTypes));
+                // TODO: handle null better
+                final @NonNull List<Material> requiredTypes =
+                        Objects.requireNonNull(ItemMetaToRequiredTypes.get(metaType));
+                player.sendMessage(this.generateWrongTypeMessage(requiredTypes));
                 return null;
             }
             final @Nullable T modifiedBuilder = operator.apply(builder);
