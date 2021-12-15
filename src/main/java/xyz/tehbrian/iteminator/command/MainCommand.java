@@ -3,6 +3,7 @@ package xyz.tehbrian.iteminator.command;
 import broccolai.corn.paper.item.AbstractPaperItemBuilder;
 import broccolai.corn.paper.item.PaperItemBuilder;
 import broccolai.corn.paper.item.special.ArmorStandBuilder;
+import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
@@ -23,11 +24,13 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -416,11 +419,31 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     );
                 });
 
+        // TODO: these commands are borken for some reason
         commandManager.command(sArmorStandShowArms)
                 .command(sArmorStandInvisible)
                 .command(sArmorStandMarker)
                 .command(sArmorStandNoBasePlate)
                 .command(sArmorStandSmall);
+
+        final var sAxolotlBucket = cSpecial.literal("axolotl-bucket")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Axolotl Buckets.");
+
+        final var sAxolotlBucketVariant = sAxolotlBucket.literal("variant")
+                .meta(CommandMeta.DESCRIPTION, "Set the variant.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(Axolotl.Variant.class, "variant"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.variant(c.<Axolotl.Variant>get("variant")),
+                            AxolotlBucketBuilder::of,
+                            AxolotlBucketMeta.class
+                    );
+                });
+
+        commandManager.command(sAxolotlBucketVariant);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
