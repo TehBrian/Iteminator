@@ -175,7 +175,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cLoreSet = cLore.literal("set")
-                .meta(CommandMeta.DESCRIPTION, "Set a specific line of lore.")
+                .meta(CommandMeta.DESCRIPTION, "Set a line of lore.")
                 .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
                 .argument(StringArgument.greedy("text"))
@@ -196,7 +196,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cLoreRemove = cLore.literal("remove")
-                .meta(CommandMeta.DESCRIPTION, "Remove a specific line of lore.")
+                .meta(CommandMeta.DESCRIPTION, "Remove a line of lore.")
                 .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
                 .handler(c -> {
@@ -419,7 +419,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     );
                 });
 
-        // TODO: these commands are borken for some reason
+        // FIXME: these commands are broken when trying to set the flags to their default state
         commandManager.command(sArmorStandShowArms)
                 .command(sArmorStandInvisible)
                 .command(sArmorStandMarker)
@@ -437,7 +437,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.variant(c.<Axolotl.Variant>get("variant")),
+                            b -> b.variant(c.get("variant")),
                             AxolotlBucketBuilder::of,
                             AxolotlBucketMeta.class
                     );
