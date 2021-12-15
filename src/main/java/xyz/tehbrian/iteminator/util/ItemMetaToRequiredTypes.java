@@ -14,12 +14,12 @@ import java.util.Map;
 // This entire class can be incinerated once switch pattern-matching arrives.
 public final class ItemMetaToRequiredTypes {
 
-    private static final Map<Class<? extends ItemMeta>, List<Material>> converter;
+    private static final Map<Class<? extends ItemMeta>, List<Material>> CONVERTER;
 
     static {
-        converter = new HashMap<>();
-        converter.put(TropicalFishBucketMeta.class, List.of(Material.TROPICAL_FISH_BUCKET));
-        converter.put(ArmorStandMeta.class, List.of(Material.ARMOR_STAND));
+        CONVERTER = new HashMap<>();
+        CONVERTER.put(TropicalFishBucketMeta.class, List.of(Material.TROPICAL_FISH_BUCKET));
+        CONVERTER.put(ArmorStandMeta.class, List.of(Material.ARMOR_STAND));
     }
 
     private ItemMetaToRequiredTypes() {
@@ -30,7 +30,7 @@ public final class ItemMetaToRequiredTypes {
      * @return the types required for that {@code ItemMeta} or null if there is no type requirement
      */
     public static @Nullable List<Material> get(final @NonNull Class<? extends ItemMeta> itemMetaType) {
-        return converter.get(itemMetaType);
+        return CONVERTER.get(itemMetaType);
     }
 
 }
