@@ -542,16 +542,17 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
      * for this terribleness. At least I don't have to re-type the same thing
      * everywhere! \_o¬o_/
      *
-     * @param player   the player to target
-     * @param operator the operator to apply to the item in the main hand
-     * @param metaType the meta type to get the required types from
-     * @param <T>      the builder type
+     * @param player         the player to target
+     * @param operator       the operator to apply to the item in the main hand
+     * @param builderCreator a function that creates the builder
+     * @param metaType       the meta type to get the required types from
+     * @param <T>            the builder type
      */
     private <T extends AbstractPaperItemBuilder<?, ?>> void modifySpecial(
             final @NonNull Player player, final @NonNull Function<@NonNull T, @Nullable T> operator,
             final Function<ItemStack, T> builderCreator, final Class<? extends ItemMeta> metaType
     ) {
-        modifyItem(player, i -> {
+        this.modifyItem(player, i -> {
             final @NonNull T builder;
             try {
                 builder = builderCreator.apply(i);
@@ -580,7 +581,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
     private void modify(
             final @NonNull Player player, final @NonNull Function<@NonNull PaperItemBuilder, @Nullable PaperItemBuilder> operator
     ) {
-        modifyItem(player, i -> {
+        this.modifyItem(player, i -> {
             final @Nullable PaperItemBuilder modifiedBuilder = operator.apply(PaperItemBuilder.of(i));
             if (modifiedBuilder == null) {
                 return null;

@@ -5,7 +5,7 @@ import xyz.tehbrian.iteminator.command.CommandService;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.UserService;
 
-public class SingletonModule extends AbstractModule {
+public final class SingletonModule extends AbstractModule {
 
     @Override
     protected void configure() {
