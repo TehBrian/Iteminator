@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 // This entire class can be incinerated once switch pattern-matching arrives.
-public class ItemMetaToRequiredTypes {
+public final class ItemMetaToRequiredTypes {
 
     private static final Map<Class<? extends ItemMeta>, List<Material>> converter;
 
