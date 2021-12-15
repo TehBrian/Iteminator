@@ -4,6 +4,7 @@ import broccolai.corn.paper.item.AbstractPaperItemBuilder;
 import broccolai.corn.paper.item.PaperItemBuilder;
 import broccolai.corn.paper.item.special.ArmorStandBuilder;
 import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
+import broccolai.corn.paper.item.special.BannerBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
@@ -22,6 +23,8 @@ import net.kyori.adventure.text.minimessage.Template;
 import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Axolotl;
@@ -31,6 +34,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -297,55 +301,6 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var cSpecial = cMain.literal("special")
                 .meta(CommandMeta.DESCRIPTION, "Commands special to a specific item type.");
 
-        final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
-                .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.");
-
-        final var sTropicalFishBucketPattern = sTropicalFishBucket.literal("pattern")
-                .meta(CommandMeta.DESCRIPTION, "Set the pattern.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(TropicalFish.Pattern.class, "pattern"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    this.modifySpecial(
-                            sender,
-                            b -> b.pattern(c.get("pattern")),
-                            TropicalFishBucketBuilder::of,
-                            TropicalFishBucketMeta.class
-                    );
-                });
-
-        final var sTropicalFishBucketBodyColor = sTropicalFishBucket.literal("body-color")
-                .meta(CommandMeta.DESCRIPTION, "Set the body color.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(DyeColor.class, "body_color"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    this.modifySpecial(
-                            sender,
-                            b -> b.bodyColor(c.get("body_color")),
-                            TropicalFishBucketBuilder::of,
-                            TropicalFishBucketMeta.class
-                    );
-                });
-
-        final var sTropicalFishBucketPatternColor = sTropicalFishBucket.literal("pattern-color")
-                .meta(CommandMeta.DESCRIPTION, "Set the pattern color.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(DyeColor.class, "pattern_color"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    this.modifySpecial(
-                            sender,
-                            b -> b.patternColor(c.get("pattern_color")),
-                            TropicalFishBucketBuilder::of,
-                            TropicalFishBucketMeta.class
-                    );
-                });
-
-        commandManager.command(sTropicalFishBucketPattern)
-                .command(sTropicalFishBucketBodyColor)
-                .command(sTropicalFishBucketPatternColor);
-
         final var sArmorStand = cSpecial.literal("armor-stand")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Armor Stands.");
 
@@ -444,6 +399,121 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         commandManager.command(sAxolotlBucketVariant);
+
+        final var sBanner = cSpecial.literal("banner")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Banners.");
+
+        final var sBannerAdd = sBanner.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a pattern.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(DyeColor.class, "color"))
+                .argument(EnumArgument.of(PatternType.class, "type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.addPattern(new Pattern(c.get("color"), c.get("type"))),
+                            BannerBuilder::of,
+                            BannerMeta.class
+                    );
+                });
+
+        final var sBannerSet = sBanner.literal("set")
+                .meta(CommandMeta.DESCRIPTION, "Set a pattern.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.of("index"))
+                .argument(EnumArgument.of(DyeColor.class, "color"))
+                .argument(EnumArgument.of(PatternType.class, "type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.setPattern(c.get("index"), new Pattern(c.get("color"), c.get("type"))),
+                            BannerBuilder::of,
+                            BannerMeta.class
+                    );
+                });
+
+        final var sBannerRemove = sBanner.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove a pattern.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.of("index"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.removePattern(c.get("index")),
+                            BannerBuilder::of,
+                            BannerMeta.class
+                    );
+                });
+
+        final var sBannerClear = sBanner.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the patterns.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.patterns(null),
+                            BannerBuilder::of,
+                            BannerMeta.class
+                    );
+                });
+
+        commandManager.command(sBannerAdd)
+                .command(sBannerSet)
+                .command(sBannerRemove)
+                .command(sBannerClear);
+
+        final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.");
+
+        final var sTropicalFishBucketPattern = sTropicalFishBucket.literal("pattern")
+                .meta(CommandMeta.DESCRIPTION, "Set the pattern.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(TropicalFish.Pattern.class, "pattern"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.pattern(c.get("pattern")),
+                            TropicalFishBucketBuilder::of,
+                            TropicalFishBucketMeta.class
+                    );
+                });
+
+        final var sTropicalFishBucketBodyColor = sTropicalFishBucket.literal("body-color")
+                .meta(CommandMeta.DESCRIPTION, "Set the body color.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(DyeColor.class, "body_color"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.bodyColor(c.get("body_color")),
+                            TropicalFishBucketBuilder::of,
+                            TropicalFishBucketMeta.class
+                    );
+                });
+
+        final var sTropicalFishBucketPatternColor = sTropicalFishBucket.literal("pattern-color")
+                .meta(CommandMeta.DESCRIPTION, "Set the pattern color.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(DyeColor.class, "pattern_color"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.patternColor(c.get("pattern_color")),
+                            TropicalFishBucketBuilder::of,
+                            TropicalFishBucketMeta.class
+                    );
+                });
+
+        commandManager.command(sTropicalFishBucketPattern)
+                .command(sTropicalFishBucketBodyColor)
+                .command(sTropicalFishBucketPatternColor);
     }
 
     private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
