@@ -455,7 +455,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.patterns(null),
+                            b -> b.patterns(List.of()),
                             BannerBuilder::of,
                             BannerMeta.class
                     );
