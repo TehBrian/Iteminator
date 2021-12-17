@@ -191,16 +191,16 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var cLoreSet = cLore.literal("set")
                 .meta(CommandMeta.DESCRIPTION, "Set a line of lore.")
                 .senderType(Player.class)
-                .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
+                .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
                 .argument(StringArgument.greedy("text"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> {
                         final @Nullable List<Component> lore = b.lore();
 
-                        final int line = c.get("line");
+                        final int line = c.get("index");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("wrong_line")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
                             return null;
                         }
 
@@ -212,15 +212,15 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var cLoreRemove = cLore.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a line of lore.")
                 .senderType(Player.class)
-                .argument(IntegerArgument.<CommandSender>newBuilder("line").withMin(0))
+                .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> {
                         final @Nullable List<Component> lore = b.lore();
 
-                        final int line = c.get("line");
+                        final int line = c.get("index");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("wrong_line")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
                             return null;
                         }
 
@@ -431,14 +431,22 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sBannerSet = sBanner.literal("set")
                 .meta(CommandMeta.DESCRIPTION, "Set a pattern.")
                 .senderType(Player.class)
-                .argument(IntegerArgument.of("index"))
+                .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
                 .argument(EnumArgument.of(DyeColor.class, "color"))
                 .argument(EnumArgument.of(PatternType.class, "type"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.setPattern(c.<Integer>get("index"), new Pattern(c.get("color"), c.get("type"))),
+                            b -> {
+                                final int index = c.<Integer>get("index");
+                                if (b.patterns().size() <= index) {
+                                    sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
+                                    return null;
+                                }
+
+                                return b.setPattern(index, new Pattern(c.get("color"), c.get("type")));
+                            },
                             BannerBuilder::of,
                             BannerMeta.class
                     );
@@ -447,12 +455,20 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sBannerRemove = sBanner.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a pattern.")
                 .senderType(Player.class)
-                .argument(IntegerArgument.of("index"))
+                .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.removePattern(c.<Integer>get("index")),
+                            b -> {
+                                final int index = c.<Integer>get("index");
+                                if (b.patterns().size() <= index) {
+                                    sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
+                                    return null;
+                                }
+
+                                return b.removePattern(index);
+                            },
                             BannerBuilder::of,
                             BannerMeta.class
                     );
