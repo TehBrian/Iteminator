@@ -532,7 +532,10 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         return this.langConfig.c(
                 NodePath.path("wrong_type"),
                 TemplateResolver.templates(Template.template(
-                        "type", String.join(", ", requiredTypes.stream().map(Enum::toString).toList())
+                        "type", Component.join(
+                                JoinConfiguration.separators(Component.text(", "), Component.text(", or ")),
+                                requiredTypes.stream().map(Component::translatable).toList()
+                        )
                 ))
         );
     }
