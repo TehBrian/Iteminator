@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.1"
     id("xyz.jpenilla.run-paper") version "1.0.6"
 }
 
@@ -34,8 +34,8 @@ dependencies {
 
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
-    implementation("cloud.commandframework:cloud-paper:1.5.0")
-    implementation("cloud.commandframework:cloud-minecraft-extras:1.5.0")
+    implementation("cloud.commandframework:cloud-paper:1.6.0")
+    implementation("cloud.commandframework:cloud-minecraft-extras:1.6.0")
 
     implementation("dev.tehbrian:tehlib-paper:0.1.0-SNAPSHOT")
     implementation("broccolai.corn:corn-minecraft-paper:3.0.0-SNAPSHOT")
