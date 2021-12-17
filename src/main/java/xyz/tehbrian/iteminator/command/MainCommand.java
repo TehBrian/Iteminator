@@ -136,12 +136,19 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cName = cMain.literal("name")
-                .meta(CommandMeta.DESCRIPTION, "Set the name.")
+                .meta(CommandMeta.DESCRIPTION, "Set the name. Pass nothing to reset.")
                 .senderType(Player.class)
-                .argument(StringArgument.greedy("text"))
+                .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.name(this.translateWithUserFormat(c.get("text"), sender)));
+                    this.modify(sender, b -> {
+                        final @NonNull Optional<String> text = c.getOptional("text");
+                        if (text.isPresent()) {
+                            return b.name(this.translateWithUserFormat(text.get(), sender));
+                        } else {
+                            return b.name(null);
+                        }
+                    });
                 });
 
         final var cUnbreakable = cMain.literal("unbreakable")
