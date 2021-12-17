@@ -5,6 +5,7 @@ import broccolai.corn.paper.item.PaperItemBuilder;
 import broccolai.corn.paper.item.special.ArmorStandBuilder;
 import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
 import broccolai.corn.paper.item.special.BannerBuilder;
+import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
@@ -36,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -473,6 +475,90 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sBannerSet)
                 .command(sBannerRemove)
                 .command(sBannerClear);
+
+        final var sBook = cSpecial.literal("book")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Books.");
+
+        final var sBookTitle = sBook.literal("title")
+                .meta(CommandMeta.DESCRIPTION, "Set the title. Pass nothing to reset.")
+                .senderType(Player.class)
+                .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @NonNull Optional<String> text = c.getOptional("text");
+                                if (text.isPresent()) {
+                                    return b.name(this.translateWithUserFormat(text.get(), sender));
+                                } else {
+                                    return b.name(null);
+                                }
+                            },
+                            BookBuilder::of,
+                            BookMeta.class
+                    );
+                });
+
+        final var sBookAuthor = sBook.literal("author")
+                .meta(CommandMeta.DESCRIPTION, "Set the author. Pass nothing to reset.")
+                .senderType(Player.class)
+                .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @NonNull Optional<String> text = c.getOptional("text");
+                                if (text.isPresent()) {
+                                    return b.author(this.translateWithUserFormat(text.get(), sender));
+                                } else {
+                                    return b.author(null);
+                                }
+                            },
+                            BookBuilder::of,
+                            BookMeta.class
+                    );
+                });
+
+        final var sBookGeneration = sBook.literal("generation")
+                .meta(CommandMeta.DESCRIPTION, "Set the generation.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(BookMeta.Generation.class, "generation"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.generation(c.get("generation")),
+                            BookBuilder::of,
+                            BookMeta.class
+                    );
+                });
+
+        final var sBookEditable = sBook.literal("editable")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the book is editable.")
+                .senderType(Player.class)
+                .argument(BooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                if (c.get("boolean")) {
+                                    return b.material(Material.WRITABLE_BOOK);
+                                } else {
+                                    return b.material(Material.WRITTEN_BOOK);
+                                }
+                            },
+                            BookBuilder::of,
+                            BookMeta.class
+                    );
+                });
+
+        commandManager.command(sBookTitle)
+                .command(sBookAuthor)
+                .command(sBookGeneration)
+                .command(sBookEditable);
 
         final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.");
