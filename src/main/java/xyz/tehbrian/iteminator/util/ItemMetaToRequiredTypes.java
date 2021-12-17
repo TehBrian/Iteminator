@@ -2,6 +2,9 @@ package xyz.tehbrian.iteminator.util;
 
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import org.bukkit.Material;
+import org.bukkit.Tag;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -20,6 +23,8 @@ public final class ItemMetaToRequiredTypes {
         CONVERTER = new HashMap<>();
         CONVERTER.put(TropicalFishBucketMeta.class, List.of(Material.TROPICAL_FISH_BUCKET));
         CONVERTER.put(ArmorStandMeta.class, List.of(Material.ARMOR_STAND));
+        CONVERTER.put(BannerMeta.class, Tag.BANNERS.getValues().stream().toList());
+        CONVERTER.put(BookMeta.class, List.of(Material.WRITABLE_BOOK, Material.WRITTEN_BOOK));
     }
 
     private ItemMetaToRequiredTypes() {
