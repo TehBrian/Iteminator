@@ -19,6 +19,7 @@ import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.minimessage.Template;
 import net.kyori.adventure.text.minimessage.template.TemplateResolver;
 import org.bukkit.DyeColor;
@@ -435,7 +436,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.setPattern(c.get("index"), new Pattern(c.get("color"), c.get("type"))),
+                            b -> b.setPattern(c.<Integer>get("index"), new Pattern(c.get("color"), c.get("type"))),
                             BannerBuilder::of,
                             BannerMeta.class
                     );
@@ -449,7 +450,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.removePattern(c.get("index")),
+                            b -> b.removePattern(c.<Integer>get("index")),
                             BannerBuilder::of,
                             BannerMeta.class
                     );
