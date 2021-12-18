@@ -8,7 +8,6 @@ import broccolai.corn.paper.item.special.BannerBuilder;
 import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
-import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
@@ -16,6 +15,8 @@ import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
 import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.AudienceProvider;
+import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.google.inject.Inject;
@@ -79,8 +80,19 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
     @Override
     public void register(final @NonNull PaperCommandManager<CommandSender> commandManager) {
-        final var cMain = commandManager.commandBuilder("iteminator", ArgumentDescription.of("The main command for Iteminator."))
+        final var cMain = commandManager.commandBuilder("iteminator")
+                .meta(CommandMeta.DESCRIPTION, "The main command for Iteminator.")
                 .handler(c -> c.getSender().sendMessage(this.langConfig.c(NodePath.path("main"))));
+
+        final var help = new MinecraftHelp<>(
+                "/iteminator help",
+                AudienceProvider.nativeAudience(), commandManager
+        );
+
+        commandManager.command(cMain.literal("help")
+                .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
+                .handler(context -> help.queryCommands(context.getOrDefault("query", ""), context.getSender()))
+        );
 
         final var cReload = cMain.literal("reload")
                 .meta(CommandMeta.DESCRIPTION, "Reload the plugin's config.")
@@ -93,7 +105,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     }
                 });
 
-        final var cFormat = cMain.literal("format", ArgumentDescription.of("Toggle your ability to format text."))
+        final var cFormat = cMain.literal("format")
+                .meta(CommandMeta.DESCRIPTION, "Toggle your ability to format text.")
                 .permission(Permissions.FORMAT)
                 .senderType(Player.class)
                 .handler(c -> {
