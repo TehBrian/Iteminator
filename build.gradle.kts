@@ -34,7 +34,7 @@ dependencies {
 
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
-    implementation("cloud.commandframework:cloud-paper:1.6.0")
+    implementation("cloud.commandframework:cloud-paper:1.6.1")
     implementation("cloud.commandframework:cloud-minecraft-extras:1.6.0")
 
     implementation("dev.tehbrian:tehlib-paper:0.1.0-SNAPSHOT")
