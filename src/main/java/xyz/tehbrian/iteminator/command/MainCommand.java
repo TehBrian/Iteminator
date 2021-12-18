@@ -234,7 +234,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.lore((List<Component>) null)); // TODO: replace with null once corn pr gets merged
+                    this.modify(sender, b -> b.lore(null));
                 });
 
         final var cEnchantment = cMain.literal("enchantment")
