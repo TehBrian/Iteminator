@@ -1,5 +1,6 @@
 package xyz.tehbrian.iteminator;
 
+import cloud.commandframework.minecraft.extras.AudienceProvider;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Guice;
@@ -100,7 +101,7 @@ public final class Iteminator extends TehPlugin {
                 .withInvalidSyntaxHandler()
                 .withNoPermissionHandler()
                 .withCommandExecutionHandler()
-                .apply(commandManager, s -> s);
+                .apply(commandManager, AudienceProvider.nativeAudience());
 
         this.injector.getInstance(MainCommand.class).register(commandManager);
 
