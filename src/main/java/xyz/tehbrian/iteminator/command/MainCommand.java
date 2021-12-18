@@ -150,7 +150,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> {
                         final @NonNull Optional<String> text = c.getOptional("text");
                         if (text.isPresent()) {
-                            return b.name(this.translateWithUserFormat(text.get(), sender));
+                            return b.name(this.formatWithUserFormat(text.get(), sender));
                         } else {
                             return b.name(null);
                         }
@@ -186,7 +186,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                                 .map(ArrayList::new)
                                 .orElse(new ArrayList<>());
 
-                        lore.add(this.translateWithUserFormat(c.get("text"), sender));
+                        lore.add(this.formatWithUserFormat(c.get("text"), sender));
                         return b.lore(lore);
                     });
                 });
@@ -207,7 +207,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             return null;
                         }
 
-                        lore.set(line, this.translateWithUserFormat(c.get("text"), sender));
+                        lore.set(line, this.formatWithUserFormat(c.get("text"), sender));
                         return b.lore(lore);
                     });
                 });
@@ -509,7 +509,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             b -> {
                                 final @NonNull Optional<String> text = c.getOptional("text");
                                 if (text.isPresent()) {
-                                    return b.name(this.translateWithUserFormat(text.get(), sender));
+                                    return b.name(this.formatWithUserFormat(text.get(), sender));
                                 } else {
                                     return b.name(null);
                                 }
@@ -530,7 +530,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             b -> {
                                 final @NonNull Optional<String> text = c.getOptional("text");
                                 if (text.isPresent()) {
-                                    return b.author(this.translateWithUserFormat(text.get(), sender));
+                                    return b.author(this.formatWithUserFormat(text.get(), sender));
                                 } else {
                                     return b.author(null);
                                 }
@@ -678,16 +678,18 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sTropicalFishBucketPatternColor);
     }
 
-    private @NonNull Component translateWithUserFormat(final @NonNull String string, final @NonNull Player player) {
+    private @NonNull Component formatWithUserFormat(final @NonNull String string, final @NonNull Player player) {
         final @NonNull User user = this.userService.getUser(player.getUniqueId());
-        if (!user.formatEnabled()) {
-            return FormatUtil.plain(string);
+
+        if (player.hasPermission(Permissions.FORMAT) && user.formatEnabled()) {
+            if (user.formattingType() == User.FormattingType.LEGACY && player.hasPermission(Permissions.LEGACY)) {
+                return FormatUtil.legacy(string);
+            } else if (user.formattingType() == User.FormattingType.MINI_MESSAGE && player.hasPermission(Permissions.MINI_MESSAGE)) {
+                return FormatUtil.miniMessage(string);
+            }
         }
 
-        return switch (user.formattingType()) {
-            case LEGACY -> FormatUtil.legacy(string);
-            case MINI_MESSAGE -> FormatUtil.miniMessage(string);
-        };
+        return FormatUtil.plain(string);
     }
 
     private @NonNull Component generateWrongTypeMessage(final List<Material> requiredTypes) {
