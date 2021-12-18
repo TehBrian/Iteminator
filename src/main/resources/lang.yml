@@ -11,8 +11,8 @@ main: |-
   <#333344>-= <#44BBDD>Iteminator <#333344>=-
   <#333344>I| <#FFEEFF>Running version <#88EEFF><version></#88EEFF>
   <#333344>I| <#FFEEFF>Made with <#DD5577><3</#DD5577> by <#88EEFF>TehBrian</#88EEFF>
-wrong_type: "<#44BBDD>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
-out_of_bounds: "<#44BBDD>I| <#DD5577>That index is out of bounds."
+wrong-type: "<#44BBDD>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
+out-of-bounds: "<#44BBDD>I| <#DD5577>That index is out of bounds."
 
 format:
   enable: "<#44BBDD>I| <#FFEEFF>Enabled text formatting."

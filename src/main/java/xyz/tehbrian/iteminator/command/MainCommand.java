@@ -203,7 +203,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
                         final int line = c.get("index");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
                             return null;
                         }
 
@@ -223,7 +223,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
                         final int line = c.get("index");
                         if (lore == null || lore.size() <= line) {
-                            sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
+                            sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
                             return null;
                         }
 
@@ -444,7 +444,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             b -> {
                                 final int index = c.<Integer>get("index");
                                 if (b.patterns().size() <= index) {
-                                    sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
+                                    sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
                                     return null;
                                 }
 
@@ -466,7 +466,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                             b -> {
                                 final int index = c.<Integer>get("index");
                                 if (b.patterns().size() <= index) {
-                                    sender.sendMessage(this.langConfig.c(NodePath.path("out_of_bounds")));
+                                    sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
                                     return null;
                                 }
 
@@ -694,7 +694,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
     private @NonNull Component generateWrongTypeMessage(final List<Material> requiredTypes) {
         return this.langConfig.c(
-                NodePath.path("wrong_type"),
+                NodePath.path("wrong-type"),
                 TemplateResolver.templates(Template.template(
                         "type", Component.join(
                                 JoinConfiguration.separators(Component.text(", "), Component.text(", or ")),
