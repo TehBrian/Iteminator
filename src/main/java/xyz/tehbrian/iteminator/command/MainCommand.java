@@ -138,6 +138,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cAmount = cMain.literal("amount")
                 .meta(CommandMeta.DESCRIPTION, "Set the amount.")
+                .permission(Permissions.AMOUNT)
                 .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
                 .handler(c -> {
@@ -147,6 +148,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cMaterial = cMain.literal("material")
                 .meta(CommandMeta.DESCRIPTION, "Set the material.")
+                .permission(Permissions.MATERIAL)
                 .senderType(Player.class)
                 .argument(MaterialArgument.of("material"))
                 .handler(c -> {
@@ -156,6 +158,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cName = cMain.literal("name")
                 .meta(CommandMeta.DESCRIPTION, "Set the name. Pass nothing to reset.")
+                .permission(Permissions.NAME)
                 .senderType(Player.class)
                 .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
                 .handler(c -> {
@@ -172,6 +175,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         final var cUnbreakable = cMain.literal("unbreakable")
                 .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
+                .permission(Permissions.UNBREAKABLE)
                 .senderType(Player.class)
                 .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
@@ -185,7 +189,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(cUnbreakable);
 
         final var cLore = cMain.literal("lore")
-                .meta(CommandMeta.DESCRIPTION, "Lore-related commands.");
+                .meta(CommandMeta.DESCRIPTION, "Lore-related commands.")
+                .permission(Permissions.LORE);
 
         final var cLoreAdd = cLore.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a line of lore.")
@@ -254,7 +259,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cEnchantment = cMain.literal("enchantment")
-                .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.");
+                .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.")
+                .permission(Permissions.ENCHANTMENT);
 
         final var cEnchantmentAdd = cEnchantment.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
@@ -284,7 +290,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         final var cFlags = cMain.literal("flags")
-                .meta(CommandMeta.DESCRIPTION, "Flag-related commands.");
+                .meta(CommandMeta.DESCRIPTION, "Flag-related commands.")
+                .permission(Permissions.FLAGS);
 
         final var cFlagsAdd = cFlags.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a flag.")
@@ -328,7 +335,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .meta(CommandMeta.DESCRIPTION, "Commands special to a specific item type.");
 
         final var sArmorStand = cSpecial.literal("armor-stand")
-                .meta(CommandMeta.DESCRIPTION, "Commands for Armor Stands.");
+                .meta(CommandMeta.DESCRIPTION, "Commands for Armor Stands.")
+                .permission(Permissions.ARMOR_STAND);
 
         final var sArmorStandShowArms = sArmorStand.literal("show-arms")
                 .meta(CommandMeta.DESCRIPTION, "Set the show arms flag.")
@@ -408,7 +416,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sArmorStandSmall);
 
         final var sAxolotlBucket = cSpecial.literal("axolotl-bucket")
-                .meta(CommandMeta.DESCRIPTION, "Commands for Axolotl Buckets.");
+                .meta(CommandMeta.DESCRIPTION, "Commands for Axolotl Buckets.")
+                .permission(Permissions.AXOLOTL_BUCKET);
 
         final var sAxolotlBucketVariant = sAxolotlBucket.literal("variant")
                 .meta(CommandMeta.DESCRIPTION, "Set the variant.")
@@ -427,7 +436,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         commandManager.command(sAxolotlBucketVariant);
 
         final var sBanner = cSpecial.literal("banner")
-                .meta(CommandMeta.DESCRIPTION, "Commands for Banners.");
+                .meta(CommandMeta.DESCRIPTION, "Commands for Banners.")
+                .permission(Permissions.BANNER);
 
         final var sBannerAdd = sBanner.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a pattern.")
@@ -509,7 +519,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sBannerClear);
 
         final var sBook = cSpecial.literal("book")
-                .meta(CommandMeta.DESCRIPTION, "Commands for Books.");
+                .meta(CommandMeta.DESCRIPTION, "Commands for Books.")
+                .permission(Permissions.BOOK);
 
         final var sBookTitle = sBook.literal("title")
                 .meta(CommandMeta.DESCRIPTION, "Set the title. Pass nothing to reset.")
@@ -593,7 +604,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sBookEditable);
 
         final var sEnchantmentStorage = cSpecial.literal("enchantment-storage")
-                .meta(CommandMeta.DESCRIPTION, "Commands for Enchantment Storages.");
+                .meta(CommandMeta.DESCRIPTION, "Commands for Enchantment Storages.")
+                .permission(Permissions.ENCHANTMENT_STORAGE);
 
         final var sEnchantmentStorageAdd = sEnchantmentStorage.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a stored enchantment.")
@@ -642,7 +654,8 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sEnchantmentStorageClear);
 
         final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
-                .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.");
+                .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.")
+                .permission(Permissions.TROPICAL_FISH_BUCKET);
 
         final var sTropicalFishBucketPattern = sTropicalFishBucket.literal("pattern")
                 .meta(CommandMeta.DESCRIPTION, "Set the pattern.")
