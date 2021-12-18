@@ -6,6 +6,7 @@ import broccolai.corn.paper.item.special.ArmorStandBuilder;
 import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
 import broccolai.corn.paper.item.special.BannerBuilder;
 import broccolai.corn.paper.item.special.BookBuilder;
+import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.BooleanArgument;
@@ -38,6 +39,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -53,6 +55,7 @@ import xyz.tehbrian.iteminator.util.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -575,6 +578,55 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sBookAuthor)
                 .command(sBookGeneration)
                 .command(sBookEditable);
+
+        final var sEnchantmentStorage = cSpecial.literal("enchantment-storage")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Enchantment Storages.");
+
+        final var sEnchantmentStorageAdd = sEnchantmentStorage.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a stored enchantment.")
+                .senderType(Player.class)
+                .argument(EnchantmentArgument.of("type"))
+                .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.addStoredEnchant(c.get("type"), c.<Integer>get("level")),
+                            EnchantmentStorageBuilder::of,
+                            EnchantmentStorageMeta.class
+                    );
+                });
+
+        final var sEnchantmentStorageRemove = sEnchantmentStorage.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove a stored enchantment.")
+                .senderType(Player.class)
+                .argument(EnchantmentArgument.of("type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.removeStoredEnchant(c.<Enchantment>get("type")),
+                            EnchantmentStorageBuilder::of,
+                            EnchantmentStorageMeta.class
+                    );
+                });
+
+        final var sEnchantmentStorageClear = sEnchantmentStorage.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the stored enchantments.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.storedEnchants(Map.of()),
+                            EnchantmentStorageBuilder::of,
+                            EnchantmentStorageMeta.class
+                    );
+                });
+
+        commandManager.command(sEnchantmentStorageAdd)
+                .command(sEnchantmentStorageRemove)
+                .command(sEnchantmentStorageClear);
 
         final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.");
