@@ -15,6 +15,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Queue;
 import java.util.function.BiFunction;
 
@@ -141,7 +142,7 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
         ) {
             final List<String> completions = new ArrayList<>();
             for (final PotionEffectType value : PotionEffectType.values()) {
-                completions.add(value.getName());
+                completions.add(value.getName().toLowerCase(Locale.ROOT));
             }
             return completions;
         }
