@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 // This entire class can be incinerated once switch pattern-matching arrives.
-public final class ItemMetaToRequiredTypes {
+public final class ItemMetaRequiredTypes {
 
     private static final Map<Class<? extends ItemMeta>, List<Material>> CONVERTER;
 
@@ -33,12 +33,12 @@ public final class ItemMetaToRequiredTypes {
         CONVERTER.put(TropicalFishBucketMeta.class, List.of(Material.TROPICAL_FISH_BUCKET));
     }
 
-    private ItemMetaToRequiredTypes() {
+    private ItemMetaRequiredTypes() {
     }
 
     /**
      * @param itemMetaType the {@code ItemMeta} type
-     * @return the types required for that {@code ItemMeta} or null if there is no type requirement
+     * @return the types required for that {@code ItemMeta}, or null if there is no type requirement
      */
     public static @Nullable List<Material> get(final @NonNull Class<? extends ItemMeta> itemMetaType) {
         return CONVERTER.get(itemMetaType);
