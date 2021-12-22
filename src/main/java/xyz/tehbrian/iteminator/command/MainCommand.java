@@ -7,6 +7,7 @@ import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
 import broccolai.corn.paper.item.special.BannerBuilder;
 import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
+import broccolai.corn.paper.item.special.PotionBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
@@ -25,6 +26,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.minimessage.Template;
 import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -42,7 +44,12 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
@@ -652,6 +659,125 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         commandManager.command(sEnchantmentStorageAdd)
                 .command(sEnchantmentStorageRemove)
                 .command(sEnchantmentStorageClear);
+
+        final var sPotion = cSpecial.literal("potion")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Potions.")
+                .permission(Permissions.POTION);
+
+        final var sPotionEffect = sPotion.literal("effect")
+                .meta(CommandMeta.DESCRIPTION, "Modify the custom effects.");
+
+        final var sPotionEffectAdd = sPotionEffect.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
+                .senderType(Player.class)
+                .argument(PotionEffectTypeArgument.of("type"))
+                .argument(IntegerArgument.<CommandSender>newBuilder("duration").withMin(0))
+                .argument(IntegerArgument.<CommandSender>newBuilder("amplifier").withMin(0).withMax(64))
+                .argument(BooleanArgument.optional("ambient", true))
+                .argument(BooleanArgument.optional("particles", true))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final var potionEffect = new PotionEffect(
+                                        c.get("type"),
+                                        c.<Integer>get("duration"),
+                                        c.<Integer>get("amplifier"),
+                                        c.<Boolean>get("ambient"),
+                                        c.<Boolean>get("particles"),
+                                        c.<Boolean>get("particles") // in testing, icon and particles are equivalent
+                                );
+
+                                return b.addCustomEffect(potionEffect, true);
+                            },
+                            PotionBuilder::of,
+                            PotionMeta.class
+                    );
+                });
+
+        final var sPotionEffectRemove = sPotionEffect.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove a custom effect.")
+                .senderType(Player.class)
+                .argument(PotionEffectTypeArgument.of("type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.removeCustomEffect(c.<PotionEffectType>get("type")),
+                            PotionBuilder::of,
+                            PotionMeta.class
+                    );
+                });
+
+        final var sPotionEffectClear = sPotionEffect.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the custom effects.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.customEffects(null),
+                            PotionBuilder::of,
+                            PotionMeta.class
+                    );
+                });
+
+        final var sPotionColor = sPotion.literal("color");
+
+        final var sPotionColorSet = sPotionColor
+                .meta(CommandMeta.DESCRIPTION, "Set the potion's color.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.color(Color.fromRGB(
+                                    c.<Integer>get("red"),
+                                    c.<Integer>get("green"),
+                                    c.<Integer>get("blue")
+                            )),
+                            PotionBuilder::of,
+                            PotionMeta.class
+                    );
+                });
+
+        final var sPotionColorReset = sPotionColor
+                .meta(CommandMeta.DESCRIPTION, "Reset the potion's color.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.color(null),
+                            PotionBuilder::of,
+                            PotionMeta.class
+                    );
+                });
+
+        final var sPotionType = sPotion.literal("type")
+                .meta(CommandMeta.DESCRIPTION, "Set the potion type.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(PotionType.class, "type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.basePotionData(new PotionData(c.get("type"))),
+                            PotionBuilder::of,
+                            PotionMeta.class
+                    );
+                });
+
+        commandManager.command(sPotionEffectAdd)
+                .command(sPotionEffectRemove)
+                .command(sPotionEffectClear)
+                .command(sPotionColorSet)
+                .command(sPotionColorReset)
+                .command(sPotionType);
 
         final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.")
