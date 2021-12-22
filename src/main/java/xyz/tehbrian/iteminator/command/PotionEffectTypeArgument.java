@@ -151,7 +151,7 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
 
     public static final class PotionEffectTypeParseException extends ParserException {
 
-        private static final long serialVersionUID = -4591509689484989301L;
+        private static final long serialVersionUID = 3319300669876276695L;
         private final String input;
 
         /**
@@ -167,7 +167,7 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
             super(
                     PotionEffectTypeParser.class,
                     context,
-                    Caption.of("argument.parse.failure.potioneffecttype"), // TODO currently doesn't resolve - put in BukkitCaptionKeys if pring to cloud
+                    Caption.of("argument.parse.failure.potioneffecttype"), // TODO: currently doesn't resolve - put in BukkitCaptionKeys if pring to cloud
                     CaptionVariable.of("input", input)
             );
             this.input = input;

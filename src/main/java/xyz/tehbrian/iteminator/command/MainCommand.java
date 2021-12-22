@@ -15,6 +15,7 @@ import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
 import cloud.commandframework.bukkit.parsers.MaterialArgument;
+import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.AudienceProvider;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
@@ -62,13 +63,18 @@ import xyz.tehbrian.iteminator.util.ItemMetaToRequiredTypes;
 import xyz.tehbrian.iteminator.util.Permissions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public final class MainCommand extends PaperCloudCommand<CommandSender> {
+
+    private static final BiFunction<CommandContext<CommandSender>, String, List<String>> LOWER_BOOLEAN_SUGGESTIONS_PROVIDER =
+            (c, s) -> Arrays.asList("true", "false");
 
     private final Iteminator iteminator;
     private final UserService userService;
@@ -184,7 +190,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
                 .permission(Permissions.UNBREAKABLE)
                 .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
+                .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modify(sender, b -> b.unbreakable(c.get("boolean")));
@@ -348,7 +354,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sArmorStandShowArms = sArmorStand.literal("show-arms")
                 .meta(CommandMeta.DESCRIPTION, "Set the show arms flag.")
                 .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
+                .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -362,7 +368,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sArmorStandInvisible = sArmorStand.literal("invisible")
                 .meta(CommandMeta.DESCRIPTION, "Set the invisible flag.")
                 .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
+                .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -376,7 +382,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sArmorStandMarker = sArmorStand.literal("marker")
                 .meta(CommandMeta.DESCRIPTION, "Set the marker flag.")
                 .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
+                .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -390,7 +396,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sArmorStandNoBasePlate = sArmorStand.literal("no-base-plate")
                 .meta(CommandMeta.DESCRIPTION, "Set the no base plate flag.")
                 .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
+                .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -404,7 +410,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sArmorStandSmall = sArmorStand.literal("small")
                 .meta(CommandMeta.DESCRIPTION, "Set the small flag.")
                 .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
+                .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -588,7 +594,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         final var sBookEditable = sBook.literal("editable")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the book is editable.")
                 .senderType(Player.class)
-                .argument(BooleanArgument.of("boolean"))
+                .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -673,8 +679,10 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .argument(PotionEffectTypeArgument.of("type"))
                 .argument(IntegerArgument.<CommandSender>newBuilder("duration").withMin(0))
                 .argument(IntegerArgument.<CommandSender>newBuilder("amplifier").withMin(0).withMax(64))
-                .argument(BooleanArgument.optional("ambient", true))
-                .argument(BooleanArgument.optional("particles", true))
+                .argument(BooleanArgument.<CommandSender>newBuilder("ambient").asOptionalWithDefault("true")
+                        .withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
+                .argument(BooleanArgument.<CommandSender>newBuilder("particles").asOptionalWithDefault("true")
+                        .withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
