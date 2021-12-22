@@ -168,7 +168,8 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
             super(
                     PotionEffectTypeParser.class,
                     context,
-                    Caption.of("argument.parse.failure.potioneffecttype"), // TODO: currently doesn't resolve - put in BukkitCaptionKeys if pring to cloud
+                    // TODO: currently doesn't resolve - put in BukkitCaptionKeys if pring to cloud
+                    Caption.of("argument.parse.failure.potioneffecttype"),
                     CaptionVariable.of("input", input)
             );
             this.input = input;

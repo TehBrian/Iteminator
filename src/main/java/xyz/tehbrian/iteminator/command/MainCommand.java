@@ -58,8 +58,8 @@ import xyz.tehbrian.iteminator.Iteminator;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.User;
 import xyz.tehbrian.iteminator.user.UserService;
-import xyz.tehbrian.iteminator.util.FormatUtil;
-import xyz.tehbrian.iteminator.util.ItemMetaToRequiredTypes;
+import xyz.tehbrian.iteminator.util.Format;
+import xyz.tehbrian.iteminator.util.ItemMetaRequiredTypes;
 import xyz.tehbrian.iteminator.util.Permissions;
 
 import java.util.ArrayList;
@@ -843,13 +843,13 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
 
         if (player.hasPermission(Permissions.FORMAT) && user.formatEnabled()) {
             if (user.formattingType() == User.FormattingType.LEGACY && player.hasPermission(Permissions.LEGACY)) {
-                return FormatUtil.legacy(string);
+                return Format.legacy(string);
             } else if (user.formattingType() == User.FormattingType.MINI_MESSAGE && player.hasPermission(Permissions.MINI_MESSAGE)) {
-                return FormatUtil.miniMessage(string);
+                return Format.miniMessage(string);
             }
         }
 
-        return FormatUtil.plain(string);
+        return Format.plain(string);
     }
 
     private @NonNull Component generateWrongTypeMessage(final List<Material> requiredTypes) {
@@ -886,7 +886,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
             } catch (final IllegalArgumentException e) {
                 // TODO: handle null better
                 final @NonNull List<Material> requiredTypes =
-                        Objects.requireNonNull(ItemMetaToRequiredTypes.get(metaType));
+                        Objects.requireNonNull(ItemMetaRequiredTypes.get(metaType));
                 player.sendMessage(this.generateWrongTypeMessage(requiredTypes));
                 return null;
             }
