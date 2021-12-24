@@ -9,8 +9,6 @@ import xyz.tehbrian.iteminator.util.Permissions;
 
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public final class User extends PaperUser {
 
