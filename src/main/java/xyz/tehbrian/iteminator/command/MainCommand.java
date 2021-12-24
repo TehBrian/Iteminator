@@ -7,6 +7,7 @@ import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
 import broccolai.corn.paper.item.special.BannerBuilder;
 import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
+import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.arguments.standard.BooleanArgument;
@@ -45,6 +46,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.bukkit.potion.PotionData;
@@ -80,6 +82,11 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
     private final UserService userService;
     private final LangConfig langConfig;
 
+    /**
+     * @param iteminator  injected
+     * @param userService injected
+     * @param langConfig  injected
+     */
     @Inject
     public MainCommand(
             final @NonNull Iteminator iteminator,
@@ -665,6 +672,46 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
         commandManager.command(sEnchantmentStorageAdd)
                 .command(sEnchantmentStorageRemove)
                 .command(sEnchantmentStorageClear);
+
+        final var sLeatherArmor = cSpecial.literal("leather-armor")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Leather Armor.")
+                .permission(Permissions.LEATHER_ARMOR);
+
+        final var sLeatherArmorSet = sLeatherArmor
+                .meta(CommandMeta.DESCRIPTION, "Set the armor's color.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.color(Color.fromRGB(
+                                    c.<Integer>get("red"),
+                                    c.<Integer>get("green"),
+                                    c.<Integer>get("blue")
+                            )),
+                            LeatherArmorBuilder::of,
+                            LeatherArmorMeta.class
+                    );
+                });
+
+        final var sLeatherArmorReset = sLeatherArmor
+                .meta(CommandMeta.DESCRIPTION, "Reset the armor's color.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.color(null),
+                            LeatherArmorBuilder::of,
+                            LeatherArmorMeta.class
+                    );
+                });
+
+        commandManager.command(sLeatherArmorSet)
+                .command(sLeatherArmorReset);
 
         final var sPotion = cSpecial.literal("potion")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Potions.")
