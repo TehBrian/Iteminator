@@ -15,6 +15,9 @@ public final class User extends PaperUser {
     private boolean formatEnabled;
     private @NonNull FormattingType formattingType = FormattingType.LEGACY;
 
+    /**
+     * @param uuid the unique identifier of the user
+     */
     public User(final @NonNull UUID uuid) {
         super(uuid);
 
