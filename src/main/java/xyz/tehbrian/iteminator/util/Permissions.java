@@ -28,6 +28,7 @@ public final class Permissions {
     public static final String ENCHANTMENT_STORAGE = SPECIAL + ".enchantment-storage";
     public static final String LEATHER_ARMOR = ".leather-armor";
     public static final String POTION = SPECIAL + ".potion";
+    public static final String SUSPICIOUS_STEW = ".suspicious-stew";
     public static final String TROPICAL_FISH_BUCKET = SPECIAL + ".tropical-fish-bucket";
 
     private Permissions() {

@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -37,6 +38,7 @@ public final class ItemMetaRequiredTypes {
                 Material.LEATHER_BOOTS
         ));
         CONVERTER.put(PotionMeta.class, List.of(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION));
+        CONVERTER.put(SuspiciousStewMeta.class, List.of(Material.SUSPICIOUS_STEW));
         CONVERTER.put(TropicalFishBucketMeta.class, List.of(Material.TROPICAL_FISH_BUCKET));
     }
 
