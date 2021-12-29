@@ -9,6 +9,7 @@ import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
 import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
+import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
@@ -48,6 +49,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -833,6 +835,72 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
                 .command(sPotionColorSet)
                 .command(sPotionColorReset)
                 .command(sPotionType);
+
+        final var sSuspiciousStew = cSpecial.literal("suspicious-stew")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
+                .permission(Permissions.SUSPICIOUS_STEW);
+
+        final var sSuspiciousStewAdd = sSuspiciousStew.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
+                .senderType(Player.class)
+                .argument(PotionEffectTypeArgument.of("type"))
+                .argument(IntegerArgument.<CommandSender>newBuilder("duration").withMin(0))
+                .argument(IntegerArgument.<CommandSender>newBuilder("amplifier").withMin(0).withMax(64))
+                .argument(BooleanArgument.<CommandSender>newBuilder("ambient").asOptionalWithDefault("true")
+                        .withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
+                .argument(BooleanArgument.<CommandSender>newBuilder("particles").asOptionalWithDefault("true")
+                        .withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final var potionEffect = new PotionEffect(
+                                        c.get("type"),
+                                        c.<Integer>get("duration"),
+                                        c.<Integer>get("amplifier"),
+                                        c.<Boolean>get("ambient"),
+                                        c.<Boolean>get("particles"),
+                                        c.<Boolean>get("particles") // in testing, icon and particles are equivalent
+                                );
+
+                                return b.addCustomEffect(potionEffect, true);
+                            },
+                            SuspiciousStewBuilder::of,
+                            SuspiciousStewMeta.class
+                    );
+                });
+
+        final var sSuspiciousStewRemove = sSuspiciousStew.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove a custom effect.")
+                .senderType(Player.class)
+                .argument(PotionEffectTypeArgument.of("type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.removeCustomEffect(c.<PotionEffectType>get("type")),
+                            SuspiciousStewBuilder::of,
+                            SuspiciousStewMeta.class
+                    );
+                });
+
+        final var sSuspiciousStewClear = sSuspiciousStew.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the custom effects.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.customEffects(null),
+                            SuspiciousStewBuilder::of,
+                            SuspiciousStewMeta.class
+                    );
+                });
+
+        commandManager.command(sSuspiciousStewAdd)
+                .command(sSuspiciousStewRemove)
+                .command(sSuspiciousStewClear);
 
         final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.")
