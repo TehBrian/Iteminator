@@ -37,7 +37,7 @@ public final class ItemMetaRequiredTypes {
                 Material.LEATHER_LEGGINGS,
                 Material.LEATHER_BOOTS
         ));
-        CONVERTER.put(PotionMeta.class, List.of(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION));
+        CONVERTER.put(PotionMeta.class, List.of(Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION, Material.TIPPED_ARROW));
         CONVERTER.put(SuspiciousStewMeta.class, List.of(Material.SUSPICIOUS_STEW));
         CONVERTER.put(TropicalFishBucketMeta.class, List.of(Material.TROPICAL_FISH_BUCKET));
     }
