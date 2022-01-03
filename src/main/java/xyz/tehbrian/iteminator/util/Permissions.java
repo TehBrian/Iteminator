@@ -8,7 +8,7 @@ public final class Permissions {
     public static final String ROOT = "iteminator";
     public static final String RELOAD = ROOT + ".reload";
 
-    public static final String FORMAT =       ROOT + ".format";
+    public static final String FORMAT =       ROOT   + ".format";
     public static final String MINI_MESSAGE = FORMAT + ".mini-message";
     public static final String LEGACY =       FORMAT + ".legacy";
 
@@ -20,7 +20,7 @@ public final class Permissions {
     public static final String ENCHANTMENT = ROOT + ".enchantment";
     public static final String FLAGS =       ROOT + ".flags";
 
-    public static final String SPECIAL =              ROOT + ".special";
+    public static final String SPECIAL =              ROOT    + ".special";
     public static final String ARMOR_STAND =          SPECIAL + ".armor-stand";
     public static final String AXOLOTL_BUCKET =       SPECIAL + ".axolotl-bucket";
     public static final String BANNER =               SPECIAL + ".banner";
