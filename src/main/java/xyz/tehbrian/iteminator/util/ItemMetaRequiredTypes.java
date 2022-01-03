@@ -32,6 +32,7 @@ public final class ItemMetaRequiredTypes {
         CONVERTER.put(BookMeta.class, List.of(Material.WRITABLE_BOOK, Material.WRITTEN_BOOK));
         CONVERTER.put(EnchantmentStorageMeta.class, List.of(Material.ENCHANTED_BOOK));
         CONVERTER.put(LeatherArmorMeta.class, List.of(
+                Material.LEATHER_HORSE_ARMOR,
                 Material.LEATHER_HELMET,
                 Material.LEATHER_CHESTPLATE,
                 Material.LEATHER_LEGGINGS,
