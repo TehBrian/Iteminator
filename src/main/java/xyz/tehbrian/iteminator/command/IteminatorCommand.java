@@ -75,7 +75,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public final class MainCommand extends PaperCloudCommand<CommandSender> {
+public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
     private static final BiFunction<CommandContext<CommandSender>, String, List<String>> LOWER_BOOLEAN_SUGGESTIONS_PROVIDER =
             (c, s) -> Arrays.asList("true", "false");
@@ -90,7 +90,7 @@ public final class MainCommand extends PaperCloudCommand<CommandSender> {
      * @param langConfig  injected
      */
     @Inject
-    public MainCommand(
+    public IteminatorCommand(
             final @NonNull Iteminator iteminator,
             final @NonNull UserService userService,
             final @NonNull LangConfig langConfig

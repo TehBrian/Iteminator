@@ -13,7 +13,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurateException;
 import xyz.tehbrian.iteminator.command.CommandService;
-import xyz.tehbrian.iteminator.command.MainCommand;
+import xyz.tehbrian.iteminator.command.IteminatorCommand;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.inject.PluginModule;
 import xyz.tehbrian.iteminator.inject.SingletonModule;
@@ -103,7 +103,7 @@ public final class Iteminator extends TehPlugin {
                 .withCommandExecutionHandler()
                 .apply(commandManager, AudienceProvider.nativeAudience());
 
-        this.injector.getInstance(MainCommand.class).register(commandManager);
+        this.injector.getInstance(IteminatorCommand.class).register(commandManager);
 
         return true;
     }
