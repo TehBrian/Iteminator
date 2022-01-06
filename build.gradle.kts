@@ -54,7 +54,7 @@ tasks {
 
         val libsPackage = "xyz.tehbrian.iteminator.libs"
         relocate("com.google.inject", "$libsPackage.guice")
-        relocate("net.kyori.adventure", "$libsPackage.adventure")
+        relocate("net.kyori.adventure.text.minimessage", "$libsPackage.minimessage")
         relocate("org.spongepowered.configurate", "$libsPackage.configurate")
         relocate("dev.tehbrian.tehlib", "$libsPackage.tehlib")
         relocate("broccolai.corn", "$libsPackage.corn")
