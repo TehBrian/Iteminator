@@ -27,8 +27,8 @@ import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.minimessage.Template;
-import net.kyori.adventure.text.minimessage.template.TemplateResolver;
+import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
+import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -149,7 +149,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     this.userService.getUser(player).formattingType(formattingType);
                     player.sendMessage(this.langConfig.c(
                             NodePath.path("format", "set"),
-                            TemplateResolver.templates(Template.template("formatting_type", formattingType.toString()))
+                            PlaceholderResolver.placeholders(Placeholder.miniMessage("formatting_type", formattingType.toString()))
                     ));
                 });
 
@@ -970,7 +970,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
     private @NonNull Component generateWrongTypeMessage(final List<Material> requiredTypes) {
         return this.langConfig.c(
                 NodePath.path("wrong-type"),
-                TemplateResolver.templates(Template.template(
+                PlaceholderResolver.placeholders(Placeholder.component(
                         "type", Component.join(
                                 JoinConfiguration.separators(Component.text(", "), Component.text(", or ")),
                                 requiredTypes.stream().map(Component::translatable).toList()
