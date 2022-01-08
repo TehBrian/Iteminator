@@ -29,10 +29,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
 
     implementation("com.google.inject:guice:5.0.1")
-    implementation("net.kyori:adventure-text-minimessage:4.2.0-SNAPSHOT")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
-
-    implementation("cloud.commandframework:cloud-paper:1.6.1")
     implementation("cloud.commandframework:cloud-minecraft-extras:1.6.1")
 
     implementation("dev.tehbrian:tehlib-paper:0.1.0-SNAPSHOT")
