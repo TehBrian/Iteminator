@@ -1,7 +1,6 @@
 package xyz.tehbrian.iteminator.command;
 
 import broccolai.corn.paper.item.AbstractPaperItemBuilder;
-import broccolai.corn.paper.item.PaperItemBuilder;
 import broccolai.corn.paper.item.special.ArmorStandBuilder;
 import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
 import broccolai.corn.paper.item.special.BannerBuilder;
@@ -42,7 +41,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
@@ -64,6 +62,7 @@ import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.User;
 import xyz.tehbrian.iteminator.user.UserService;
 import xyz.tehbrian.iteminator.util.Format;
+import xyz.tehbrian.iteminator.util.HeldItemModifier;
 import xyz.tehbrian.iteminator.util.ItemMetaRequiredTypes;
 import xyz.tehbrian.iteminator.util.Permissions;
 
@@ -186,7 +185,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.amount(c.get("amount")));
+                    HeldItemModifier.modify(sender, b -> b.amount(c.get("amount")));
                 });
 
         final var cMaterial = parent.literal("material")
@@ -196,7 +195,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(MaterialArgument.of("material"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.material(c.get("material")));
+                    HeldItemModifier.modify(sender, b -> b.material(c.get("material")));
                 });
 
         final var cName = parent.literal("name")
@@ -206,7 +205,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> {
+                    HeldItemModifier.modify(sender, b -> {
                         final @NonNull Optional<String> text = c.getOptional("text");
                         if (text.isPresent()) {
                             return b.name(this.formatWithUserFormat(text.get(), sender));
@@ -223,7 +222,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(BooleanArgument.<CommandSender>newBuilder("boolean").withSuggestionsProvider(LOWER_BOOLEAN_SUGGESTIONS_PROVIDER))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.unbreakable(c.get("boolean")));
+                    HeldItemModifier.modify(sender, b -> b.unbreakable(c.get("boolean")));
                 });
 
         commandManager.command(cAmount)
@@ -241,7 +240,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(StringArgument.greedy("text"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> {
+                    HeldItemModifier.modify(sender, b -> {
                         final @NonNull List<Component> lore = Optional
                                 .ofNullable(b.lore())
                                 .map(ArrayList::new)
@@ -259,7 +258,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(StringArgument.greedy("text"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> {
+                    HeldItemModifier.modify(sender, b -> {
                         final @Nullable List<Component> lore = b.lore();
 
                         final int line = c.get("index");
@@ -279,7 +278,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> {
+                    HeldItemModifier.modify(sender, b -> {
                         final @Nullable List<Component> lore = b.lore();
 
                         final int line = c.get("index");
@@ -298,7 +297,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.lore(null));
+                    HeldItemModifier.modify(sender, b -> b.lore(null));
                 });
 
         final var cEnchantment = parent.literal("enchantment")
@@ -312,7 +311,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.addEnchant(c.get("type"), c.<Integer>get("level")));
+                    HeldItemModifier.modify(sender, b -> b.addEnchant(c.get("type"), c.<Integer>get("level")));
                 });
 
         final var cEnchantmentRemove = cEnchantment.literal("remove")
@@ -321,7 +320,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(EnchantmentArgument.of("type"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.removeEnchant(c.<Enchantment>get("type")));
+                    HeldItemModifier.modify(sender, b -> b.removeEnchant(c.<Enchantment>get("type")));
                 });
 
         final var cEnchantmentClear = cEnchantment.literal("clear")
@@ -329,7 +328,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.enchants(null));
+                    HeldItemModifier.modify(sender, b -> b.enchants(null));
                 });
 
         final var cFlags = parent.literal("flags")
@@ -342,7 +341,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(EnumArgument.of(ItemFlag.class, "flag"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.addFlag(c.<ItemFlag>get("flag")));
+                    HeldItemModifier.modify(sender, b -> b.addFlag(c.<ItemFlag>get("flag")));
                 });
 
         final var cFlagsRemove = cFlags.literal("remove")
@@ -351,7 +350,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .argument(EnumArgument.of(ItemFlag.class, "flag"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.removeFlag(c.<ItemFlag>get("flag")));
+                    HeldItemModifier.modify(sender, b -> b.removeFlag(c.<ItemFlag>get("flag")));
                 });
 
         final var cFlagsClear = cFlags.literal("clear")
@@ -359,7 +358,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .senderType(Player.class)
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modify(sender, b -> b.flags(null));
+                    HeldItemModifier.modify(sender, b -> b.flags(null));
                 });
 
         commandManager
@@ -991,90 +990,36 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
     }
 
     private @NonNull Component generateWrongTypeMessage(final List<Material> requiredTypes) {
+        final Component types = Component.join(
+                JoinConfiguration.separators(Component.text(", "), Component.text(", or ")),
+                requiredTypes.stream().map(Component::translatable).toList()
+        );
+
         return this.langConfig.c(
                 NodePath.path("wrong-type"),
-                PlaceholderResolver.placeholders(Placeholder.component(
-                        "type", Component.join(
-                                JoinConfiguration.separators(Component.text(", "), Component.text(", or ")),
-                                requiredTypes.stream().map(Component::translatable).toList()
-                        )
-                ))
+                PlaceholderResolver.placeholders(Placeholder.component("type", types))
         );
     }
 
     /**
-     * I am most certainly going to the deepest, darkest level of programmer hell
-     * for this terribleness. At least I don't have to re-type the same thing
-     * everywhere! \_o¬o_/
-     *
      * @param player         the player to target
      * @param operator       the operator to apply to the item in the main hand
      * @param builderCreator a function that creates the builder
      * @param metaType       the meta type to get the required types from
      * @param <T>            the builder type
      */
-    private <T extends AbstractPaperItemBuilder<?, ?>> void modifySpecial(
+    private <T extends AbstractPaperItemBuilder<T, ?>> void modifySpecial(
             final @NonNull Player player, final @NonNull Function<@NonNull T, @Nullable T> operator,
             final Function<ItemStack, T> builderCreator, final Class<? extends ItemMeta> metaType
     ) {
-        this.modifyItem(player, i -> {
-            final @NonNull T builder;
-            try {
-                builder = builderCreator.apply(i);
-            } catch (final IllegalArgumentException e) {
-                // TODO: handle null better
-                final @NonNull List<Material> requiredTypes =
-                        Objects.requireNonNull(ItemMetaRequiredTypes.get(metaType));
-                player.sendMessage(this.generateWrongTypeMessage(requiredTypes));
-                return null;
-            }
-            final @Nullable T modifiedBuilder = operator.apply(builder);
-            if (modifiedBuilder == null) {
-                return null;
-            }
-            return modifiedBuilder.build();
-        });
-    }
-
-    /**
-     * Applies the given operator to the item in the player's main hand.
-     * If the operator returns null, nothing will happen to the item.
-     *
-     * @param player   the player to target
-     * @param operator the operator to apply to the item in the main hand
-     */
-    private void modify(
-            final @NonNull Player player, final @NonNull Function<@NonNull PaperItemBuilder, @Nullable PaperItemBuilder> operator
-    ) {
-        this.modifyItem(player, i -> {
-            final @Nullable PaperItemBuilder modifiedBuilder = operator.apply(PaperItemBuilder.of(i));
-            if (modifiedBuilder == null) {
-                return null;
-            }
-            return modifiedBuilder.build();
-        });
-    }
-
-    /**
-     * Applies the given operator to the item in the player's main hand.
-     * If the operator returns null, nothing will happen to the item.
-     *
-     * @param player   the player to target
-     * @param operator the operator to apply to the item in the main hand
-     */
-    private void modifyItem(
-            final @NonNull Player player, final @NonNull Function<@NonNull ItemStack, @Nullable ItemStack> operator
-    ) {
-        final @NonNull PlayerInventory inventory = player.getInventory();
-        final @NonNull ItemStack item = inventory.getItemInMainHand();
-        if (item.getItemMeta() == null) { // it's air and therefore cannot be modified
-            return;
+        try {
+            HeldItemModifier.modifySpecial(player, operator, builderCreator);
+        } catch (final IllegalArgumentException e) {
+            // TODO: handle null better
+            final @NonNull List<Material> requiredTypes =
+                    Objects.requireNonNull(ItemMetaRequiredTypes.get(metaType));
+            player.sendMessage(this.generateWrongTypeMessage(requiredTypes));
         }
-        final var modifiedItem = operator.apply(item);
-        if (modifiedItem == null) {
-            return;
-        }
-        inventory.setItemInMainHand(modifiedItem);
     }
 
 }
