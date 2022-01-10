@@ -104,10 +104,9 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
     public void register(final @NonNull PaperCommandManager<CommandSender> commandManager) {
         final var cMain = commandManager.commandBuilder("iteminator")
                 .meta(CommandMeta.DESCRIPTION, "The main command for Iteminator.");
+
         this.registerMeta(commandManager, cMain);
 
-//        final var cCommon = cMain.literal("common")
-//                .meta(CommandMeta.DESCRIPTION, "Commands applicable to all item types.");
         this.registerCommon(commandManager, cMain);
 
         final var cSpecial = cMain.literal("special")
@@ -126,6 +125,9 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 AudienceProvider.nativeAudience(), commandManager
         );
 
+        // we know that context.getOrDefault won't default to null
+        // since we can see what we're passing in
+        @SuppressWarnings("ConstantConditions")
         final var cHelp = parent.literal("help")
                 .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
                 .handler(context -> help.queryCommands(context.getOrDefault("query", ""), context.getSender()));
@@ -207,11 +209,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     final var sender = (Player) c.getSender();
                     HeldItemModifier.modify(sender, b -> {
                         final @NonNull Optional<String> text = c.getOptional("text");
-                        if (text.isPresent()) {
-                            return b.name(this.formatWithUserFormat(text.get(), sender));
-                        } else {
-                            return b.name(null);
-                        }
+                        return text.map(s -> b.name(this.formatWithUserFormat(s, sender))).orElseGet(() -> b.name(null));
                     });
                 });
 
@@ -576,11 +574,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                             sender,
                             b -> {
                                 final @NonNull Optional<String> text = c.getOptional("text");
-                                if (text.isPresent()) {
-                                    return b.name(this.formatWithUserFormat(text.get(), sender));
-                                } else {
-                                    return b.name(null);
-                                }
+                                return text.map(s -> b.name(this.formatWithUserFormat(s, sender))).orElseGet(() -> b.name(null));
                             },
                             BookBuilder::of,
                             BookMeta.class
@@ -597,11 +591,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                             sender,
                             b -> {
                                 final @NonNull Optional<String> text = c.getOptional("text");
-                                if (text.isPresent()) {
-                                    return b.author(this.formatWithUserFormat(text.get(), sender));
-                                } else {
-                                    return b.author(null);
-                                }
+                                return text.map(s -> b.author(this.formatWithUserFormat(s, sender))).orElseGet(() -> b.author(null));
                             },
                             BookBuilder::of,
                             BookMeta.class

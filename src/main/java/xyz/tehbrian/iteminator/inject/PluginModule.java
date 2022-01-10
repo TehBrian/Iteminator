@@ -10,6 +10,7 @@ import xyz.tehbrian.iteminator.Iteminator;
 
 import java.nio.file.Path;
 
+@SuppressWarnings("unused")
 public final class PluginModule extends AbstractModule {
 
     private final Iteminator iteminator;
