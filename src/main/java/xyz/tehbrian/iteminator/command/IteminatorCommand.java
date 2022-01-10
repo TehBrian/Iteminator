@@ -11,6 +11,7 @@ import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
 import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
+import cloud.commandframework.Command;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
@@ -77,8 +78,8 @@ import java.util.function.Function;
 
 public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
-    private static final BiFunction<CommandContext<CommandSender>, String, List<String>> LOWER_BOOLEAN_SUGGESTIONS_PROVIDER =
-            (c, s) -> Arrays.asList("true", "false");
+    private static final BiFunction<CommandContext<CommandSender>, String, List<String>>
+            LOWER_BOOLEAN_SUGGESTIONS_PROVIDER = (c, s) -> Arrays.asList("true", "false");
 
     private final Iteminator iteminator;
     private final UserService userService;
@@ -103,20 +104,34 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
     @Override
     public void register(final @NonNull PaperCommandManager<CommandSender> commandManager) {
         final var cMain = commandManager.commandBuilder("iteminator")
-                .meta(CommandMeta.DESCRIPTION, "The main command for Iteminator.")
-                .handler(c -> c.getSender().sendMessage(this.langConfig.c(NodePath.path("main"))));
+                .meta(CommandMeta.DESCRIPTION, "The main command for Iteminator.");
+        this.registerMeta(commandManager, cMain);
+
+//        final var cCommon = cMain.literal("common")
+//                .meta(CommandMeta.DESCRIPTION, "Commands applicable to all item types.");
+        this.registerCommon(commandManager, cMain);
+
+        final var cSpecial = cMain.literal("special")
+                .meta(CommandMeta.DESCRIPTION, "Commands special to a specific item type.");
+        this.registerSpecial(commandManager, cSpecial);
+    }
+
+    private void registerMeta(
+            final @NonNull PaperCommandManager<CommandSender> commandManager,
+            final Command.@NonNull Builder<CommandSender> parent
+    ) {
+        final var cMain = parent.handler(c -> c.getSender().sendMessage(this.langConfig.c(NodePath.path("main"))));
 
         final var help = new MinecraftHelp<>(
                 "/iteminator help",
                 AudienceProvider.nativeAudience(), commandManager
         );
 
-        commandManager.command(cMain.literal("help")
+        final var cHelp = parent.literal("help")
                 .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
-                .handler(context -> help.queryCommands(context.getOrDefault("query", ""), context.getSender()))
-        );
+                .handler(context -> help.queryCommands(context.getOrDefault("query", ""), context.getSender()));
 
-        final var cReload = cMain.literal("reload")
+        final var cReload = parent.literal("reload")
                 .meta(CommandMeta.DESCRIPTION, "Reload the plugin's config.")
                 .permission(Permissions.RELOAD)
                 .handler(c -> {
@@ -127,7 +142,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     }
                 });
 
-        final var cFormat = cMain.literal("format")
+        final var cFormat = parent.literal("format")
                 .meta(CommandMeta.DESCRIPTION, "Toggle your ability to format text.")
                 .permission(Permissions.FORMAT)
                 .senderType(Player.class)
@@ -154,11 +169,17 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 });
 
         commandManager.command(cMain)
+                .command(cHelp)
                 .command(cReload)
                 .command(cFormat)
                 .command(cFormatFormattingType);
+    }
 
-        final var cAmount = cMain.literal("amount")
+    private void registerCommon(
+            final @NonNull PaperCommandManager<CommandSender> commandManager,
+            final Command.@NonNull Builder<CommandSender> parent
+    ) {
+        final var cAmount = parent.literal("amount")
                 .meta(CommandMeta.DESCRIPTION, "Set the amount.")
                 .permission(Permissions.AMOUNT)
                 .senderType(Player.class)
@@ -168,7 +189,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.amount(c.get("amount")));
                 });
 
-        final var cMaterial = cMain.literal("material")
+        final var cMaterial = parent.literal("material")
                 .meta(CommandMeta.DESCRIPTION, "Set the material.")
                 .permission(Permissions.MATERIAL)
                 .senderType(Player.class)
@@ -178,7 +199,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.material(c.get("material")));
                 });
 
-        final var cName = cMain.literal("name")
+        final var cName = parent.literal("name")
                 .meta(CommandMeta.DESCRIPTION, "Set the name. Pass nothing to reset.")
                 .permission(Permissions.NAME)
                 .senderType(Player.class)
@@ -195,7 +216,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     });
                 });
 
-        final var cUnbreakable = cMain.literal("unbreakable")
+        final var cUnbreakable = parent.literal("unbreakable")
                 .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
                 .permission(Permissions.UNBREAKABLE)
                 .senderType(Player.class)
@@ -210,7 +231,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(cName)
                 .command(cUnbreakable);
 
-        final var cLore = cMain.literal("lore")
+        final var cLore = parent.literal("lore")
                 .meta(CommandMeta.DESCRIPTION, "Lore-related commands.")
                 .permission(Permissions.LORE);
 
@@ -280,7 +301,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.lore(null));
                 });
 
-        final var cEnchantment = cMain.literal("enchantment")
+        final var cEnchantment = parent.literal("enchantment")
                 .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.")
                 .permission(Permissions.ENCHANTMENT);
 
@@ -311,7 +332,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     this.modify(sender, b -> b.enchants(null));
                 });
 
-        final var cFlags = cMain.literal("flags")
+        final var cFlags = parent.literal("flags")
                 .meta(CommandMeta.DESCRIPTION, "Flag-related commands.")
                 .permission(Permissions.FLAGS);
 
@@ -352,11 +373,13 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(cFlagsAdd)
                 .command(cFlagsRemove)
                 .command(cFlagsClear);
+    }
 
-        final var cSpecial = cMain.literal("special")
-                .meta(CommandMeta.DESCRIPTION, "Commands special to a specific item type.");
-
-        final var sArmorStand = cSpecial.literal("armor-stand")
+    private void registerSpecial(
+            final @NonNull PaperCommandManager<CommandSender> commandManager,
+            final Command.@NonNull Builder<CommandSender> parent
+    ) {
+        final var sArmorStand = parent.literal("armor-stand")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Armor Stands.")
                 .permission(Permissions.ARMOR_STAND);
 
@@ -437,7 +460,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sArmorStandNoBasePlate)
                 .command(sArmorStandSmall);
 
-        final var sAxolotlBucket = cSpecial.literal("axolotl-bucket")
+        final var sAxolotlBucket = parent.literal("axolotl-bucket")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Axolotl Buckets.")
                 .permission(Permissions.AXOLOTL_BUCKET);
 
@@ -457,7 +480,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
         commandManager.command(sAxolotlBucketVariant);
 
-        final var sBanner = cSpecial.literal("banner")
+        final var sBanner = parent.literal("banner")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Banners.")
                 .permission(Permissions.BANNER);
 
@@ -540,7 +563,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sBannerRemove)
                 .command(sBannerClear);
 
-        final var sBook = cSpecial.literal("book")
+        final var sBook = parent.literal("book")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Books.")
                 .permission(Permissions.BOOK);
 
@@ -625,7 +648,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sBookGeneration)
                 .command(sBookEditable);
 
-        final var sEnchantmentStorage = cSpecial.literal("enchantment-storage")
+        final var sEnchantmentStorage = parent.literal("enchantment-storage")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Enchantment Storages.")
                 .permission(Permissions.ENCHANTMENT_STORAGE);
 
@@ -675,7 +698,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sEnchantmentStorageRemove)
                 .command(sEnchantmentStorageClear);
 
-        final var sLeatherArmor = cSpecial.literal("leather-armor")
+        final var sLeatherArmor = parent.literal("leather-armor")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Leather Armor.")
                 .permission(Permissions.LEATHER_ARMOR);
 
@@ -715,7 +738,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         commandManager.command(sLeatherArmorSet)
                 .command(sLeatherArmorReset);
 
-        final var sPotion = cSpecial.literal("potion")
+        final var sPotion = parent.literal("potion")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Potions.")
                 .permission(Permissions.POTION);
 
@@ -836,7 +859,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sPotionColorReset)
                 .command(sPotionType);
 
-        final var sSuspiciousStew = cSpecial.literal("suspicious-stew")
+        final var sSuspiciousStew = parent.literal("suspicious-stew")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
                 .permission(Permissions.SUSPICIOUS_STEW);
 
@@ -902,7 +925,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sSuspiciousStewRemove)
                 .command(sSuspiciousStewClear);
 
-        final var sTropicalFishBucket = cSpecial.literal("tropical-fish-bucket")
+        final var sTropicalFishBucket = parent.literal("tropical-fish-bucket")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.")
                 .permission(Permissions.TROPICAL_FISH_BUCKET);
 
