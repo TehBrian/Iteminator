@@ -971,7 +971,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         if (player.hasPermission(Permissions.FORMAT) && user.formatEnabled()) {
             if (user.formattingType() == User.FormattingType.LEGACY && player.hasPermission(Permissions.LEGACY)) {
                 return Format.legacy(string);
-            } else if (user.formattingType() == User.FormattingType.MINI_MESSAGE && player.hasPermission(Permissions.MINI_MESSAGE)) {
+            } else if (user.formattingType() == User.FormattingType.MINI_MESSAGE && player.hasPermission(Permissions.MINIMESSAGE)) {
                 return Format.miniMessage(string);
             }
         }
