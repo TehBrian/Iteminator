@@ -16,7 +16,7 @@ public final class PluginModule extends AbstractModule {
     private final Iteminator iteminator;
 
     /**
-     * @param iteminator injected
+     * @param iteminator Iteminator reference
      */
     public PluginModule(final @NonNull Iteminator iteminator) {
         this.iteminator = iteminator;
