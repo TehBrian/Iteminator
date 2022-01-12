@@ -42,17 +42,17 @@ public final class User extends PaperUser {
         return this.formatEnabled();
     }
 
-    public @NonNull FormattingType formattingType() {
+    public User.@NonNull FormattingType formattingType() {
         return this.formattingType;
     }
 
-    public void formattingType(final @NonNull FormattingType formattingType) {
+    public void formattingType(final User.@NonNull FormattingType formattingType) {
         this.formattingType = formattingType;
     }
 
     public enum FormattingType {
         LEGACY,
-        MINI_MESSAGE
+        MINIMESSAGE
     }
 
 }
