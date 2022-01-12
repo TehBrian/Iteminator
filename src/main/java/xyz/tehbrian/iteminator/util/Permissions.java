@@ -9,7 +9,7 @@ public final class Permissions {
     public static final String RELOAD = ROOT + ".reload";
 
     public static final String FORMAT =       ROOT   + ".format";
-    public static final String MINI_MESSAGE = FORMAT + ".mini-message";
+    public static final String MINIMESSAGE = FORMAT + ".minimessage";
     public static final String LEGACY =       FORMAT + ".legacy";
 
     public static final String AMOUNT =      ROOT + ".amount";
