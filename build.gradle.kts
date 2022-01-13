@@ -7,6 +7,7 @@ plugins {
 
 group = "xyz.tehbrian"
 version = "0.1.0-SNAPSHOT"
+description = "A modern item editing plugin."
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
@@ -45,7 +46,7 @@ project.gradle.startParameter.excludedTaskNames.add("checkstyleTest")
 
 tasks {
     processResources {
-        expand("version" to project.version)
+        expand("version" to project.version, "description" to project.description)
     }
 
     shadowJar {
