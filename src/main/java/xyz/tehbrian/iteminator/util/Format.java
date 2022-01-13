@@ -24,7 +24,7 @@ public final class Format {
      * @return the string as a component
      */
     public static @NonNull Component miniMessage(final @NonNull String string) {
-        return MiniMessage.miniMessage().parse(string);
+        return MiniMessage.miniMessage().deserialize(string);
     }
 
     /**

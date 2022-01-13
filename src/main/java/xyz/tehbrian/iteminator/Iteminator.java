@@ -34,7 +34,7 @@ public final class Iteminator extends TehPlugin {
         } catch (final Exception e) {
             this.getLog4JLogger().error("Something went wrong while creating the Guice injector.");
             this.getLog4JLogger().error("Disabling plugin.");
-            this.setEnabled(false);
+            this.disableSelf();
             this.getLog4JLogger().error("Printing stack trace, please send this to the developers:", e);
             return;
         }
