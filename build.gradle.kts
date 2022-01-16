@@ -1,8 +1,8 @@
 plugins {
     id("java")
-    id("net.kyori.indra.checkstyle") version "2.0.6"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("xyz.jpenilla.run-paper") version "1.0.6"
+    id("net.kyori.indra.checkstyle") version "2.0.6"
 }
 
 group = "xyz.tehbrian"
@@ -41,7 +41,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-/* Disable checkstyle on tests */
+// disable checkstyle in tests
 project.gradle.startParameter.excludedTaskNames.add("checkstyleTest")
 
 tasks {

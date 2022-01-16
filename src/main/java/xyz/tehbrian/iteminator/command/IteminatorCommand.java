@@ -118,7 +118,10 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
             final @NonNull PaperCommandManager<CommandSender> commandManager,
             final Command.@NonNull Builder<CommandSender> parent
     ) {
-        final var cMain = parent.handler(c -> c.getSender().sendMessage(this.langConfig.c(NodePath.path("main"))));
+        final var cMain = parent.handler(c -> c.getSender().sendMessage(
+                this.langConfig.c(NodePath.path("main"), PlaceholderResolver.placeholders(
+                        Placeholder.miniMessage("version", this.iteminator.getDescription().getVersion())
+                ))));
 
         final var help = new MinecraftHelp<>(
                 "/iteminator help",
@@ -127,8 +130,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
         // we know that context.getOrDefault won't default to null
         // since we can see what we're passing in
-        @SuppressWarnings("ConstantConditions")
-        final var cHelp = parent.literal("help")
+        @SuppressWarnings("ConstantConditions") final var cHelp = parent.literal("help")
                 .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
                 .handler(context -> help.queryCommands(context.getOrDefault("query", ""), context.getSender()));
 
