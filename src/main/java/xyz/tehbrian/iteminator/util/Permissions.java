@@ -19,6 +19,7 @@ public final class Permissions {
     public static final String LORE =        ROOT + ".lore";
     public static final String ENCHANTMENT = ROOT + ".enchantment";
     public static final String FLAGS =       ROOT + ".flags";
+    public static final String ATTRIBUTE =   ROOT + ".attribute";
 
     public static final String SPECIAL =              ROOT    + ".special";
     public static final String ARMOR_STAND =          SPECIAL + ".armor-stand";
