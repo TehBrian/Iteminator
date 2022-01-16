@@ -12,6 +12,7 @@ import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.Command;
 import cloud.commandframework.arguments.standard.BooleanArgument;
+import cloud.commandframework.arguments.standard.DoubleArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
@@ -32,6 +33,8 @@ import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
@@ -39,6 +42,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TropicalFish;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
@@ -72,6 +76,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -361,6 +366,49 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     HeldItemModifier.modify(sender, b -> b.flags(null));
                 });
 
+        final var cAttribute = parent.literal("attribute")
+                .meta(CommandMeta.DESCRIPTION, "Attribute-related commands.")
+                .permission(Permissions.ATTRIBUTE);
+
+        final var cAttributeAdd = cAttribute.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add an attribute.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(Attribute.class, "attribute"))
+                .argument(StringArgument.quoted("name"))
+                .argument(DoubleArgument.of("amount"))
+                .argument(EnumArgument.of(AttributeModifier.Operation.class, "operation"))
+                .argument(EnumArgument.optional(EquipmentSlot.class, "equipment_slot"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+
+                    final var modifier = new AttributeModifier(
+                            UUID.randomUUID(), // let's hope for no collision! :D
+                            c.get("name"),
+                            c.<Double>get("amount"),
+                            c.get("operation"),
+                            c.getOrDefault("equipment_slot", null)
+                    );
+
+                    HeldItemModifier.modify(sender, b -> b.addAttributeModifier(c.get("attribute"), modifier));
+                });
+
+        final var cAttributeRemove = cAttribute.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove an attribute.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(Attribute.class, "attribute"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.removeAttributeModifier(c.<Attribute>get("attribute")));
+                });
+
+        final var cAttributeClear = cAttribute.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the attributes.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.attributeModifiers(null));
+                });
+
         commandManager
                 .command(cLoreAdd)
                 .command(cLoreSet)
@@ -371,7 +419,10 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(cEnchantmentClear)
                 .command(cFlagsAdd)
                 .command(cFlagsRemove)
-                .command(cFlagsClear);
+                .command(cFlagsClear)
+                .command(cAttributeAdd)
+                .command(cAttributeRemove)
+                .command(cAttributeClear);
     }
 
     private void registerSpecial(
