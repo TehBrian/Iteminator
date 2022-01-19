@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
 import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
 import org.bukkit.Color;
@@ -124,6 +125,16 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var help = new MinecraftHelp<>(
                 "/iteminator help",
                 AudienceProvider.nativeAudience(), commandManager
+        );
+
+        help.setHelpColors(
+                MinecraftHelp.HelpColors.of(
+                        TextColor.fromCSSHexString("#333344"),
+                        TextColor.fromCSSHexString("#88EEFF"),
+                        TextColor.fromCSSHexString("#44BBDD"),
+                        TextColor.fromCSSHexString("#FFEEFF"),
+                        TextColor.fromCSSHexString("#333344")//TextColor.fromCSSHexString("#DD5577")
+                )
         );
 
         // we know that context.getOrDefault won't default to null
