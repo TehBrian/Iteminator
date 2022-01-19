@@ -746,7 +746,9 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .meta(CommandMeta.DESCRIPTION, "Commands for Leather Armor.")
                 .permission(Permissions.LEATHER_ARMOR);
 
-        final var sLeatherArmorSet = sLeatherArmor
+        final var sLeatherArmorColor = sLeatherArmor.literal("color");
+
+        final var sLeatherArmorSet = sLeatherArmorColor
                 .meta(CommandMeta.DESCRIPTION, "Set the armor's color.")
                 .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
@@ -766,7 +768,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                     );
                 });
 
-        final var sLeatherArmorReset = sLeatherArmor
+        final var sLeatherArmorReset = sLeatherArmorColor
                 .meta(CommandMeta.DESCRIPTION, "Reset the armor's color.")
                 .senderType(Player.class)
                 .handler(c -> {
