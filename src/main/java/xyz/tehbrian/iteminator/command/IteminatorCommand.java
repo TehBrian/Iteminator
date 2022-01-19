@@ -27,7 +27,6 @@ import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
 import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
 import org.bukkit.Color;
@@ -64,6 +63,7 @@ import xyz.tehbrian.iteminator.Iteminator;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.User;
 import xyz.tehbrian.iteminator.user.UserService;
+import xyz.tehbrian.iteminator.util.Colors;
 import xyz.tehbrian.iteminator.util.Format;
 import xyz.tehbrian.iteminator.util.HeldItemModifier;
 import xyz.tehbrian.iteminator.util.ItemMetaRequiredTypes;
@@ -129,11 +129,11 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
         help.setHelpColors(
                 MinecraftHelp.HelpColors.of(
-                        TextColor.fromCSSHexString("#333344"),
-                        TextColor.fromCSSHexString("#88EEFF"),
-                        TextColor.fromCSSHexString("#44BBDD"),
-                        TextColor.fromCSSHexString("#FFEEFF"),
-                        TextColor.fromCSSHexString("#333344")//TextColor.fromCSSHexString("#DD5577")
+                        Colors.GRAY,
+                        Colors.LIGHT_BLUE,
+                        Colors.DARK_BLUE,
+                        Colors.WHITE,
+                        Colors.GRAY
                 )
         );
 
