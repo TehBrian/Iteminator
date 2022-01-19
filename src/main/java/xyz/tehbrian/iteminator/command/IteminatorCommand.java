@@ -910,7 +910,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sDamageableSet = sDamageable
                 .meta(CommandMeta.DESCRIPTION, "Sets the damage.")
                 .senderType(Player.class)
-                .argument(IntegerArgument.optional("damage", 0))
+                .argument(IntegerArgument.<CommandSender>newBuilder("damage").asOptionalWithDefault(0).withMin(0))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
