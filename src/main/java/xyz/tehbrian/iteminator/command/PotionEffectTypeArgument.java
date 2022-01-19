@@ -4,7 +4,6 @@ import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.captions.Caption;
 import cloud.commandframework.captions.CaptionVariable;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.exceptions.parsing.NoInputProvidedException;
@@ -20,13 +19,13 @@ import java.util.Queue;
 import java.util.function.BiFunction;
 
 /**
- * cloud argument type that parses Bukkit {@link PotionEffectType}s
+ * Parses Bukkit {@link PotionEffectType}s.
  *
- * @param <C> Command sender type
+ * @param <C> sender type
  */
 public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffectType> {
 
-    protected PotionEffectTypeArgument(
+    private PotionEffectTypeArgument(
             final boolean required,
             final @NonNull String name,
             final @NonNull String defaultValue,
@@ -37,7 +36,7 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
         super(
                 required,
                 name,
-                new PotionEffectTypeParser<>(),
+                new Parser<>(),
                 defaultValue,
                 PotionEffectType.class,
                 suggestionsProvider,
@@ -46,61 +45,82 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
     }
 
     /**
-     * Create a new builder
+     * Create a new {@link Builder}.
      *
-     * @param name Name of the argument
-     * @param <C>  Command sender type
-     * @return Created builder
+     * @param name argument name
+     * @param <C>  sender type
+     * @return new builder
      */
-    public static <C> PotionEffectTypeArgument.@NonNull Builder<C> newBuilder(final @NonNull String name) {
-        return new PotionEffectTypeArgument.Builder<>(name);
+    public static @NonNull <C> Builder<C> builder(final @NonNull String name) {
+        return new Builder<>(name);
     }
 
     /**
-     * Create a new required argument
+     * Create a new required {@link PotionEffectTypeArgument}.
      *
-     * @param name Argument name
-     * @param <C>  Command sender type
-     * @return Created argument
+     * @param name argument name
+     * @param <C>  sender type
+     * @return built argument
      */
-    public static <C> @NonNull CommandArgument<C, PotionEffectType> of(final @NonNull String name) {
-        return PotionEffectTypeArgument.<C>newBuilder(name).asRequired().build();
+    public static <C> @NonNull PotionEffectTypeArgument<C> of(final @NonNull String name) {
+        return PotionEffectTypeArgument.<C>builder(name).asRequired().build();
     }
 
     /**
-     * Create a new optional argument
+     * Create a new optional {@link PotionEffectTypeArgument}.
      *
-     * @param name Argument name
-     * @param <C>  Command sender type
-     * @return Created argument
+     * @param name argument name
+     * @param <C>  sender type
+     * @return built argument
      */
-    public static <C> @NonNull CommandArgument<C, PotionEffectType> optional(final @NonNull String name) {
-        return PotionEffectTypeArgument.<C>newBuilder(name).asOptional().build();
+    public static <C> @NonNull PotionEffectTypeArgument<C> optional(final @NonNull String name) {
+        return PotionEffectTypeArgument.<C>builder(name).asOptional().build();
     }
 
     /**
-     * Create a new optional argument with a default value
+     * Create a new optional {@link PotionEffectTypeArgument} with the specified default value.
      *
-     * @param name             Argument name
-     * @param potionEffectType Default value
-     * @param <C>              Command sender type
-     * @return Created argument
+     * @param name             argument name
+     * @param potionEffectType default value
+     * @param <C>              sender type
+     * @return built argument
      */
-    public static <C> @NonNull CommandArgument<C, PotionEffectType> optional(
+    public static <C> @NonNull PotionEffectTypeArgument<C> optional(
             final @NonNull String name,
             final @NonNull PotionEffectType potionEffectType
     ) {
-        return PotionEffectTypeArgument.<C>newBuilder(name).asOptionalWithDefault(potionEffectType.getName()).build();
+        return PotionEffectTypeArgument.<C>builder(name).asOptionalWithDefault(potionEffectType.getName()).build();
     }
 
-    public static final class Builder<C> extends CommandArgument.Builder<C, PotionEffectType> {
+    /**
+     * Builder for {@link PotionEffectTypeArgument}.
+     *
+     * @param <C> sender type
+     */
+    public static final class Builder<C> extends TypedBuilder<C, PotionEffectType, Builder<C>> {
 
         private Builder(final @NonNull String name) {
             super(PotionEffectType.class, name);
         }
 
+        /**
+         * Sets the command argument to be optional, with the specified default value.
+         *
+         * @param defaultValue default value
+         * @return this builder
+         * @see CommandArgument.Builder#asOptionalWithDefault(String)
+         */
+        public @NonNull Builder<C> asOptionalWithDefault(final @NonNull PotionEffectType defaultValue) {
+            return this.asOptionalWithDefault(defaultValue.getName());
+        }
+
+        /**
+         * Create a new {@link PotionEffectTypeArgument} from this builder.
+         *
+         * @return built argument
+         */
         @Override
-        public @NonNull CommandArgument<C, PotionEffectType> build() {
+        public @NonNull PotionEffectTypeArgument<C> build() {
             return new PotionEffectTypeArgument<>(
                     this.isRequired(),
                     this.getName(),
@@ -112,7 +132,12 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
 
     }
 
-    public static final class PotionEffectTypeParser<C> implements ArgumentParser<C, PotionEffectType> {
+    /**
+     * Parser for {@link PotionEffectType}.
+     *
+     * @param <C> sender type
+     */
+    public static final class Parser<C> implements ArgumentParser<C, PotionEffectType> {
 
         @Override
         public @NonNull ArgumentParseResult<PotionEffectType> parse(
@@ -122,15 +147,16 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
             final String input = inputQueue.peek();
             if (input == null) {
                 return ArgumentParseResult.failure(new NoInputProvidedException(
-                        PotionEffectTypeParser.class,
+                        Parser.class,
                         commandContext
                 ));
             }
 
-            final PotionEffectType potionEffectType = PotionEffectType.getByName(input);
+            final @Nullable PotionEffectType potionEffectType = PotionEffectType.getByName(input);
             if (potionEffectType == null) {
                 return ArgumentParseResult.failure(new PotionEffectTypeParseException(input, commandContext));
             }
+
             inputQueue.remove();
             return ArgumentParseResult.success(potionEffectType);
         }
@@ -149,36 +175,37 @@ public class PotionEffectTypeArgument<C> extends CommandArgument<C, PotionEffect
 
     }
 
-
+    /**
+     * Failure exception for {@link Parser}.
+     */
     public static final class PotionEffectTypeParseException extends ParserException {
 
         private static final long serialVersionUID = 3319300669876276695L;
         private final String input;
 
         /**
-         * Construct a new PotionEffectTypeParseException
+         * Construct a new {@link PotionEffectTypeParseException}.
          *
-         * @param input   Input
-         * @param context Command context
+         * @param input   input string
+         * @param context command context
          */
         public PotionEffectTypeParseException(
                 final @NonNull String input,
                 final @NonNull CommandContext<?> context
         ) {
             super(
-                    PotionEffectTypeParser.class,
+                    Parser.class,
                     context,
-                    // TODO: currently doesn't resolve - put in BukkitCaptionKeys if pring to cloud
-                    Caption.of("argument.parse.failure.potioneffecttype"),
+                    IteminatorCaptionKeys.ARGUMENT_PARSE_FAILURE_POTION_EFFECT_TYPE,
                     CaptionVariable.of("input", input)
             );
             this.input = input;
         }
 
         /**
-         * Get the input
+         * Get the supplied input string.
          *
-         * @return Input
+         * @return input string
          */
         public @NonNull String getInput() {
             return this.input;
