@@ -16,7 +16,6 @@ import cloud.commandframework.arguments.standard.DoubleArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
-import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
 import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.AudienceProvider;
@@ -37,7 +36,6 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TropicalFish;
@@ -316,20 +314,20 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var cEnchantmentAdd = cEnchantment.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
                 .senderType(Player.class)
-                .argument(EnchantmentArgument.of("type"))
+                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
                 .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.addEnchant(c.get("type"), c.<Integer>get("level")));
+                    HeldItemModifier.modify(sender, b -> b.addEnchant(c.<ModernEnchantment>get("type").unwrap(), c.<Integer>get("level")));
                 });
 
         final var cEnchantmentRemove = cEnchantment.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove an enchantment.")
                 .senderType(Player.class)
-                .argument(EnchantmentArgument.of("type"))
+                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.removeEnchant(c.<Enchantment>get("type")));
+                    HeldItemModifier.modify(sender, b -> b.removeEnchant(c.<ModernEnchantment>get("type").unwrap()));
                 });
 
         final var cEnchantmentClear = cEnchantment.literal("clear")
@@ -701,13 +699,13 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sEnchantmentStorageAdd = sEnchantmentStorage.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a stored enchantment.")
                 .senderType(Player.class)
-                .argument(EnchantmentArgument.of("type"))
+                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
                 .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.addStoredEnchant(c.get("type"), c.<Integer>get("level")),
+                            b -> b.addStoredEnchant(c.<ModernEnchantment>get("type").unwrap(), c.<Integer>get("level")),
                             EnchantmentStorageBuilder::of,
                             EnchantmentStorageMeta.class
                     );
@@ -716,12 +714,12 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sEnchantmentStorageRemove = sEnchantmentStorage.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a stored enchantment.")
                 .senderType(Player.class)
-                .argument(EnchantmentArgument.of("type"))
+                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.removeStoredEnchant(c.<Enchantment>get("type")),
+                            b -> b.removeStoredEnchant(c.<ModernEnchantment>get("type").unwrap()),
                             EnchantmentStorageBuilder::of,
                             EnchantmentStorageMeta.class
                     );
