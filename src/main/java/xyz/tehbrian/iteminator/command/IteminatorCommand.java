@@ -5,6 +5,7 @@ import broccolai.corn.paper.item.special.ArmorStandBuilder;
 import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
 import broccolai.corn.paper.item.special.BannerBuilder;
 import broccolai.corn.paper.item.special.BookBuilder;
+import broccolai.corn.paper.item.special.DamageableBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
 import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
@@ -48,6 +49,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -900,6 +902,26 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sPotionColorSet)
                 .command(sPotionColorReset)
                 .command(sPotionType);
+
+        final var sDamageable = parent.literal("damage") // abnormal name because ends in "able"
+                .meta(CommandMeta.DESCRIPTION, "Commands for Damageable items.")
+                .permission(Permissions.DAMAGEABLE);
+
+        final var sDamageableSet = sDamageable
+                .meta(CommandMeta.DESCRIPTION, "Sets the damage.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.optional("damage", 0))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.damage(c.get("damage")),
+                            DamageableBuilder::of,
+                            Damageable.class
+                    );
+                });
+
+        commandManager.command(sDamageableSet);
 
         final var sSuspiciousStew = parent.literal("suspicious-stew")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
