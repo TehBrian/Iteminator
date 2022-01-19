@@ -4,7 +4,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public enum ModernPotionEffectType {
-
     SPEED              (PotionEffectType.SPEED),
     SLOWNESS           (PotionEffectType.SLOW),
     HASTE              (PotionEffectType.FAST_DIGGING),

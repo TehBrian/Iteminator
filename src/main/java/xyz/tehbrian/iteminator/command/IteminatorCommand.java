@@ -56,7 +56,6 @@ import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
@@ -875,12 +874,12 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sPotionType = sPotion.literal("type")
                 .meta(CommandMeta.DESCRIPTION, "Set the potion type.")
                 .senderType(Player.class)
-                .argument(EnumArgument.of(PotionType.class, "type"))
+                .argument(EnumArgument.of(ModernPotionType.class, "type"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.basePotionData(new PotionData(c.get("type"))),
+                            b -> b.basePotionData(new PotionData(c.<ModernPotionType>get("type").unwrap())),
                             PotionBuilder::of,
                             PotionMeta.class
                     );
