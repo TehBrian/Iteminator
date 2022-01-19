@@ -56,7 +56,6 @@ import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -785,7 +784,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sPotionEffectAdd = sPotionEffect.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
                 .senderType(Player.class)
-                .argument(PotionEffectTypeArgument.of("type"))
+                .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
                 .argument(IntegerArgument.<CommandSender>newBuilder("duration").withMin(0))
                 .argument(IntegerArgument.<CommandSender>newBuilder("amplifier").withMin(0).withMax(64))
                 .argument(LowerBooleanArgument.optional("ambient", true))
@@ -796,7 +795,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                             sender,
                             b -> {
                                 final var potionEffect = new PotionEffect(
-                                        c.get("type"),
+                                        c.<ModernPotionEffectType>get("type").unwrap(),
                                         c.<Integer>get("duration"),
                                         c.<Integer>get("amplifier"),
                                         c.<Boolean>get("ambient"),
@@ -814,12 +813,12 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sPotionEffectRemove = sPotionEffect.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a custom effect.")
                 .senderType(Player.class)
-                .argument(PotionEffectTypeArgument.of("type"))
+                .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.removeCustomEffect(c.<PotionEffectType>get("type")),
+                            b -> b.removeCustomEffect(c.<ModernPotionEffectType>get("type").unwrap()),
                             PotionBuilder::of,
                             PotionMeta.class
                     );
@@ -921,7 +920,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sSuspiciousStewAdd = sSuspiciousStew.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
                 .senderType(Player.class)
-                .argument(PotionEffectTypeArgument.of("type"))
+                .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
                 .argument(IntegerArgument.<CommandSender>newBuilder("duration").withMin(0))
                 .argument(IntegerArgument.<CommandSender>newBuilder("amplifier").withMin(0).withMax(64))
                 .argument(LowerBooleanArgument.optional("ambient", true))
@@ -932,7 +931,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                             sender,
                             b -> {
                                 final var potionEffect = new PotionEffect(
-                                        c.get("type"),
+                                        c.<ModernPotionEffectType>get("type").unwrap(),
                                         c.<Integer>get("duration"),
                                         c.<Integer>get("amplifier"),
                                         c.<Boolean>get("ambient"),
@@ -950,12 +949,12 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         final var sSuspiciousStewRemove = sSuspiciousStew.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a custom effect.")
                 .senderType(Player.class)
-                .argument(PotionEffectTypeArgument.of("type"))
+                .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
                             sender,
-                            b -> b.removeCustomEffect(c.<PotionEffectType>get("type")),
+                            b -> b.removeCustomEffect(c.<ModernPotionEffectType>get("type").unwrap()),
                             SuspiciousStewBuilder::of,
                             SuspiciousStewMeta.class
                     );
