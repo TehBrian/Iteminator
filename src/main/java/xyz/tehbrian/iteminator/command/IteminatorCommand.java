@@ -692,6 +692,26 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sBookGeneration)
                 .command(sBookEditable);
 
+        final var sDamageable = parent.literal("damage") // abnormal name because ends in "able"
+                .meta(CommandMeta.DESCRIPTION, "Commands for Damageable items.")
+                .permission(Permissions.DAMAGEABLE);
+
+        final var sDamageableSet = sDamageable
+                .meta(CommandMeta.DESCRIPTION, "Sets the damage.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("damage").asOptionalWithDefault(0).withMin(0))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.damage(c.get("damage")),
+                            DamageableBuilder::of,
+                            Damageable.class
+                    );
+                });
+
+        commandManager.command(sDamageableSet);
+
         final var sEnchantmentStorage = parent.literal("enchantment-storage")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Enchantment Storages.")
                 .permission(Permissions.ENCHANTMENT_STORAGE);
@@ -902,26 +922,6 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sPotionColorSet)
                 .command(sPotionColorReset)
                 .command(sPotionType);
-
-        final var sDamageable = parent.literal("damage") // abnormal name because ends in "able"
-                .meta(CommandMeta.DESCRIPTION, "Commands for Damageable items.")
-                .permission(Permissions.DAMAGEABLE);
-
-        final var sDamageableSet = sDamageable
-                .meta(CommandMeta.DESCRIPTION, "Sets the damage.")
-                .senderType(Player.class)
-                .argument(IntegerArgument.<CommandSender>newBuilder("damage").asOptionalWithDefault(0).withMin(0))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    this.modifySpecial(
-                            sender,
-                            b -> b.damage(c.get("damage")),
-                            DamageableBuilder::of,
-                            Damageable.class
-                    );
-                });
-
-        commandManager.command(sDamageableSet);
 
         final var sSuspiciousStew = parent.literal("suspicious-stew")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
