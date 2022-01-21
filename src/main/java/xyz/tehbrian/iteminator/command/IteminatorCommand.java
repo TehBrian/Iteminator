@@ -24,6 +24,7 @@ import cloud.commandframework.paper.PaperCommandManager;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
@@ -50,6 +51,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.bukkit.potion.PotionData;
@@ -923,6 +925,39 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
                 .command(sPotionColorReset)
                 .command(sPotionType);
 
+        final var sSkull = parent.literal("skull")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Skulls.")
+                .permission(Permissions.SKULL);
+
+        final var sSkullName = sSkull.literal("name")
+                .meta(CommandMeta.DESCRIPTION, "Set the owning player by name.")
+                .senderType(Player.class)
+                .argument(StringArgument.<CommandSender>newBuilder("name")
+                        .withSuggestionsProvider((c, s) -> this.iteminator.getServer()
+                                .getOnlinePlayers().stream().map(Player::getName).toList()))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modifyItemStack(
+                            sender,
+                            i -> {
+                                if (i.getItemMeta() instanceof SkullMeta skullMeta) {
+                                    // fuk th polic
+                                    // i spent like 50 trillion hours fiddling with
+                                    // get offline player and calling mojang's api, and
+                                    // you know what actually worked? a deprecated method.
+                                    //noinspection deprecation
+                                    skullMeta.setOwner(c.get("name"));
+                                    i.setItemMeta(skullMeta);
+                                } else {
+                                    this.sendWrongTypeMessage(sender, SkullMeta.class);
+                                }
+                                return i;
+                            }
+                    );
+                });
+
+        commandManager.command(sSkullName);
+
         final var sSuspiciousStew = parent.literal("suspicious-stew")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
                 .permission(Permissions.SUSPICIOUS_STEW);
@@ -1064,6 +1099,13 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         );
     }
 
+    private void sendWrongTypeMessage(final Audience audience, final Class<? extends ItemMeta> metaType) {
+        // TODO: handle null better
+        final @NonNull List<Material> requiredTypes =
+                Objects.requireNonNull(ItemMetaRequiredTypes.get(metaType));
+        audience.sendMessage(this.generateWrongTypeMessage(requiredTypes));
+    }
+
     /**
      * @param player         the player to target
      * @param operator       the operator to apply to the item in the main hand
@@ -1078,10 +1120,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
         try {
             HeldItemModifier.modifySpecial(player, operator, builderCreator);
         } catch (final IllegalArgumentException e) {
-            // TODO: handle null better
-            final @NonNull List<Material> requiredTypes =
-                    Objects.requireNonNull(ItemMetaRequiredTypes.get(metaType));
-            player.sendMessage(this.generateWrongTypeMessage(requiredTypes));
+            this.sendWrongTypeMessage(player, metaType);
         }
     }
 
