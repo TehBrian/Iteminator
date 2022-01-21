@@ -26,10 +26,11 @@ public final class Permissions {
     public static final String AXOLOTL_BUCKET =       SPECIAL + ".axolotl-bucket";
     public static final String BANNER =               SPECIAL + ".banner";
     public static final String BOOK =                 SPECIAL + ".book";
+    public static final String DAMAGEABLE =           SPECIAL + ".damageable";
     public static final String ENCHANTMENT_STORAGE =  SPECIAL + ".enchantment-storage";
     public static final String LEATHER_ARMOR =        SPECIAL + ".leather-armor";
     public static final String POTION =               SPECIAL + ".potion";
-    public static final String DAMAGEABLE =           SPECIAL + ".damageable";
+    public static final String SKULL =                SPECIAL + ".skull";
     public static final String SUSPICIOUS_STEW =      SPECIAL + ".suspicious-stew";
     public static final String TROPICAL_FISH_BUCKET = SPECIAL + ".tropical-fish-bucket";
 
