@@ -71,11 +71,18 @@ public final class MetaCommands {
                 )
         );
 
-        // we know that context.getOrDefault won't default to null
-        // since we can see what we're passing in
-        @SuppressWarnings("ConstantConditions") final var cHelp = parent.literal("help")
+        final var cHelp = parent.literal("help")
                 .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
-                .handler(context -> help.queryCommands(context.getOrDefault("query", ""), context.getSender()));
+                .handler(c -> help.queryCommands(
+                        // prepend "iteminator " to non-empty queries without root command for usability
+                        c.<String>getOptional("query").map(s -> {
+                            if (!s.startsWith("iteminator")) {
+                                return "iteminator " + s;
+                            }
+                            return s;
+                        }).orElse(""),
+                        c.getSender()
+                ));
 
         final var cReload = parent.literal("reload")
                 .meta(CommandMeta.DESCRIPTION, "Reload the plugin's config.")
