@@ -8,6 +8,7 @@ import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.DamageableBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
 import broccolai.corn.paper.item.special.LeatherArmorBuilder;
+import broccolai.corn.paper.item.special.MapBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
 import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
@@ -41,10 +42,12 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
+import org.bukkit.map.MapView;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -472,6 +475,212 @@ public final class SpecialCommands {
 
         commandManager.command(sLeatherArmorSet)
                 .command(sLeatherArmorReset);
+
+        final var sMap = parent.literal("map")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Maps.")
+                .permission(Permissions.MAP);
+
+        final var sMapScaling = sMap.literal("scaling")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the map is scaling.")
+                .senderType(Player.class)
+                .argument(LowerBooleanArgument.of("scaling"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.scaling(c.<Boolean>get("scaling")),
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapLocationName = sMap.literal("location-name")
+                .meta(CommandMeta.DESCRIPTION, "Set the map's location name.")
+                .senderType(Player.class)
+                .argument(StringArgument.optional("name"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.locationName(c.<String>getOptional("name").orElse(null)),
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapColor = sMap.literal("color");
+
+        final var sMapColorSet = sMapColor
+                .meta(CommandMeta.DESCRIPTION, "Set the map's color.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.color(Color.fromRGB(
+                                    c.<Integer>get("red"),
+                                    c.<Integer>get("green"),
+                                    c.<Integer>get("blue")
+                            )),
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapColorReset = sMapColor
+                .meta(CommandMeta.DESCRIPTION, "Reset the map's color.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.color(null),
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapView = sMap.literal("view");
+
+        final var sMapViewCenterX = sMapView.literal("center-x")
+                .meta(CommandMeta.DESCRIPTION, "Set the map view's center x.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.of("x"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @Nullable MapView view = b.mapView();
+                                if (view != null) {
+                                    view.setCenterX(c.<Integer>get("x"));
+                                    b.mapView(view);
+                                }
+                                return b;
+                            },
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapViewCenterZ = sMapView.literal("center-z")
+                .meta(CommandMeta.DESCRIPTION, "Set the map view's center z.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.of("z"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @Nullable MapView view = b.mapView();
+                                if (view != null) {
+                                    view.setCenterZ(c.<Integer>get("z"));
+                                    b.mapView(view);
+                                }
+                                return b;
+                            },
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapViewScale = sMapView.literal("scale")
+                .meta(CommandMeta.DESCRIPTION, "Set the map view's scale.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(MapView.Scale.class, "scale"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @Nullable MapView view = b.mapView();
+                                if (view != null) {
+                                    view.setScale(c.get("scale"));
+                                    b.mapView(view);
+                                }
+                                return b;
+                            },
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapViewLocked = sMapView.literal("locked")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the map view is locked.")
+                .senderType(Player.class)
+                .argument(LowerBooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @Nullable MapView view = b.mapView();
+                                if (view != null) {
+                                    view.setLocked(c.<Boolean>get("boolean"));
+                                    b.mapView(view);
+                                }
+                                return b;
+                            },
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapViewTrackingPosition = sMapView.literal("tracking-position")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the map view shows a position cursor.")
+                .senderType(Player.class)
+                .argument(LowerBooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @Nullable MapView view = b.mapView();
+                                if (view != null) {
+                                    view.setTrackingPosition(c.<Boolean>get("boolean"));
+                                    b.mapView(view);
+                                }
+                                return b;
+                            },
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        final var sMapViewUnlimitedTracking = sMapView.literal("unlimited-tracking")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the map view shows off-screen cursors.")
+                .senderType(Player.class)
+                .argument(LowerBooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> {
+                                final @Nullable MapView view = b.mapView();
+                                if (view != null) {
+                                    view.setUnlimitedTracking(c.<Boolean>get("boolean"));
+                                    b.mapView(view);
+                                }
+                                return b;
+                            },
+                            MapBuilder::of,
+                            MapMeta.class
+                    );
+                });
+
+        commandManager.command(sMapScaling)
+                .command(sMapLocationName)
+                .command(sMapColorSet)
+                .command(sMapColorReset)
+                .command(sMapViewCenterX)
+                .command(sMapViewCenterZ)
+                .command(sMapViewScale)
+                .command(sMapViewLocked)
+                .command(sMapViewTrackingPosition)
+                .command(sMapViewUnlimitedTracking);
 
         final var sPotion = parent.literal("potion")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Potions.")
