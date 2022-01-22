@@ -551,18 +551,12 @@ public final class SpecialCommands {
                 .argument(IntegerArgument.of("x"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modifySpecial(
+                    this.modifyMapView(
                             sender,
-                            b -> {
-                                final @Nullable MapView view = b.mapView();
-                                if (view != null) {
-                                    view.setCenterX(c.<Integer>get("x"));
-                                    b.mapView(view);
-                                }
-                                return b;
-                            },
-                            MapBuilder::of,
-                            MapMeta.class
+                            v -> {
+                                v.setCenterX(c.<Integer>get("x"));
+                                return v;
+                            }
                     );
                 });
 
@@ -572,18 +566,12 @@ public final class SpecialCommands {
                 .argument(IntegerArgument.of("z"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modifySpecial(
+                    this.modifyMapView(
                             sender,
-                            b -> {
-                                final @Nullable MapView view = b.mapView();
-                                if (view != null) {
-                                    view.setCenterZ(c.<Integer>get("z"));
-                                    b.mapView(view);
-                                }
-                                return b;
-                            },
-                            MapBuilder::of,
-                            MapMeta.class
+                            v -> {
+                                v.setCenterZ(c.<Integer>get("z"));
+                                return v;
+                            }
                     );
                 });
 
@@ -593,18 +581,12 @@ public final class SpecialCommands {
                 .argument(EnumArgument.of(MapView.Scale.class, "scale"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modifySpecial(
+                    this.modifyMapView(
                             sender,
-                            b -> {
-                                final @Nullable MapView view = b.mapView();
-                                if (view != null) {
-                                    view.setScale(c.get("scale"));
-                                    b.mapView(view);
-                                }
-                                return b;
-                            },
-                            MapBuilder::of,
-                            MapMeta.class
+                            v -> {
+                                v.setScale(c.get("scale"));
+                                return v;
+                            }
                     );
                 });
 
@@ -614,18 +596,12 @@ public final class SpecialCommands {
                 .argument(LowerBooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modifySpecial(
+                    this.modifyMapView(
                             sender,
-                            b -> {
-                                final @Nullable MapView view = b.mapView();
-                                if (view != null) {
-                                    view.setLocked(c.<Boolean>get("boolean"));
-                                    b.mapView(view);
-                                }
-                                return b;
-                            },
-                            MapBuilder::of,
-                            MapMeta.class
+                            v -> {
+                                v.setLocked(c.<Boolean>get("boolean"));
+                                return v;
+                            }
                     );
                 });
 
@@ -635,18 +611,12 @@ public final class SpecialCommands {
                 .argument(LowerBooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modifySpecial(
+                    this.modifyMapView(
                             sender,
-                            b -> {
-                                final @Nullable MapView view = b.mapView();
-                                if (view != null) {
-                                    view.setTrackingPosition(c.<Boolean>get("boolean"));
-                                    b.mapView(view);
-                                }
-                                return b;
-                            },
-                            MapBuilder::of,
-                            MapMeta.class
+                            v -> {
+                                v.setTrackingPosition(c.<Boolean>get("boolean"));
+                                return v;
+                            }
                     );
                 });
 
@@ -656,18 +626,12 @@ public final class SpecialCommands {
                 .argument(LowerBooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
-                    this.modifySpecial(
+                    this.modifyMapView(
                             sender,
-                            b -> {
-                                final @Nullable MapView view = b.mapView();
-                                if (view != null) {
-                                    view.setUnlimitedTracking(c.<Boolean>get("boolean"));
-                                    b.mapView(view);
-                                }
-                                return b;
-                            },
-                            MapBuilder::of,
-                            MapMeta.class
+                            v -> {
+                                v.setUnlimitedTracking(c.<Boolean>get("boolean"));
+                                return v;
+                            }
                     );
                 });
 
@@ -984,6 +948,27 @@ public final class SpecialCommands {
         } catch (final IllegalArgumentException e) {
             this.sendWrongTypeMessage(player, metaType);
         }
+    }
+
+    /**
+     * @param player   the player to target
+     * @param operator the operator to apply to the map in the main hand
+     */
+    private void modifyMapView(
+            final @NonNull Player player, final @NonNull Function<@NonNull MapView, @Nullable MapView> operator
+    ) {
+        this.modifySpecial(
+                player,
+                b -> {
+                    final @Nullable MapView view = b.mapView();
+                    if (view != null) {
+                        b.mapView(operator.apply(view));
+                    }
+                    return b;
+                },
+                MapBuilder::of,
+                MapMeta.class
+        );
     }
 
 }
