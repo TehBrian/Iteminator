@@ -29,6 +29,7 @@ public final class Permissions {
     public static final String DAMAGEABLE =           SPECIAL + ".damageable";
     public static final String ENCHANTMENT_STORAGE =  SPECIAL + ".enchantment-storage";
     public static final String FIREWORK =             SPECIAL + ".firework";
+    public static final String FIREWORK_EFFECT =      SPECIAL + ".firework-effect";
     public static final String LEATHER_ARMOR =        SPECIAL + ".leather-armor";
     public static final String MAP =                  SPECIAL + ".map";
     public static final String POTION =               SPECIAL + ".potion";
