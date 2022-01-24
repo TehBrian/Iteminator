@@ -7,6 +7,7 @@ import broccolai.corn.paper.item.special.BannerBuilder;
 import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.DamageableBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
+import broccolai.corn.paper.item.special.FireworkBuilder;
 import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.MapBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
@@ -40,6 +41,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.MapMeta;
@@ -433,6 +435,26 @@ public final class SpecialCommands {
         commandManager.command(sEnchantmentStorageAdd)
                 .command(sEnchantmentStorageRemove)
                 .command(sEnchantmentStorageClear);
+
+        final var sFirework = parent.literal("firework")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Fireworks.")
+                .permission(Permissions.FIREWORK);
+
+        final var sFireworkPower = sFirework.literal("power")
+                .meta(CommandMeta.DESCRIPTION, "Set the power.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("power").withMin(0).withMax(128))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.power(c.<Integer>get("power")),
+                            FireworkBuilder::of,
+                            FireworkMeta.class
+                    );
+                });
+
+        commandManager.command(sFireworkPower);
 
         final var sLeatherArmor = parent.literal("leather-armor")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Leather Armor.")
