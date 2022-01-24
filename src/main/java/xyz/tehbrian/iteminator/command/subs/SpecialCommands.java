@@ -8,6 +8,7 @@ import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.DamageableBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
 import broccolai.corn.paper.item.special.FireworkBuilder;
+import broccolai.corn.paper.item.special.FireworkEffectBuilder;
 import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.MapBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
@@ -28,6 +29,7 @@ import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
 import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -41,6 +43,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -435,6 +438,65 @@ public final class SpecialCommands {
         commandManager.command(sEnchantmentStorageAdd)
                 .command(sEnchantmentStorageRemove)
                 .command(sEnchantmentStorageClear);
+
+        final var sFireworkEffect = parent.literal("firework-effect")
+                .meta(CommandMeta.DESCRIPTION, "Commands for Firework Effects.")
+                .permission(Permissions.FIREWORK_EFFECT);
+
+        final var sFireworkEffectFlicker = sFireworkEffect.literal("flicker")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the effect should flicker.")
+                .senderType(Player.class)
+                .argument(LowerBooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.fireworkEffect(
+                                    this.fireworkEffectBuilder(b.fireworkEffect())
+                                            .flicker(c.<Boolean>get("boolean")).build()
+                            ),
+                            FireworkEffectBuilder::of,
+                            FireworkEffectMeta.class
+                    );
+                });
+
+        final var sFireworkEffectTrail = sFireworkEffect.literal("trail")
+                .meta(CommandMeta.DESCRIPTION, "Set whether the effect should trail.")
+                .senderType(Player.class)
+                .argument(LowerBooleanArgument.of("boolean"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.fireworkEffect(
+                                    this.fireworkEffectBuilder(b.fireworkEffect())
+                                            .trail(c.<Boolean>get("boolean")).build()
+                            ),
+                            FireworkEffectBuilder::of,
+                            FireworkEffectMeta.class
+                    );
+                });
+
+        final var sFireworkEffectType = sFireworkEffect.literal("type")
+                .meta(CommandMeta.DESCRIPTION, "Set the effect type.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(FireworkEffect.Type.class, "type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.fireworkEffect(
+                                    this.fireworkEffectBuilder(b.fireworkEffect())
+                                            .with(c.get("type")).build()
+                            ),
+                            FireworkEffectBuilder::of,
+                            FireworkEffectMeta.class
+                    );
+                });
+
+        commandManager.command(sFireworkEffectFlicker)
+                .command(sFireworkEffectTrail)
+                .command(sFireworkEffectType);
 
         final var sFirework = parent.literal("firework")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Fireworks.")
@@ -991,6 +1053,24 @@ public final class SpecialCommands {
                 MapBuilder::of,
                 MapMeta.class
         );
+    }
+
+    /**
+     * Creates a new {@code Builder} from the provided {@code FireworkEffect}.
+     *
+     * @param fireworkEffect the {@code FireworkEffect} to turn into a {@code Builder}
+     * @return the {@code Builder}
+     */
+    private FireworkEffect.@NonNull Builder fireworkEffectBuilder(final @Nullable FireworkEffect fireworkEffect) {
+        if (fireworkEffect == null) {
+            return FireworkEffect.builder();
+        }
+        return FireworkEffect.builder()
+                .flicker(fireworkEffect.hasFlicker())
+                .trail(fireworkEffect.hasTrail())
+                .withColor(fireworkEffect.getColors())
+                .withFade(fireworkEffect.getFadeColors())
+                .with(fireworkEffect.getType());
     }
 
 }
