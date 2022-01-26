@@ -45,10 +45,7 @@ public final class Iteminator extends TehPlugin {
         }
         if (!this.setupCommands()) {
             this.disableSelf();
-            return;
         }
-
-        this.getLog4JLogger().info("Successfully started the plugin.");
     }
 
     /**
