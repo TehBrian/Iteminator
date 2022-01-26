@@ -494,9 +494,60 @@ public final class SpecialCommands {
                     );
                 });
 
+        final var sFireworkEffectColor = sFireworkEffect.literal("color");
+
+        final var sFireworkEffectColorAdd = sFireworkEffectColor.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a color.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.fireworkEffect(this.fireworkEffectBuilder(b.fireworkEffect())
+                                    .withColor(Color.fromRGB(
+                                            c.<Integer>get("red"),
+                                            c.<Integer>get("green"),
+                                            c.<Integer>get("blue")
+                                    )).build()
+                            ),
+                            FireworkEffectBuilder::of,
+                            FireworkEffectMeta.class
+                    );
+                });
+
+
+        final var sFireworkEffectFadeColor = sFireworkEffect.literal("fade-color");
+
+        final var sFireworkEffectFadeColorAdd = sFireworkEffectFadeColor.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a fade color.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
+                .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.fireworkEffect(this.fireworkEffectBuilder(b.fireworkEffect())
+                                    .withFade(Color.fromRGB(
+                                            c.<Integer>get("red"),
+                                            c.<Integer>get("green"),
+                                            c.<Integer>get("blue")
+                                    )).build()
+                            ),
+                            FireworkEffectBuilder::of,
+                            FireworkEffectMeta.class
+                    );
+                });
+
         commandManager.command(sFireworkEffectFlicker)
                 .command(sFireworkEffectTrail)
-                .command(sFireworkEffectType);
+                .command(sFireworkEffectType)
+                .command(sFireworkEffectColorAdd)
+                .command(sFireworkEffectFadeColorAdd);
 
         final var sFirework = parent.literal("firework")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Fireworks.")
