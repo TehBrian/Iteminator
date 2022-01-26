@@ -179,7 +179,6 @@ public final class SpecialCommands {
                     );
                 });
 
-        // FIXME: these commands are broken when trying to set the flags to their default state
         commandManager.command(sArmorStandShowArms)
                 .command(sArmorStandInvisible)
                 .command(sArmorStandMarker)
