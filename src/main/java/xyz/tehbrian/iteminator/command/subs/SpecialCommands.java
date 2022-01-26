@@ -518,7 +518,6 @@ public final class SpecialCommands {
                     );
                 });
 
-
         final var sFireworkEffectFadeColor = sFireworkEffect.literal("fade-color");
 
         final var sFireworkEffectFadeColorAdd = sFireworkEffectFadeColor.literal("add")
@@ -543,11 +542,11 @@ public final class SpecialCommands {
                     );
                 });
 
-        commandManager.command(sFireworkEffectFlicker)
-                .command(sFireworkEffectTrail)
-                .command(sFireworkEffectType)
-                .command(sFireworkEffectColorAdd)
-                .command(sFireworkEffectFadeColorAdd);
+//        commandManager.command(sFireworkEffectFlicker)
+//                .command(sFireworkEffectTrail)
+//                .command(sFireworkEffectType)
+//                .command(sFireworkEffectColorAdd)
+//                .command(sFireworkEffectFadeColorAdd);
 
         final var sFirework = parent.literal("firework")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Fireworks.")
