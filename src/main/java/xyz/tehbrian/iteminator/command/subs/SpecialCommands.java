@@ -554,7 +554,7 @@ public final class SpecialCommands {
         final var sFireworkPower = sFirework.literal("power")
                 .meta(CommandMeta.DESCRIPTION, "Set the power.")
                 .senderType(Player.class)
-                .argument(IntegerArgument.<CommandSender>newBuilder("power").withMin(0).withMax(128))
+                .argument(IntegerArgument.<CommandSender>newBuilder("power").withMin(0).withMax(127))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
