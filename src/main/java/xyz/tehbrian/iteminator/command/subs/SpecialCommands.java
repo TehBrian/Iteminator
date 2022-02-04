@@ -12,6 +12,7 @@ import broccolai.corn.paper.item.special.FireworkEffectBuilder;
 import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.MapBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
+import broccolai.corn.paper.item.special.RepairableBuilder;
 import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.Command;
@@ -49,6 +50,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
@@ -897,6 +899,26 @@ public final class SpecialCommands {
                 .command(sPotionColorSet)
                 .command(sPotionColorReset)
                 .command(sPotionType);
+
+        final var sRepairable = parent.literal("repair") // abnormal name because ends in "able"
+                .meta(CommandMeta.DESCRIPTION, "Commands for Repairable items.")
+                .permission(Permissions.REPAIRABLE);
+
+        final var sRepairableCostSet = sRepairable.literal("cost")
+                .meta(CommandMeta.DESCRIPTION, "Sets the repair cost.")
+                .senderType(Player.class)
+                .argument(IntegerArgument.<CommandSender>newBuilder("cost").asOptionalWithDefault(0))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    this.modifySpecial(
+                            sender,
+                            b -> b.repairCost(c.get("cost")),
+                            RepairableBuilder::of,
+                            Repairable.class
+                    );
+                });
+
+        commandManager.command(sRepairableCostSet);
 
         final var sSkull = parent.literal("skull")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Skulls.")
