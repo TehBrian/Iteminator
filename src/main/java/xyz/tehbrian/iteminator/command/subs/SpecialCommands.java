@@ -26,8 +26,7 @@ import com.google.inject.Inject;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
-import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -1076,7 +1075,7 @@ public final class SpecialCommands {
 
         return this.langConfig.c(
                 NodePath.path("wrong-type"),
-                PlaceholderResolver.placeholders(Placeholder.component("type", types))
+                Placeholder.component("type", types)
         );
     }
 
