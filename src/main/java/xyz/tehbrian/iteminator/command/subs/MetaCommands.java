@@ -8,8 +8,7 @@ import cloud.commandframework.minecraft.extras.AudienceProvider;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
-import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
-import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -52,9 +51,11 @@ public final class MetaCommands {
             final Command.@NonNull Builder<CommandSender> parent
     ) {
         final var cMain = parent.handler(c -> c.getSender().sendMessage(
-                this.langConfig.c(NodePath.path("main"), PlaceholderResolver.placeholders(
-                        Placeholder.miniMessage("version", this.iteminator.getDescription().getVersion())
-                ))));
+                this.langConfig.c(
+                        NodePath.path("main"),
+                        Placeholder.unparsed("version", this.iteminator.getDescription().getVersion())
+                ))
+        );
 
         final var help = new MinecraftHelp<>(
                 "/iteminator help",
@@ -117,7 +118,7 @@ public final class MetaCommands {
                     this.userService.getUser(player).formattingType(formattingType);
                     player.sendMessage(this.langConfig.c(
                             NodePath.path("format", "set"),
-                            PlaceholderResolver.placeholders(Placeholder.miniMessage("formatting_type", formattingType.toString()))
+                            Placeholder.unparsed("formatting_type", formattingType.toString())
                     ));
                 });
 
