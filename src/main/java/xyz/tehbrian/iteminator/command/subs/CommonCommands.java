@@ -117,6 +117,125 @@ public final class CommonCommands {
                 .command(cName)
                 .command(cUnbreakable);
 
+        final var cAttribute = parent.literal("attribute")
+                .meta(CommandMeta.DESCRIPTION, "Attribute-related commands.")
+                .permission(Permissions.ATTRIBUTE);
+
+        final var cAttributeAdd = cAttribute.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add an attribute.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(Attribute.class, "attribute"))
+                .argument(StringArgument.quoted("name"))
+                .argument(DoubleArgument.of("amount"))
+                .argument(EnumArgument.of(AttributeModifier.Operation.class, "operation"))
+                .argument(EnumArgument.optional(EquipmentSlot.class, "equipment_slot"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+
+                    final var modifier = new AttributeModifier(
+                            UUID.randomUUID(), // let's hope for no collision! :D
+                            c.get("name"),
+                            c.<Double>get("amount"),
+                            c.get("operation"),
+                            c.getOrDefault("equipment_slot", null)
+                    );
+
+                    HeldItemModifier.modify(sender, b -> b.addAttributeModifier(c.get("attribute"), modifier));
+                });
+
+        final var cAttributeRemove = cAttribute.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove an attribute.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(Attribute.class, "attribute"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.removeAttributeModifier(c.<Attribute>get("attribute")));
+                });
+
+        final var cAttributeClear = cAttribute.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the attributes.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.attributeModifiers(null));
+                });
+
+        commandManager
+                .command(cAttributeAdd)
+                .command(cAttributeRemove)
+                .command(cAttributeClear);
+
+        final var cEnchantment = parent.literal("enchantment")
+                .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.")
+                .permission(Permissions.ENCHANTMENT);
+
+        final var cEnchantmentAdd = cEnchantment.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
+                .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.addEnchant(c.<ModernEnchantment>get("type").unwrap(), c.<Integer>get("level")));
+                });
+
+        final var cEnchantmentRemove = cEnchantment.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove an enchantment.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.removeEnchant(c.<ModernEnchantment>get("type").unwrap()));
+                });
+
+        final var cEnchantmentClear = cEnchantment.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the enchantments.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.enchants(null));
+                });
+
+        commandManager
+                .command(cEnchantmentAdd)
+                .command(cEnchantmentRemove)
+                .command(cEnchantmentClear);
+
+        final var cFlags = parent.literal("flags")
+                .meta(CommandMeta.DESCRIPTION, "Flag-related commands.")
+                .permission(Permissions.FLAGS);
+
+        final var cFlagsAdd = cFlags.literal("add")
+                .meta(CommandMeta.DESCRIPTION, "Add a flag.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(ItemFlag.class, "flag"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.addFlag(c.<ItemFlag>get("flag")));
+                });
+
+        final var cFlagsRemove = cFlags.literal("remove")
+                .meta(CommandMeta.DESCRIPTION, "Remove a flag.")
+                .senderType(Player.class)
+                .argument(EnumArgument.of(ItemFlag.class, "flag"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.removeFlag(c.<ItemFlag>get("flag")));
+                });
+
+        final var cFlagsClear = cFlags.literal("clear")
+                .meta(CommandMeta.DESCRIPTION, "Clear the flags.")
+                .senderType(Player.class)
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.flags(null));
+                });
+
+        commandManager
+                .command(cFlagsAdd)
+                .command(cFlagsRemove)
+                .command(cFlagsClear);
+
         final var cLore = parent.literal("lore")
                 .meta(CommandMeta.DESCRIPTION, "Lore-related commands.")
                 .permission(Permissions.LORE);
@@ -192,125 +311,6 @@ public final class CommonCommands {
                 .command(cLoreSet)
                 .command(cLoreRemove)
                 .command(cLoreClear);
-
-        final var cEnchantment = parent.literal("enchantment")
-                .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.")
-                .permission(Permissions.ENCHANTMENT);
-
-        final var cEnchantmentAdd = cEnchantment.literal("add")
-                .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
-                .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.addEnchant(c.<ModernEnchantment>get("type").unwrap(), c.<Integer>get("level")));
-                });
-
-        final var cEnchantmentRemove = cEnchantment.literal("remove")
-                .meta(CommandMeta.DESCRIPTION, "Remove an enchantment.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(ModernEnchantment.class, "type"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.removeEnchant(c.<ModernEnchantment>get("type").unwrap()));
-                });
-
-        final var cEnchantmentClear = cEnchantment.literal("clear")
-                .meta(CommandMeta.DESCRIPTION, "Clear the enchantments.")
-                .senderType(Player.class)
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.enchants(null));
-                });
-
-        commandManager
-                .command(cEnchantmentAdd)
-                .command(cEnchantmentRemove)
-                .command(cEnchantmentClear);
-
-        final var cFlags = parent.literal("flags")
-                .meta(CommandMeta.DESCRIPTION, "Flag-related commands.")
-                .permission(Permissions.FLAGS);
-
-        final var cFlagsAdd = cFlags.literal("add")
-                .meta(CommandMeta.DESCRIPTION, "Add a flag.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(ItemFlag.class, "flag"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.addFlag(c.<ItemFlag>get("flag")));
-                });
-
-        final var cFlagsRemove = cFlags.literal("remove")
-                .meta(CommandMeta.DESCRIPTION, "Remove a flag.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(ItemFlag.class, "flag"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.removeFlag(c.<ItemFlag>get("flag")));
-                });
-
-        final var cFlagsClear = cFlags.literal("clear")
-                .meta(CommandMeta.DESCRIPTION, "Clear the flags.")
-                .senderType(Player.class)
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.flags(null));
-                });
-
-        commandManager
-                .command(cFlagsAdd)
-                .command(cFlagsRemove)
-                .command(cFlagsClear);
-
-        final var cAttribute = parent.literal("attribute")
-                .meta(CommandMeta.DESCRIPTION, "Attribute-related commands.")
-                .permission(Permissions.ATTRIBUTE);
-
-        final var cAttributeAdd = cAttribute.literal("add")
-                .meta(CommandMeta.DESCRIPTION, "Add an attribute.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(Attribute.class, "attribute"))
-                .argument(StringArgument.quoted("name"))
-                .argument(DoubleArgument.of("amount"))
-                .argument(EnumArgument.of(AttributeModifier.Operation.class, "operation"))
-                .argument(EnumArgument.optional(EquipmentSlot.class, "equipment_slot"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-
-                    final var modifier = new AttributeModifier(
-                            UUID.randomUUID(), // let's hope for no collision! :D
-                            c.get("name"),
-                            c.<Double>get("amount"),
-                            c.get("operation"),
-                            c.getOrDefault("equipment_slot", null)
-                    );
-
-                    HeldItemModifier.modify(sender, b -> b.addAttributeModifier(c.get("attribute"), modifier));
-                });
-
-        final var cAttributeRemove = cAttribute.literal("remove")
-                .meta(CommandMeta.DESCRIPTION, "Remove an attribute.")
-                .senderType(Player.class)
-                .argument(EnumArgument.of(Attribute.class, "attribute"))
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.removeAttributeModifier(c.<Attribute>get("attribute")));
-                });
-
-        final var cAttributeClear = cAttribute.literal("clear")
-                .meta(CommandMeta.DESCRIPTION, "Clear the attributes.")
-                .senderType(Player.class)
-                .handler(c -> {
-                    final var sender = (Player) c.getSender();
-                    HeldItemModifier.modify(sender, b -> b.attributeModifiers(null));
-                });
-
-        commandManager
-                .command(cAttributeAdd)
-                .command(cAttributeRemove)
-                .command(cAttributeClear);
     }
 
 }
