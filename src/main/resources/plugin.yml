@@ -20,3 +20,78 @@ permissions:
   iteminator.reload:
     description: Permission to run /iteminator reload.
     default: op
+
+  iteminator.amount:
+    description: Permission to run /iteminator amount.
+    default: true
+  iteminator.custom-model-data:
+    description: Permission to run /iteminator custom-model-data.
+    default: true
+  iteminator.material:
+    description: Permission to run /iteminator material.
+    default: true
+  iteminator.name:
+    description: Permission to run /iteminator name.
+    default: true
+  iteminator.unbreakable:
+    description: Permission to run /iteminator unbreakable.
+    default: true
+
+  iteminator.attribute:
+    description: Permission to run /iteminator attribute.
+    default: true
+  iteminator.enchantment:
+    description: Permission to run /iteminator enchantment.
+    default: true
+  iteminator.flags:
+    description: Permission to run /iteminator flags.
+    default: true
+  iteminator.lore:
+    description: Permission to run /iteminator lore.
+    default: true
+
+  iteminator.special.armor-stand:
+    description: Permission to run /iteminator special armor-stand.
+    default: true
+  iteminator.special.axolotl-bucket:
+    description: Permission to run /iteminator special axolotl-bucket.
+    default: true
+  iteminator.special.banner:
+    description: Permission to run /iteminator special banner.
+    default: true
+  iteminator.special.book:
+    description: Permission to run /iteminator special book.
+    default: true
+  iteminator.special.damageable:
+    description: Permission to run /iteminator special damageable.
+    default: true
+  iteminator.special.enchantment-storage:
+    description: Permission to run /iteminator special enchantment-storage.
+    default: true
+  iteminator.special.firework:
+    description: Permission to run /iteminator special firework.
+    default: true
+  iteminator.special.firework-effect:
+    description: Permission to run /iteminator special firework-effect.
+    default: true
+  iteminator.special.leather-armor:
+    description: Permission to run /iteminator special leather-armor.
+    default: true
+  iteminator.special.map:
+    description: Permission to run /iteminator special map.
+    default: true
+  iteminator.special.potion:
+    description: Permission to run /iteminator special potion.
+    default: true
+  iteminator.special.repairable:
+    description: Permission to run /iteminator special repairable.
+    default: true
+  iteminator.special.skull:
+    description: Permission to run /iteminator special skull.
+    default: true
+  iteminator.special.suspicious-stew:
+    description: Permission to run /iteminator special suspicious-stew.
+    default: true
+  iteminator.special.tropical-fish-bucket:
+    description: Permission to run /iteminator special tropical-fish-bucket.
+    default: true
