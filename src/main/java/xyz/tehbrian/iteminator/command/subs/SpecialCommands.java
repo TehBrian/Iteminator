@@ -303,8 +303,7 @@ public final class SpecialCommands {
                             sender,
                             b -> {
                                 final @NonNull Optional<String> text = c.getOptional("text");
-                                return text
-                                        .map(s -> b.name(this.userService.formatWithUserFormat(s, sender)))
+                                return text.map(s -> b.name(this.userService.formatWithUserFormat(s, sender)))
                                         .orElseGet(() -> b.name(null));
                             },
                             BookBuilder::of,
@@ -322,8 +321,8 @@ public final class SpecialCommands {
                             sender,
                             b -> {
                                 final @NonNull Optional<String> text = c.getOptional("text");
-                                return text.map(s -> b.author(this.userService.formatWithUserFormat(s, sender))).orElseGet(() -> b.author(
-                                        null));
+                                return text.map(s -> b.author(this.userService.formatWithUserFormat(s, sender)))
+                                        .orElseGet(() -> b.author(null));
                             },
                             BookBuilder::of,
                             BookMeta.class
@@ -629,7 +628,7 @@ public final class SpecialCommands {
                 });
 
         final var sMapLocationName = sMap.literal("location-name")
-                .meta(CommandMeta.DESCRIPTION, "Set the map's location name.")
+                .meta(CommandMeta.DESCRIPTION, "Set the map's location name. Pass nothing to reset.")
                 .senderType(Player.class)
                 .argument(StringArgument.optional("name"))
                 .handler(c -> {

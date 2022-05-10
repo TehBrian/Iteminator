@@ -67,6 +67,16 @@ public final class CommonCommands {
                     HeldItemModifier.modify(sender, b -> b.amount(c.get("amount")));
                 });
 
+        final var cCustomModelData = parent.literal("custom-model-data")
+                .meta(CommandMeta.DESCRIPTION, "Set the custom model data. Pass nothing to reset.")
+                .permission(Permissions.CUSTOM_MODEL_DATA)
+                .senderType(Player.class)
+                .argument(IntegerArgument.optional("data"))
+                .handler(c -> {
+                    final var sender = (Player) c.getSender();
+                    HeldItemModifier.modify(sender, b -> b.customModelData(c.<Integer>getOptional("data").orElse(null)));
+                });
+
         final var cMaterial = parent.literal("material")
                 .meta(CommandMeta.DESCRIPTION, "Set the material.")
                 .permission(Permissions.MATERIAL)
@@ -86,7 +96,8 @@ public final class CommonCommands {
                     final var sender = (Player) c.getSender();
                     HeldItemModifier.modify(sender, b -> {
                         final @NonNull Optional<String> text = c.getOptional("text");
-                        return text.map(s -> b.name(this.userService.formatWithUserFormat(s, sender))).orElseGet(() -> b.name(null));
+                        return text.map(s -> b.name(this.userService.formatWithUserFormat(s, sender)))
+                                .orElseGet(() -> b.name(null));
                     });
                 });
 
@@ -101,6 +112,7 @@ public final class CommonCommands {
                 });
 
         commandManager.command(cAmount)
+                .command(cCustomModelData)
                 .command(cMaterial)
                 .command(cName)
                 .command(cUnbreakable);
@@ -175,6 +187,12 @@ public final class CommonCommands {
                     HeldItemModifier.modify(sender, b -> b.lore(null));
                 });
 
+        commandManager
+                .command(cLoreAdd)
+                .command(cLoreSet)
+                .command(cLoreRemove)
+                .command(cLoreClear);
+
         final var cEnchantment = parent.literal("enchantment")
                 .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.")
                 .permission(Permissions.ENCHANTMENT);
@@ -206,6 +224,11 @@ public final class CommonCommands {
                     HeldItemModifier.modify(sender, b -> b.enchants(null));
                 });
 
+        commandManager
+                .command(cEnchantmentAdd)
+                .command(cEnchantmentRemove)
+                .command(cEnchantmentClear);
+
         final var cFlags = parent.literal("flags")
                 .meta(CommandMeta.DESCRIPTION, "Flag-related commands.")
                 .permission(Permissions.FLAGS);
@@ -235,6 +258,11 @@ public final class CommonCommands {
                     final var sender = (Player) c.getSender();
                     HeldItemModifier.modify(sender, b -> b.flags(null));
                 });
+
+        commandManager
+                .command(cFlagsAdd)
+                .command(cFlagsRemove)
+                .command(cFlagsClear);
 
         final var cAttribute = parent.literal("attribute")
                 .meta(CommandMeta.DESCRIPTION, "Attribute-related commands.")
@@ -280,16 +308,6 @@ public final class CommonCommands {
                 });
 
         commandManager
-                .command(cLoreAdd)
-                .command(cLoreSet)
-                .command(cLoreRemove)
-                .command(cLoreClear)
-                .command(cEnchantmentAdd)
-                .command(cEnchantmentRemove)
-                .command(cEnchantmentClear)
-                .command(cFlagsAdd)
-                .command(cFlagsRemove)
-                .command(cFlagsClear)
                 .command(cAttributeAdd)
                 .command(cAttributeRemove)
                 .command(cAttributeClear);
