@@ -11,12 +11,12 @@ permissions:
   iteminator.format:
     description: Permission to format text.
     default: true
-  iteminator.format.minimessage:
-    description: Permission to use the MiniMessage formatting type.
-    default: op
   iteminator.format.legacy:
     description: Permission to use the Legacy formatting type.
     default: true
+  iteminator.format.minimessage:
+    description: Permission to use the MiniMessage formatting type.
+    default: op
   iteminator.reload:
     description: Permission to run /iteminator reload.
     default: op

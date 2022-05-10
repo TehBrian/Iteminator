@@ -9,18 +9,19 @@ public final class Permissions {
     public static final String RELOAD = ROOT + ".reload";
 
     public static final String FORMAT = ROOT + ".format";
-    public static final String MINIMESSAGE = FORMAT + ".minimessage";
     public static final String LEGACY = FORMAT + ".legacy";
+    public static final String MINIMESSAGE = FORMAT + ".minimessage";
 
     public static final String AMOUNT = ROOT + ".amount";
     public static final String CUSTOM_MODEL_DATA = ROOT + ".custom-model-data";
     public static final String MATERIAL = ROOT + ".material";
     public static final String NAME = ROOT + ".name";
     public static final String UNBREAKABLE = ROOT + ".unbreakable";
-    public static final String LORE = ROOT + ".lore";
+
+    public static final String ATTRIBUTE = ROOT + ".attribute";
     public static final String ENCHANTMENT = ROOT + ".enchantment";
     public static final String FLAGS = ROOT + ".flags";
-    public static final String ATTRIBUTE = ROOT + ".attribute";
+    public static final String LORE = ROOT + ".lore";
 
     public static final String SPECIAL = ROOT + ".special";
     public static final String ARMOR_STAND = SPECIAL + ".armor-stand";
