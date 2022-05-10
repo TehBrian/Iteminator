@@ -41,7 +41,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-// disable checkstyle in tests
+/* Disable checkstyle in tests. */
 project.gradle.startParameter.excludedTaskNames.add("checkstyleTest")
 
 tasks {
