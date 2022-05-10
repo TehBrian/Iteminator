@@ -15,9 +15,6 @@ public final class PluginModule extends AbstractModule {
 
     private final Iteminator iteminator;
 
-    /**
-     * @param iteminator Iteminator reference
-     */
     public PluginModule(final @NonNull Iteminator iteminator) {
         this.iteminator = iteminator;
     }
@@ -37,7 +34,7 @@ public final class PluginModule extends AbstractModule {
     }
 
     /**
-     * @return the data folder
+     * @return the plugin's data folder
      */
     @Provides
     @Named("dataFolder")
