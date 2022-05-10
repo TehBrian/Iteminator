@@ -13,6 +13,7 @@ public final class Permissions {
     public static final String LEGACY = FORMAT + ".legacy";
 
     public static final String AMOUNT = ROOT + ".amount";
+    public static final String CUSTOM_MODEL_DATA = ROOT + ".custom-model-data";
     public static final String MATERIAL = ROOT + ".material";
     public static final String NAME = ROOT + ".name";
     public static final String UNBREAKABLE = ROOT + ".unbreakable";
