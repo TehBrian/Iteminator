@@ -31,7 +31,7 @@ dependencies {
 
     implementation("com.google.inject:guice:5.1.0")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
-    implementation("cloud.commandframework:cloud-minecraft-extras:1.6.2")
+    implementation("cloud.commandframework:cloud-minecraft-extras:1.7.0")
 
     implementation("dev.tehbrian:tehlib-paper:0.1.0-SNAPSHOT")
     implementation("broccolai.corn:corn-minecraft-paper:3.0.0-SNAPSHOT")
