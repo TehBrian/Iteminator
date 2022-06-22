@@ -1,6 +1,7 @@
 package xyz.tehbrian.iteminator.command.subs;
 
 import cloud.commandframework.Command;
+import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.DoubleArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
@@ -19,7 +20,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
-import xyz.tehbrian.iteminator.command.LowerBooleanArgument;
 import xyz.tehbrian.iteminator.command.ModernEnchantment;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.UserService;
@@ -101,7 +101,7 @@ public final class CommonCommands {
                 .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
                 .permission(Permissions.UNBREAKABLE)
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     HeldItemModifier.modify(sender, b -> b.unbreakable(c.get("boolean")));

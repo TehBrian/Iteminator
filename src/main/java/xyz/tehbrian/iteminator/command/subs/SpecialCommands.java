@@ -16,6 +16,7 @@ import broccolai.corn.paper.item.special.RepairableBuilder;
 import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.Command;
+import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
@@ -60,7 +61,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
 import xyz.tehbrian.iteminator.Iteminator;
-import xyz.tehbrian.iteminator.command.LowerBooleanArgument;
 import xyz.tehbrian.iteminator.command.ModernEnchantment;
 import xyz.tehbrian.iteminator.command.ModernPotionEffectType;
 import xyz.tehbrian.iteminator.command.ModernPotionType;
@@ -108,7 +108,7 @@ public final class SpecialCommands {
         final var sArmorStandShowArms = sArmorStand.literal("show-arms")
                 .meta(CommandMeta.DESCRIPTION, "Set the show arms flag.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -122,7 +122,7 @@ public final class SpecialCommands {
         final var sArmorStandInvisible = sArmorStand.literal("invisible")
                 .meta(CommandMeta.DESCRIPTION, "Set the invisible flag.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -136,7 +136,7 @@ public final class SpecialCommands {
         final var sArmorStandMarker = sArmorStand.literal("marker")
                 .meta(CommandMeta.DESCRIPTION, "Set the marker flag.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -150,7 +150,7 @@ public final class SpecialCommands {
         final var sArmorStandNoBasePlate = sArmorStand.literal("no-base-plate")
                 .meta(CommandMeta.DESCRIPTION, "Set the no base plate flag.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -164,7 +164,7 @@ public final class SpecialCommands {
         final var sArmorStandSmall = sArmorStand.literal("small")
                 .meta(CommandMeta.DESCRIPTION, "Set the small flag.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -341,7 +341,7 @@ public final class SpecialCommands {
         final var sBookEditable = sBook.literal("editable")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the book is editable.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -440,7 +440,7 @@ public final class SpecialCommands {
         final var sFireworkEffectFlicker = sFireworkEffect.literal("flicker")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the effect should flicker.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -457,7 +457,7 @@ public final class SpecialCommands {
         final var sFireworkEffectTrail = sFireworkEffect.literal("trail")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the effect should trail.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -611,7 +611,7 @@ public final class SpecialCommands {
         final var sMapScaling = sMap.literal("scaling")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the map is scaling.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("scaling"))
+                .argument(BooleanArgument.of("scaling"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -721,7 +721,7 @@ public final class SpecialCommands {
         final var sMapViewLocked = sMapView.literal("locked")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the map view is locked.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifyMapView(
@@ -736,7 +736,7 @@ public final class SpecialCommands {
         final var sMapViewTrackingPosition = sMapView.literal("tracking-position")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the map view shows a position cursor.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifyMapView(
@@ -751,7 +751,7 @@ public final class SpecialCommands {
         final var sMapViewUnlimitedTracking = sMapView.literal("unlimited-tracking")
                 .meta(CommandMeta.DESCRIPTION, "Set whether the map view shows off-screen cursors.")
                 .senderType(Player.class)
-                .argument(LowerBooleanArgument.of("boolean"))
+                .argument(BooleanArgument.of("boolean"))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifyMapView(
@@ -787,8 +787,8 @@ public final class SpecialCommands {
                 .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
                 .argument(IntegerArgument.<CommandSender>newBuilder("duration").withMin(0))
                 .argument(IntegerArgument.<CommandSender>newBuilder("amplifier").withMin(0).withMax(64))
-                .argument(LowerBooleanArgument.optional("ambient", true))
-                .argument(LowerBooleanArgument.optional("particles", true))
+                .argument(BooleanArgument.optional("ambient", true))
+                .argument(BooleanArgument.optional("particles", true))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
@@ -956,8 +956,8 @@ public final class SpecialCommands {
                 .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
                 .argument(IntegerArgument.<CommandSender>newBuilder("duration").withMin(0))
                 .argument(IntegerArgument.<CommandSender>newBuilder("amplifier").withMin(0).withMax(64))
-                .argument(LowerBooleanArgument.optional("ambient", true))
-                .argument(LowerBooleanArgument.optional("particles", true))
+                .argument(BooleanArgument.optional("ambient", true))
+                .argument(BooleanArgument.optional("particles", true))
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     this.modifySpecial(
