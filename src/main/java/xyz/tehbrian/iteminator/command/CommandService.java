@@ -14,9 +14,6 @@ public class CommandService extends PaperCloudService<CommandSender> {
 
     private final Iteminator iteminator;
 
-    /**
-     * @param iteminator injected
-     */
     @Inject
     public CommandService(
             final @NonNull Iteminator iteminator

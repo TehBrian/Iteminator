@@ -26,11 +26,6 @@ public final class MetaCommands {
     private final UserService userService;
     private final LangConfig langConfig;
 
-    /**
-     * @param iteminator  injected
-     * @param userService injected
-     * @param langConfig  injected
-     */
     @Inject
     public MetaCommands(
             final @NonNull Iteminator iteminator,

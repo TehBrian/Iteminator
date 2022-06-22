@@ -82,11 +82,6 @@ public final class SpecialCommands {
     private final UserService userService;
     private final LangConfig langConfig;
 
-    /**
-     * @param iteminator  injected
-     * @param userService injected
-     * @param langConfig  injected
-     */
     @Inject
     public SpecialCommands(
             final @NonNull Iteminator iteminator,
