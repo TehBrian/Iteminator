@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "xyz.tehbrian"
-version = "0.1.0-SNAPSHOT"
+version = "0.1.0"
 description = "A modern item editing plugin."
 
 java {
