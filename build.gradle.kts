@@ -33,7 +33,7 @@ dependencies {
     implementation("org.spongepowered:configurate-yaml:4.1.2")
     implementation("cloud.commandframework:cloud-minecraft-extras:1.7.0")
 
-    implementation("dev.tehbrian:tehlib-paper:0.3.0")
+    implementation("dev.tehbrian:tehlib-paper:0.3.1")
     implementation("broccolai.corn:corn-minecraft-paper:3.0.0-SNAPSHOT")
 
     testImplementation("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
