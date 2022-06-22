@@ -41,9 +41,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-/* Disable checkstyle in tests. */
-project.gradle.startParameter.excludedTaskNames.add("checkstyleTest")
-
 tasks {
     assemble {
         dependsOn(shadowJar)
