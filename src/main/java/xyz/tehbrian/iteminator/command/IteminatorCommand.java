@@ -16,11 +16,6 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
     private final CommonCommands commonCommands;
     private final SpecialCommands specialCommands;
 
-    /**
-     * @param metaCommands    injected
-     * @param commonCommands  injected
-     * @param specialCommands injected
-     */
     @Inject
     public IteminatorCommand(
             final @NonNull MetaCommands metaCommands,

@@ -36,10 +36,6 @@ public final class CommonCommands {
     private final UserService userService;
     private final LangConfig langConfig;
 
-    /**
-     * @param userService injected
-     * @param langConfig  injected
-     */
     @Inject
     public CommonCommands(
             final @NonNull UserService userService,
