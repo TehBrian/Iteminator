@@ -206,7 +206,10 @@ public final class SpecialCommands {
                 .meta(CommandMeta.DESCRIPTION, "Commands for Banners.")
                 .permission(Permissions.BANNER);
 
-        final var sBannerAdd = sBanner.literal("add")
+        final var sBannerPattern = sBanner.literal("pattern")
+                .meta(CommandMeta.DESCRIPTION, "Modify the patterns.");
+
+        final var sBannerPatternAdd = sBannerPattern.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a pattern.")
                 .senderType(Player.class)
                 .argument(EnumArgument.of(DyeColor.class, "color"))
@@ -221,7 +224,7 @@ public final class SpecialCommands {
                     );
                 });
 
-        final var sBannerSet = sBanner.literal("set")
+        final var sBannerPatternSet = sBannerPattern.literal("set")
                 .meta(CommandMeta.DESCRIPTION, "Set a pattern.")
                 .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
@@ -245,7 +248,7 @@ public final class SpecialCommands {
                     );
                 });
 
-        final var sBannerRemove = sBanner.literal("remove")
+        final var sBannerPatternRemove = sBannerPattern.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a pattern.")
                 .senderType(Player.class)
                 .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
@@ -267,7 +270,7 @@ public final class SpecialCommands {
                     );
                 });
 
-        final var sBannerClear = sBanner.literal("clear")
+        final var sBannerPatternClear = sBannerPattern.literal("clear")
                 .meta(CommandMeta.DESCRIPTION, "Clear the patterns.")
                 .senderType(Player.class)
                 .handler(c -> {
@@ -280,10 +283,10 @@ public final class SpecialCommands {
                     );
                 });
 
-        commandManager.command(sBannerAdd)
-                .command(sBannerSet)
-                .command(sBannerRemove)
-                .command(sBannerClear);
+        commandManager.command(sBannerPatternAdd)
+                .command(sBannerPatternSet)
+                .command(sBannerPatternRemove)
+                .command(sBannerPatternClear);
 
         final var sBook = parent.literal("book")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Books.")
