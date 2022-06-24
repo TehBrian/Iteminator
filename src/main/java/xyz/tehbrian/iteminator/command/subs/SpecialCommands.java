@@ -954,7 +954,10 @@ public final class SpecialCommands {
                 .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
                 .permission(Permissions.SUSPICIOUS_STEW);
 
-        final var sSuspiciousStewAdd = sSuspiciousStew.literal("add")
+        final var sSuspiciousStewEffect = sSuspiciousStew.literal("effect")
+                .meta(CommandMeta.DESCRIPTION, "Modify the custom effects.");
+
+        final var sSuspiciousStewEffectAdd = sSuspiciousStewEffect.literal("add")
                 .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
                 .senderType(Player.class)
                 .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
@@ -983,7 +986,7 @@ public final class SpecialCommands {
                     );
                 });
 
-        final var sSuspiciousStewRemove = sSuspiciousStew.literal("remove")
+        final var sSuspiciousStewEffectRemove = sSuspiciousStewEffect.literal("remove")
                 .meta(CommandMeta.DESCRIPTION, "Remove a custom effect.")
                 .senderType(Player.class)
                 .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
@@ -997,7 +1000,7 @@ public final class SpecialCommands {
                     );
                 });
 
-        final var sSuspiciousStewClear = sSuspiciousStew.literal("clear")
+        final var sSuspiciousStewEffectClear = sSuspiciousStewEffect.literal("clear")
                 .meta(CommandMeta.DESCRIPTION, "Clear the custom effects.")
                 .senderType(Player.class)
                 .handler(c -> {
@@ -1010,9 +1013,9 @@ public final class SpecialCommands {
                     );
                 });
 
-        commandManager.command(sSuspiciousStewAdd)
-                .command(sSuspiciousStewRemove)
-                .command(sSuspiciousStewClear);
+        commandManager.command(sSuspiciousStewEffectAdd)
+                .command(sSuspiciousStewEffectRemove)
+                .command(sSuspiciousStewEffectClear);
 
         final var sTropicalFishBucket = parent.literal("tropical-fish-bucket")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.")
