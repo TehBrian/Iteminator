@@ -54,7 +54,7 @@ tasks {
         archiveBaseName.set("Iteminator")
         archiveClassifier.set("")
 
-        val libsPackage = "xyz.tehbrian.iteminator.libs"
+        val libsPackage = "${project.group}.${project.name}.libs"
         relocate("com.google.inject", "$libsPackage.guice")
         relocate("org.spongepowered.configurate", "$libsPackage.configurate")
         relocate("dev.tehbrian.tehlib", "$libsPackage.tehlib")
