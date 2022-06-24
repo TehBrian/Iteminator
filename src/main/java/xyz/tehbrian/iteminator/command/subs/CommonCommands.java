@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class CommonCommands {
 
     private final UserService userService;

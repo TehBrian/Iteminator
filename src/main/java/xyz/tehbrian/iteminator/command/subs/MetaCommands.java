@@ -20,6 +20,7 @@ import xyz.tehbrian.iteminator.user.UserService;
 import xyz.tehbrian.iteminator.util.Colors;
 import xyz.tehbrian.iteminator.util.Permissions;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class MetaCommands {
 
     private final Iteminator iteminator;

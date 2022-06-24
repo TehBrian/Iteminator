@@ -76,6 +76,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class SpecialCommands {
 
     private final Iteminator iteminator;
