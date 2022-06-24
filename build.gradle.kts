@@ -29,15 +29,15 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
 
-    implementation("com.google.inject:guice:5.1.0")
     implementation("broccolai.corn:corn-minecraft-paper:3.0.0-SNAPSHOT")
     implementation("cloud.commandframework:cloud-minecraft-extras:1.7.0")
+    implementation("com.google.inject:guice:5.1.0")
     implementation("dev.tehbrian:tehlib-paper:0.3.1")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
     testImplementation("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
-    testImplementation(platform("org.junit:junit-bom:5.8.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
 }
 
 tasks {
@@ -54,11 +54,11 @@ tasks {
         archiveClassifier.set("")
 
         val libsPackage = "${project.group}.${project.name}.libs"
-        relocate("com.google.inject", "$libsPackage.guice")
-        relocate("org.spongepowered.configurate", "$libsPackage.configurate")
-        relocate("dev.tehbrian.tehlib", "$libsPackage.tehlib")
         relocate("broccolai.corn", "$libsPackage.corn")
         relocate("cloud.commandframework", "$libsPackage.cloud")
+        relocate("com.google.inject", "$libsPackage.guice")
+        relocate("dev.tehbrian.tehlib", "$libsPackage.tehlib")
+        relocate("org.spongepowered.configurate", "$libsPackage.configurate")
     }
 
     runServer {
