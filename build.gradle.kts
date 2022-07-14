@@ -18,18 +18,18 @@ repositories {
     maven("https://papermc.io/repo/repository/maven-public/") {
         name = "papermc"
     }
+    maven("https://repo.broccol.ai/releases/") {
+        name = "broccolai"
+    }
     maven("https://repo.thbn.me/releases/") {
         name = "thbn"
-    }
-    maven("https://repo.broccol.ai/snapshots/") {
-        name = "broccolai-snapshots"
     }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
 
-    implementation("broccolai.corn:corn-minecraft-paper:3.0.0-SNAPSHOT")
+    implementation("broccolai.corn:corn-minecraft-paper:3.1.0")
     implementation("cloud.commandframework:cloud-minecraft-extras:1.7.0")
     implementation("com.google.inject:guice:5.1.0")
     implementation("dev.tehbrian:tehlib-paper:0.3.1")
@@ -37,7 +37,7 @@ dependencies {
 
     testImplementation("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation(platform("org.junit:junit-bom:5.9.0"))
 }
 
 tasks {
