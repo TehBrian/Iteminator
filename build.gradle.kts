@@ -37,7 +37,7 @@ dependencies {
 
     testImplementation("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation(platform("org.junit:junit-bom:5.9.0"))
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
 }
 
 tasks {
