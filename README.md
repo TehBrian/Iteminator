@@ -13,8 +13,8 @@ system in your hands.
 
 ## Features
 
-- Edit all item data. Seriously. All of it. This includes books, maps, fireworks,
-  and even tropical fish buckets.
+- Edit all item data. Seriously. All of it. This includes books, maps,
+  fireworks, and even tropical fish buckets.
 - Use either [MiniMessage][MiniMessage] or legacy formatting to format text.
 - All plugin messages are easily configurable.
 
