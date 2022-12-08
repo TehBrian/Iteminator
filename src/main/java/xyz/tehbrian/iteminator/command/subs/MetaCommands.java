@@ -58,11 +58,11 @@ public final class MetaCommands {
 
     help.setHelpColors(
         MinecraftHelp.HelpColors.of(
-            Colors.GRAY,
+            Colors.LIGHT_GRAY,
             Colors.LIGHT_BLUE,
             Colors.DARK_BLUE,
             Colors.WHITE,
-            Colors.GRAY
+            Colors.DARK_GRAY
         )
     );
 
