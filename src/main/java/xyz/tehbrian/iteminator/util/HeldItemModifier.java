@@ -28,12 +28,12 @@ public final class HeldItemModifier {
      *                                  be modified by the provided builder
      */
     public static <T extends AbstractPaperItemBuilder<T, ?>> void modifySpecial(
-            final @NonNull Player player,
-            final @NonNull Function<@NonNull T, @Nullable T> operator,
+            final Player player,
+            final Function<T, @Nullable T> operator,
             final Function<ItemStack, T> builderCreator
     ) throws IllegalArgumentException {
         modifyItemStack(player, i -> {
-            final @NonNull T builder = builderCreator.apply(i);
+            final T builder = builderCreator.apply(i);
             final @Nullable T modifiedBuilder = operator.apply(builder);
             if (modifiedBuilder == null) {
                 return null;
@@ -50,8 +50,8 @@ public final class HeldItemModifier {
      * @param operator the operator to apply to the item in the main hand
      */
     public static void modify(
-            final @NonNull Player player,
-            final @NonNull Function<@NonNull PaperItemBuilder, @Nullable PaperItemBuilder> operator
+            final Player player,
+            final Function<PaperItemBuilder, @Nullable PaperItemBuilder> operator
     ) {
         modifyItemStack(player, i -> {
             final @Nullable PaperItemBuilder modifiedBuilder = operator.apply(PaperItemBuilder.of(i));
@@ -70,11 +70,11 @@ public final class HeldItemModifier {
      * @param operator the operator to apply to the item in the main hand
      */
     public static void modifyItemStack(
-            final @NonNull Player player,
-            final @NonNull Function<@NonNull ItemStack, @Nullable ItemStack> operator
+            final Player player,
+            final Function<ItemStack, @Nullable ItemStack> operator
     ) {
-        final @NonNull PlayerInventory inventory = player.getInventory();
-        final @NonNull ItemStack item = inventory.getItemInMainHand();
+        final PlayerInventory inventory = player.getInventory();
+        final ItemStack item = inventory.getItemInMainHand();
         if (item.getItemMeta() == null) { // it's air and therefore cannot be modified
             return;
         }

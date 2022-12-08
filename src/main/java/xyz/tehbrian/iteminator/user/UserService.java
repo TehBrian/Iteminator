@@ -12,7 +12,7 @@ import java.util.UUID;
 public final class UserService extends PaperUserService<User> {
 
     @Override
-    public @NonNull User getUser(final @NonNull UUID uuid) {
+    public User getUser(final UUID uuid) {
         return this.userMap.computeIfAbsent(uuid, User::new);
     }
 
@@ -24,8 +24,8 @@ public final class UserService extends PaperUserService<User> {
      * @param player the player to get the format from
      * @return the string formatted with the user's formatting type
      */
-    public @NonNull Component formatWithUserFormat(final @NonNull String string, final @NonNull Player player) {
-        final @NonNull User user = this.getUser(player.getUniqueId());
+    public Component formatWithUserFormat(final String string, final Player player) {
+        final User user = this.getUser(player.getUniqueId());
 
         if (player.hasPermission(Permissions.FORMAT) && user.formatEnabled()) {
             if (user.formattingType() == User.FormattingType.LEGACY && player.hasPermission(Permissions.LEGACY)) {

@@ -85,9 +85,9 @@ public final class SpecialCommands {
 
     @Inject
     public SpecialCommands(
-            final @NonNull Iteminator iteminator,
-            final @NonNull UserService userService,
-            final @NonNull LangConfig langConfig
+            final Iteminator iteminator,
+            final UserService userService,
+            final LangConfig langConfig
     ) {
         this.iteminator = iteminator;
         this.userService = userService;
@@ -99,8 +99,8 @@ public final class SpecialCommands {
      * @param parent         the command to register the subcommands under
      */
     public void registerSpecial(
-            final @NonNull PaperCommandManager<CommandSender> commandManager,
-            final Command.@NonNull Builder<CommandSender> parent
+            final PaperCommandManager<CommandSender> commandManager,
+            final Command.Builder<CommandSender> parent
     ) {
         final var sArmorStand = parent.literal("armor-stand")
                 .meta(CommandMeta.DESCRIPTION, "Commands for Armor Stands.")
@@ -301,7 +301,7 @@ public final class SpecialCommands {
                     this.modifySpecial(
                             sender,
                             b -> {
-                                final @NonNull Optional<String> text = c.getOptional("text");
+                                final Optional<String> text = c.getOptional("text");
                                 return text.map(s -> b.name(this.userService.formatWithUserFormat(s, sender)))
                                         .orElseGet(() -> b.name(null));
                             },
@@ -319,7 +319,7 @@ public final class SpecialCommands {
                     this.modifySpecial(
                             sender,
                             b -> {
-                                final @NonNull Optional<String> text = c.getOptional("text");
+                                final Optional<String> text = c.getOptional("text");
                                 return text.map(s -> b.author(this.userService.formatWithUserFormat(s, sender)))
                                         .orElseGet(() -> b.author(null));
                             },
@@ -1117,7 +1117,7 @@ public final class SpecialCommands {
                 .command(sTropicalFishBucketPatternColor);
     }
 
-    private @NonNull Component generateWrongTypeMessage(final List<Material> requiredTypes) {
+    private Component generateWrongTypeMessage(final List<Material> requiredTypes) {
         final Component types = Component.join(
                 JoinConfiguration.separators(Component.text(", "), Component.text(", or ")),
                 requiredTypes.stream().map(Component::translatable).toList()
@@ -1131,7 +1131,7 @@ public final class SpecialCommands {
 
     private void sendWrongTypeMessage(final Audience audience, final Class<? extends ItemMeta> metaType) {
         // TODO: handle null better
-        final @NonNull List<Material> requiredTypes =
+        final List<Material> requiredTypes =
                 Objects.requireNonNull(ItemMetaRequiredTypes.get(metaType));
         audience.sendMessage(this.generateWrongTypeMessage(requiredTypes));
     }
@@ -1144,7 +1144,7 @@ public final class SpecialCommands {
      * @param <T>            the builder type
      */
     private <T extends AbstractPaperItemBuilder<T, ?>> void modifySpecial(
-            final @NonNull Player player, final @NonNull Function<@NonNull T, @Nullable T> operator,
+            final Player player, final Function<T, @Nullable T> operator,
             final Function<ItemStack, T> builderCreator, final Class<? extends ItemMeta> metaType
     ) {
         try {
@@ -1159,7 +1159,7 @@ public final class SpecialCommands {
      * @param operator the operator to apply to the map in the main hand
      */
     private void modifyMapView(
-            final @NonNull Player player, final @NonNull Function<@NonNull MapView, @Nullable MapView> operator
+            final Player player, final Function<MapView, @Nullable MapView> operator
     ) {
         this.modifySpecial(
                 player,
@@ -1181,7 +1181,7 @@ public final class SpecialCommands {
      * @param fireworkEffect the {@code FireworkEffect} to turn into a {@code Builder}
      * @return the {@code Builder}
      */
-    private FireworkEffect.@NonNull Builder fireworkEffectBuilder(final @Nullable FireworkEffect fireworkEffect) {
+    private FireworkEffect.Builder fireworkEffectBuilder(final @Nullable FireworkEffect fireworkEffect) {
         if (fireworkEffect == null) {
             return FireworkEffect.builder();
         }

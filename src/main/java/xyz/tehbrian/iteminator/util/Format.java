@@ -15,7 +15,7 @@ public final class Format {
      * @param string the Legacy-formatted string
      * @return the string as a component
      */
-    public static @NonNull Component legacy(final @NonNull String string) {
+    public static Component legacy(final String string) {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(string);
     }
 
@@ -23,7 +23,7 @@ public final class Format {
      * @param string the MiniMessage-formatted string
      * @return the string as a component
      */
-    public static @NonNull Component miniMessage(final @NonNull String string) {
+    public static Component miniMessage(final String string) {
         return MiniMessage.miniMessage().deserialize(string);
     }
 
@@ -31,7 +31,7 @@ public final class Format {
      * @param string the plain string
      * @return the string as a component
      */
-    public static @NonNull Component plain(final @NonNull String string) {
+    public static Component plain(final String string) {
         return PlainTextComponentSerializer.plainText().deserialize(string);
     }
 

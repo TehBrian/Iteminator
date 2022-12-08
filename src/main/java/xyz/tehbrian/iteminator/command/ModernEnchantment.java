@@ -55,7 +55,7 @@ public enum ModernEnchantment {
     /**
      * @return the wrapped type
      */
-    public @NonNull Enchantment unwrap() {
+    public Enchantment unwrap() {
         return this.type;
     }
 

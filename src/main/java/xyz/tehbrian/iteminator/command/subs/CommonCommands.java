@@ -39,8 +39,8 @@ public final class CommonCommands {
 
     @Inject
     public CommonCommands(
-            final @NonNull UserService userService,
-            final @NonNull LangConfig langConfig
+            final UserService userService,
+            final LangConfig langConfig
     ) {
         this.userService = userService;
         this.langConfig = langConfig;
@@ -51,8 +51,8 @@ public final class CommonCommands {
      * @param parent         the command to register the subcommands under
      */
     public void registerCommon(
-            final @NonNull PaperCommandManager<CommandSender> commandManager,
-            final Command.@NonNull Builder<CommandSender> parent
+            final PaperCommandManager<CommandSender> commandManager,
+            final Command.Builder<CommandSender> parent
     ) {
         final var cAmount = parent.literal("amount")
                 .meta(CommandMeta.DESCRIPTION, "Set the amount.")
@@ -92,7 +92,7 @@ public final class CommonCommands {
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     HeldItemModifier.modify(sender, b -> {
-                        final @NonNull Optional<String> text = c.getOptional("text");
+                        final Optional<String> text = c.getOptional("text");
                         return text.map(s -> b.name(this.userService.formatWithUserFormat(s, sender)))
                                 .orElseGet(() -> b.name(null));
                     });
@@ -244,7 +244,7 @@ public final class CommonCommands {
                 .handler(c -> {
                     final var sender = (Player) c.getSender();
                     HeldItemModifier.modify(sender, b -> {
-                        final @NonNull List<Component> lore = Optional
+                        final List<Component> lore = Optional
                                 .ofNullable(b.lore())
                                 .map(ArrayList::new)
                                 .orElse(new ArrayList<>());

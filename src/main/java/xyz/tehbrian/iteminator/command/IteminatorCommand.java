@@ -18,9 +18,9 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
     @Inject
     public IteminatorCommand(
-            final @NonNull MetaCommands metaCommands,
-            final @NonNull CommonCommands commonCommands,
-            final @NonNull SpecialCommands specialCommands
+            final MetaCommands metaCommands,
+            final CommonCommands commonCommands,
+            final SpecialCommands specialCommands
     ) {
         this.metaCommands = metaCommands;
         this.commonCommands = commonCommands;
@@ -28,7 +28,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
     }
 
     @Override
-    public void register(final @NonNull PaperCommandManager<CommandSender> commandManager) {
+    public void register(final PaperCommandManager<CommandSender> commandManager) {
         final var cMain = commandManager.commandBuilder("iteminator")
                 .meta(CommandMeta.DESCRIPTION, "The main command for Iteminator.");
 

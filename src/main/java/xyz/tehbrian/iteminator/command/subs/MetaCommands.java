@@ -29,9 +29,9 @@ public final class MetaCommands {
 
     @Inject
     public MetaCommands(
-            final @NonNull Iteminator iteminator,
-            final @NonNull UserService userService,
-            final @NonNull LangConfig langConfig
+            final Iteminator iteminator,
+            final UserService userService,
+            final LangConfig langConfig
     ) {
         this.iteminator = iteminator;
         this.userService = userService;
@@ -43,8 +43,8 @@ public final class MetaCommands {
      * @param parent         the command to register the subcommands under
      */
     public void registerMeta(
-            final @NonNull PaperCommandManager<CommandSender> commandManager,
-            final Command.@NonNull Builder<CommandSender> parent
+            final PaperCommandManager<CommandSender> commandManager,
+            final Command.Builder<CommandSender> parent
     ) {
         final var cMain = parent.handler(c -> c.getSender().sendMessage(
                 this.langConfig.c(
@@ -108,8 +108,8 @@ public final class MetaCommands {
         final var cFormatFormattingType = cFormat
                 .argument(EnumArgument.of(User.FormattingType.class, "formatting_type"))
                 .handler(c -> {
-                    final @NonNull Player player = (Player) c.getSender();
-                    final User.@NonNull FormattingType formattingType = c.get("formatting_type");
+                    final Player player = (Player) c.getSender();
+                    final User.FormattingType formattingType = c.get("formatting_type");
 
                     this.userService.getUser(player).formattingType(formattingType);
                     player.sendMessage(this.langConfig.c(

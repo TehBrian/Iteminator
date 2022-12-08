@@ -38,7 +38,7 @@ public enum ModernPotionType {
     /**
      * @return the wrapped type
      */
-    public @NonNull PotionType unwrap() {
+    public PotionType unwrap() {
         return this.type;
     }
 

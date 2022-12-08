@@ -13,15 +13,15 @@ import java.util.UUID;
 public final class User extends PaperUser {
 
     private boolean formatEnabled;
-    private @NonNull FormattingType formattingType = FormattingType.LEGACY;
+    private FormattingType formattingType = FormattingType.LEGACY;
 
     /**
      * @param uuid the unique identifier of the user
      */
-    public User(final @NonNull UUID uuid) {
+    public User(final UUID uuid) {
         super(uuid);
 
-        final @NonNull Player player = Objects.requireNonNull(this.getPlayer());
+        final Player player = Objects.requireNonNull(this.getPlayer());
         this.formatEnabled = player.hasPermission(Permissions.FORMAT);
     }
 
@@ -59,14 +59,14 @@ public final class User extends PaperUser {
     /**
      * @return the user's formatting type
      */
-    public User.@NonNull FormattingType formattingType() {
+    public User.FormattingType formattingType() {
         return this.formattingType;
     }
 
     /**
      * @param formattingType the user's formatting type
      */
-    public void formattingType(final User.@NonNull FormattingType formattingType) {
+    public void formattingType(final User.FormattingType formattingType) {
         this.formattingType = formattingType;
     }
 

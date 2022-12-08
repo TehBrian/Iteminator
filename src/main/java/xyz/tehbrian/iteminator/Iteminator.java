@@ -77,7 +77,7 @@ public final class Iteminator extends TehPlugin {
      * @return whether it was successful
      */
     private boolean setupCommands() {
-        final @NonNull CommandService commandService = this.injector.getInstance(CommandService.class);
+        final CommandService commandService = this.injector.getInstance(CommandService.class);
         try {
             commandService.init();
         } catch (final Exception e) {

@@ -61,7 +61,7 @@ public final class ItemMetaRequiredTypes {
      * @param itemMetaType the {@code ItemMeta} type
      * @return the types required for that {@code ItemMeta}, or null if there is no type requirement
      */
-    public static @Nullable List<Material> get(final @NonNull Class<? extends ItemMeta> itemMetaType) {
+    public static @Nullable List<Material> get(final Class<? extends ItemMeta> itemMetaType) {
         return CONVERTER.get(itemMetaType);
     }
 

@@ -15,7 +15,7 @@ public final class PluginModule extends AbstractModule {
 
     private final Iteminator iteminator;
 
-    public PluginModule(final @NonNull Iteminator iteminator) {
+    public PluginModule(final Iteminator iteminator) {
         this.iteminator = iteminator;
     }
 
@@ -29,7 +29,7 @@ public final class PluginModule extends AbstractModule {
      * @return the plugin's SLF4J logger
      */
     @Provides
-    public @NonNull Logger provideSLF4JLogger() {
+    public Logger provideSLF4JLogger() {
         return this.iteminator.getSLF4JLogger();
     }
 
@@ -38,7 +38,7 @@ public final class PluginModule extends AbstractModule {
      */
     @Provides
     @Named("dataFolder")
-    public @NonNull Path provideDataFolder() {
+    public Path provideDataFolder() {
         return this.iteminator.getDataFolder().toPath();
     }
 
