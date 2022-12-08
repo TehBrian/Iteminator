@@ -8,17 +8,22 @@
 # https://thbn.me/discord
 
 main: |-
-  <#333344>-= <#44BBDD>Iteminator <#333344>=-
-  <#333344>I| <#FFEEFF>Running version <#88EEFF><version></#88EEFF>
-  <#333344>I| <#FFEEFF>Made with <#DD5577><3</#DD5577> by <#88EEFF>TehBrian</#88EEFF>
-wrong-type: "<#44BBDD>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
-out-of-bounds: "<#44BBDD>I| <#DD5577>That index is out of bounds."
+  <#333344>-= <#44AABB>Iteminator</#44AABB> =-
+  <#333344>I| <#EEEEFF>Running version <#88EEFF><version></#88EEFF>.
+  <#333344>I| <#EEEEFF>Made with <#DD5577><3</#DD5577> by <#88EEFF>TehBrian</#88EEFF>.
+  <#333344>I|
+  <#333344>I| <#EEEEFF>Set text formatting syntax with <#88EEFF>/iteminator format</#88EEFF>.
+  <#333344>I| <#EEEEFF>Browse more commands with <#88EEFF>/iteminator help</#88EEFF>.
+  <#333344>I| <#EEEEFF>Reload plugin configuration with <#88EEFF>/iteminator reload</#88EEFF>.
+
+wrong-type: "<#44AABB>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
+out-of-bounds: "<#44AABB>I| <#DD5577>That index is out of bounds."
 
 format:
-  enable: "<#44BBDD>I| <#FFEEFF>Enabled text formatting."
-  disable: "<#44BBDD>I| <#FFEEFF>Disabled text formatting."
-  set: "<#44BBDD>I| <#FFEEFF>Set your formatting type to <#88EEFF><formatting_type></#88EEFF>."
+  enable: "<#44AABB>I| <#EEEEFF>Enabled text formatting."
+  disable: "<#44AABB>I| <#EEEEFF>Disabled text formatting."
+  set: "<#44AABB>I| <#EEEEFF>Set your formatting type to <#88EEFF><formatting_type></#88EEFF>."
 
 reload:
-  success: "<#44BBDD>I| <#FFEEFF>The configuration has been successfully reloaded."
-  fail: "<#44BBDD>I| <#DD5577>Failed to load configuration, please check the console."
+  success: "<#44AABB>I| <#EEEEFF>The configuration has been successfully reloaded."
+  fail: "<#44AABB>I| <#DD5577>Failed to load configuration, please check the console."
