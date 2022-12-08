@@ -7,11 +7,11 @@ import xyz.tehbrian.iteminator.user.UserService;
 
 public final class SingletonModule extends AbstractModule {
 
-    @Override
-    protected void configure() {
-        this.bind(CommandService.class).asEagerSingleton();
-        this.bind(UserService.class).asEagerSingleton();
-        this.bind(LangConfig.class).asEagerSingleton();
-    }
+  @Override
+  protected void configure() {
+    this.bind(CommandService.class).asEagerSingleton();
+    this.bind(UserService.class).asEagerSingleton();
+    this.bind(LangConfig.class).asEagerSingleton();
+  }
 
 }
