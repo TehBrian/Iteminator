@@ -2,6 +2,9 @@ package xyz.tehbrian.iteminator.util;
 
 import com.destroystokyo.paper.MaterialTags;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
+
+import java.util.Collections;
+
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
@@ -24,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// This entire class can be incinerated once switch pattern-matching arrives.
 public final class ItemMetaRequiredTypes {
 
   private static final Map<Class<? extends ItemMeta>, List<Material>> CONVERTER;
@@ -61,10 +63,10 @@ public final class ItemMetaRequiredTypes {
 
   /**
    * @param itemMetaType the {@code ItemMeta} type
-   * @return the types required for that {@code ItemMeta}, or null if there is no type requirement
+   * @return the types required for that {@code ItemMeta}
    */
   public static @Nullable List<Material> get(final Class<? extends ItemMeta> itemMetaType) {
-    return CONVERTER.get(itemMetaType);
+    return CONVERTER.getOrDefault(itemMetaType, Collections.emptyList());
   }
 
 }

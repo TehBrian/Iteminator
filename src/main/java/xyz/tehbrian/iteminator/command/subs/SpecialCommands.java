@@ -1128,7 +1128,6 @@ public final class SpecialCommands {
   }
 
   private void sendWrongTypeMessage(final Audience audience, final Class<? extends ItemMeta> metaType) {
-    // TODO: handle null better
     final List<Material> requiredTypes =
         Objects.requireNonNull(ItemMetaRequiredTypes.get(metaType));
     audience.sendMessage(this.generateWrongTypeMessage(requiredTypes));
