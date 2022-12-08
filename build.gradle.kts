@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-  compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
+  compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
 
   implementation("broccolai.corn:corn-minecraft-paper:3.2.0")
   implementation("cloud.commandframework:cloud-minecraft-extras:1.7.1")
@@ -29,7 +29,7 @@ dependencies {
   implementation("dev.tehbrian:tehlib-paper:0.3.1")
   implementation("org.spongepowered:configurate-yaml:4.1.2")
 
-  testImplementation("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
+  testImplementation("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation(platform("org.junit:junit-bom:5.9.1"))
 }
@@ -56,7 +56,7 @@ tasks {
   }
 
   runServer {
-    minecraftVersion("1.19")
+    minecraftVersion("1.19.2")
   }
 
   test {
