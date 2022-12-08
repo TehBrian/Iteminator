@@ -12,6 +12,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurateException;
 import xyz.tehbrian.iteminator.command.CommandService;
+import xyz.tehbrian.iteminator.command.ExceptionHandlers;
 import xyz.tehbrian.iteminator.command.IteminatorCommand;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.inject.PluginModule;
@@ -95,11 +96,11 @@ public final class Iteminator extends TehPlugin {
     }
 
     new MinecraftExceptionHandler<CommandSender>()
-        .withArgumentParsingHandler()
-        .withInvalidSenderHandler()
-        .withInvalidSyntaxHandler()
-        .withNoPermissionHandler()
-        .withCommandExecutionHandler()
+        .withHandler(MinecraftExceptionHandler.ExceptionType.ARGUMENT_PARSING, ExceptionHandlers.ARGUMENT_PARSE)
+        .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SENDER, ExceptionHandlers.INVALID_SENDER)
+        .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SYNTAX, ExceptionHandlers.INVALID_SYNTAX)
+        .withHandler(MinecraftExceptionHandler.ExceptionType.NO_PERMISSION, ExceptionHandlers.NO_PERMISSION)
+        .withHandler(MinecraftExceptionHandler.ExceptionType.COMMAND_EXECUTION, ExceptionHandlers.COMMAND_EXECUTION)
         .apply(commandManager, AudienceProvider.nativeAudience());
 
     this.injector.getInstance(IteminatorCommand.class).register(commandManager);

@@ -2,9 +2,6 @@ package xyz.tehbrian.iteminator.util;
 
 import com.destroystokyo.paper.MaterialTags;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
-
-import java.util.Collections;
-
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
@@ -23,6 +20,7 @@ import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
