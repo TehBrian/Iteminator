@@ -12,9 +12,16 @@ main: |-
   <#333344>I| <#EEEEFF>Running version <#88EEFF><version></#88EEFF>.
   <#333344>I| <#EEEEFF>Made with <#DD5577><3</#DD5577> by <#88EEFF>TehBrian</#88EEFF>.
   <#333344>I|
-  <#333344>I| <#EEEEFF>Set text formatting syntax with <#88EEFF>/iteminator format</#88EEFF>.
-  <#333344>I| <#EEEEFF>Browse more commands with <#88EEFF>/iteminator help</#88EEFF>.
-  <#333344>I| <#EEEEFF>Reload plugin configuration with <#88EEFF>/iteminator reload</#88EEFF>.
+  <#333344>I| <#EEEEFF>Discord: <#88EEFF><u><hover:show_text:'https://thbn.me/discord
+
+  Click to open.'><click:open_url:'https://thbn.me/discord'>thbn.me/discord</click></hover></u></#88EEFF>.
+  <#333344>I| <#EEEEFF>Modrinth: <#88EEFF><u><hover:show_text:'https://modrinth.com/plugin/iteminator
+
+  Click to open in your handy dandy web browser.'><click:open_url:'https://modrinth.com/plugin/iteminator'>modrinth.com/plugin/iteminator</click></hover></u></#88EEFF>.
+  <#333344>I|
+  <#333344>I| <#EEEEFF>Set text formatting syntax with <#88EEFF><click:suggest_command:'/iteminator format'>/iteminator format</click></#88EEFF>.
+  <#333344>I| <#EEEEFF>Reload plugin configuration with <#88EEFF><click:suggest_command:'/iteminator reload'>/iteminator reload</click></#88EEFF>.
+  <#333344>I| <#EEEEFF>Explore commands with <#88EEFF><click:suggest_command:'/iteminator help'>/iteminator help</click></#88EEFF> or tab completion.
 
 wrong-type: "<#44AABB>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
 out-of-bounds: "<#44AABB>I| <#DD5577>That index is out of bounds."
