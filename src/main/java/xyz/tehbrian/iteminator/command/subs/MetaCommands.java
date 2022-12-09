@@ -69,9 +69,10 @@ public final class MetaCommands {
     final var cHelp = parent.literal("help")
         .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
         .handler(c -> help.queryCommands(
-            // prepend "iteminator " to non-empty queries without root command for usability
+            // for usability, prepend "iteminator " to non-empty, non-numerical
+            // queries that don't already have the root command.
             c.<String>getOptional("query").map(s -> {
-              if (!s.startsWith("iteminator")) {
+              if (!s.startsWith("iteminator") && !isInteger(s)) {
                 return "iteminator " + s;
               }
               return s;
@@ -121,6 +122,15 @@ public final class MetaCommands {
         .command(cReload)
         .command(cFormat)
         .command(cFormatFormattingType);
+  }
+
+  private static boolean isInteger(final String str) {
+    try {
+      Integer.parseInt(str);
+    } catch (final NumberFormatException e) {
+      return false;
+    }
+    return true;
   }
 
 }
