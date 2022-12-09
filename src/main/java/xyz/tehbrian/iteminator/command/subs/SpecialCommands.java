@@ -8,7 +8,6 @@ import broccolai.corn.paper.item.special.BookBuilder;
 import broccolai.corn.paper.item.special.DamageableBuilder;
 import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
 import broccolai.corn.paper.item.special.FireworkBuilder;
-import broccolai.corn.paper.item.special.FireworkEffectBuilder;
 import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.MapBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
@@ -44,7 +43,6 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -435,108 +433,108 @@ public final class SpecialCommands {
         .command(sEnchantmentStorageRemove)
         .command(sEnchantmentStorageClear);
 
-    final var sFireworkEffect = parent.literal("firework-effect")
-        .meta(CommandMeta.DESCRIPTION, "Commands for Firework Effects.")
-        .permission(Permissions.FIREWORK_EFFECT);
-
-    final var sFireworkEffectFlicker = sFireworkEffect.literal("flicker")
-        .meta(CommandMeta.DESCRIPTION, "Set whether the effect should flicker.")
-        .senderType(Player.class)
-        .argument(BooleanArgument.of("boolean"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          this.modifySpecial(
-              sender,
-              b -> b.fireworkEffect(
-                  this.fireworkEffectBuilder(b.fireworkEffect())
-                      .flicker(c.<Boolean>get("boolean")).build()
-              ),
-              FireworkEffectBuilder::of,
-              FireworkEffectMeta.class
-          );
-        });
-
-    final var sFireworkEffectTrail = sFireworkEffect.literal("trail")
-        .meta(CommandMeta.DESCRIPTION, "Set whether the effect should trail.")
-        .senderType(Player.class)
-        .argument(BooleanArgument.of("boolean"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          this.modifySpecial(
-              sender,
-              b -> b.fireworkEffect(
-                  this.fireworkEffectBuilder(b.fireworkEffect())
-                      .trail(c.<Boolean>get("boolean")).build()
-              ),
-              FireworkEffectBuilder::of,
-              FireworkEffectMeta.class
-          );
-        });
-
-    final var sFireworkEffectType = sFireworkEffect.literal("type")
-        .meta(CommandMeta.DESCRIPTION, "Set the effect type.")
-        .senderType(Player.class)
-        .argument(EnumArgument.of(FireworkEffect.Type.class, "type"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          this.modifySpecial(
-              sender,
-              b -> b.fireworkEffect(
-                  this.fireworkEffectBuilder(b.fireworkEffect())
-                      .with(c.get("type")).build()
-              ),
-              FireworkEffectBuilder::of,
-              FireworkEffectMeta.class
-          );
-        });
-
-    final var sFireworkEffectColor = sFireworkEffect.literal("color");
-
-    final var sFireworkEffectColorAdd = sFireworkEffectColor.literal("add")
-        .meta(CommandMeta.DESCRIPTION, "Add a color.")
-        .senderType(Player.class)
-        .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
-        .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
-        .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          this.modifySpecial(
-              sender,
-              b -> b.fireworkEffect(this.fireworkEffectBuilder(b.fireworkEffect())
-                  .withColor(Color.fromRGB(
-                      c.<Integer>get("red"),
-                      c.<Integer>get("green"),
-                      c.<Integer>get("blue")
-                  )).build()
-              ),
-              FireworkEffectBuilder::of,
-              FireworkEffectMeta.class
-          );
-        });
-
-    final var sFireworkEffectFadeColor = sFireworkEffect.literal("fade-color");
-
-    final var sFireworkEffectFadeColorAdd = sFireworkEffectFadeColor.literal("add")
-        .meta(CommandMeta.DESCRIPTION, "Add a fade color.")
-        .senderType(Player.class)
-        .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
-        .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
-        .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          this.modifySpecial(
-              sender,
-              b -> b.fireworkEffect(this.fireworkEffectBuilder(b.fireworkEffect())
-                  .withFade(Color.fromRGB(
-                      c.<Integer>get("red"),
-                      c.<Integer>get("green"),
-                      c.<Integer>get("blue")
-                  )).build()
-              ),
-              FireworkEffectBuilder::of,
-              FireworkEffectMeta.class
-          );
-        });
+//    final var sFireworkEffect = parent.literal("firework-effect")
+//        .meta(CommandMeta.DESCRIPTION, "Commands for Firework Effects.")
+//        .permission(Permissions.FIREWORK_EFFECT);
+//
+//    final var sFireworkEffectFlicker = sFireworkEffect.literal("flicker")
+//        .meta(CommandMeta.DESCRIPTION, "Set whether the effect should flicker.")
+//        .senderType(Player.class)
+//        .argument(BooleanArgument.of("boolean"))
+//        .handler(c -> {
+//          final var sender = (Player) c.getSender();
+//          this.modifySpecial(
+//              sender,
+//              b -> b.fireworkEffect(
+//                  this.fireworkEffectBuilder(b.fireworkEffect())
+//                      .flicker(c.<Boolean>get("boolean")).build()
+//              ),
+//              FireworkEffectBuilder::of,
+//              FireworkEffectMeta.class
+//          );
+//        });
+//
+//    final var sFireworkEffectTrail = sFireworkEffect.literal("trail")
+//        .meta(CommandMeta.DESCRIPTION, "Set whether the effect should trail.")
+//        .senderType(Player.class)
+//        .argument(BooleanArgument.of("boolean"))
+//        .handler(c -> {
+//          final var sender = (Player) c.getSender();
+//          this.modifySpecial(
+//              sender,
+//              b -> b.fireworkEffect(
+//                  this.fireworkEffectBuilder(b.fireworkEffect())
+//                      .trail(c.<Boolean>get("boolean")).build()
+//              ),
+//              FireworkEffectBuilder::of,
+//              FireworkEffectMeta.class
+//          );
+//        });
+//
+//    final var sFireworkEffectType = sFireworkEffect.literal("type")
+//        .meta(CommandMeta.DESCRIPTION, "Set the effect type.")
+//        .senderType(Player.class)
+//        .argument(EnumArgument.of(FireworkEffect.Type.class, "type"))
+//        .handler(c -> {
+//          final var sender = (Player) c.getSender();
+//          this.modifySpecial(
+//              sender,
+//              b -> b.fireworkEffect(
+//                  this.fireworkEffectBuilder(b.fireworkEffect())
+//                      .with(c.get("type")).build()
+//              ),
+//              FireworkEffectBuilder::of,
+//              FireworkEffectMeta.class
+//          );
+//        });
+//
+//    final var sFireworkEffectColor = sFireworkEffect.literal("color");
+//
+//    final var sFireworkEffectColorAdd = sFireworkEffectColor.literal("add")
+//        .meta(CommandMeta.DESCRIPTION, "Add a color.")
+//        .senderType(Player.class)
+//        .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
+//        .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
+//        .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
+//        .handler(c -> {
+//          final var sender = (Player) c.getSender();
+//          this.modifySpecial(
+//              sender,
+//              b -> b.fireworkEffect(this.fireworkEffectBuilder(b.fireworkEffect())
+//                  .withColor(Color.fromRGB(
+//                      c.<Integer>get("red"),
+//                      c.<Integer>get("green"),
+//                      c.<Integer>get("blue")
+//                  )).build()
+//              ),
+//              FireworkEffectBuilder::of,
+//              FireworkEffectMeta.class
+//          );
+//        });
+//
+//    final var sFireworkEffectFadeColor = sFireworkEffect.literal("fade-color");
+//
+//    final var sFireworkEffectFadeColorAdd = sFireworkEffectFadeColor.literal("add")
+//        .meta(CommandMeta.DESCRIPTION, "Add a fade color.")
+//        .senderType(Player.class)
+//        .argument(IntegerArgument.<CommandSender>newBuilder("red").withMin(0).withMax(255))
+//        .argument(IntegerArgument.<CommandSender>newBuilder("blue").withMin(0).withMax(255))
+//        .argument(IntegerArgument.<CommandSender>newBuilder("green").withMin(0).withMax(255))
+//        .handler(c -> {
+//          final var sender = (Player) c.getSender();
+//          this.modifySpecial(
+//              sender,
+//              b -> b.fireworkEffect(this.fireworkEffectBuilder(b.fireworkEffect())
+//                  .withFade(Color.fromRGB(
+//                      c.<Integer>get("red"),
+//                      c.<Integer>get("green"),
+//                      c.<Integer>get("blue")
+//                  )).build()
+//              ),
+//              FireworkEffectBuilder::of,
+//              FireworkEffectMeta.class
+//          );
+//        });
 
 //        commandManager.command(sFireworkEffectFlicker)
 //                .command(sFireworkEffectTrail)

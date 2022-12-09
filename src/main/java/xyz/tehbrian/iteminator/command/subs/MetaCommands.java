@@ -36,6 +36,15 @@ public final class MetaCommands {
     this.langConfig = langConfig;
   }
 
+  private static boolean isInteger(final String str) {
+    try {
+      Integer.parseInt(str);
+    } catch (final NumberFormatException e) {
+      return false;
+    }
+    return true;
+  }
+
   /**
    * @param commandManager the manager to register the commands to
    * @param parent         the command to register the subcommands under
@@ -122,15 +131,6 @@ public final class MetaCommands {
         .command(cReload)
         .command(cFormat)
         .command(cFormatFormattingType);
-  }
-
-  private static boolean isInteger(final String str) {
-    try {
-      Integer.parseInt(str);
-    } catch (final NumberFormatException e) {
-      return false;
-    }
-    return true;
   }
 
 }
