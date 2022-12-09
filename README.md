@@ -5,9 +5,11 @@ A modern item editing plugin.
 * [Discord](https://thbn.me/discord)
 * [Donate](https://github.com/sponsors/TehBrian) <3
 
+---
+
 ## About
 Iteminator is a fresh take on in-game Minecraft item editing. It offers a simple
-command UX powered by tab-completion while still allowing you to modify all item
+command UX powered by tab completion while still allowing you to modify all item
 data available. No cluttered, sludgy GUIs. Just the raw power of the game's item
 system in your hands.
 
@@ -19,3 +21,9 @@ system in your hands.
 - All plugin messages are easily configurable.
 
 [MiniMessage]: https://docs.adventure.kyori.net/minimessage.html
+
+## Screenshots
+
+![text shown when running /iteminator](assets/iteminator-command.png)
+![tab completion for common commands](assets/tab-complete-common.png)
+![tab completion for special commands](assets/tab-complete-special.png)
