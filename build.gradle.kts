@@ -43,8 +43,11 @@ tasks {
     expand("version" to project.version, "description" to project.description)
   }
 
+  base {
+    archivesName.set("Iteminator")
+  }
+
   shadowJar {
-    archiveBaseName.set("Iteminator")
     archiveClassifier.set("")
 
     val libsPackage = "${project.group}.${project.name}.libs"
