@@ -16,8 +16,8 @@ import xyz.tehbrian.iteminator.Iteminator;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.User;
 import xyz.tehbrian.iteminator.user.UserService;
-import xyz.tehbrian.iteminator.util.Colors;
-import xyz.tehbrian.iteminator.util.Permissions;
+import xyz.tehbrian.iteminator.Colors;
+import xyz.tehbrian.iteminator.Permissions;
 
 public final class MetaCommands {
 

@@ -7,7 +7,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.util.ComponentMessageThrowable;
-import xyz.tehbrian.iteminator.util.Colors;
+import xyz.tehbrian.iteminator.Colors;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

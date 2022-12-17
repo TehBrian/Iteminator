@@ -23,7 +23,7 @@ import xyz.tehbrian.iteminator.command.ModernEnchantment;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.UserService;
 import xyz.tehbrian.iteminator.util.HeldItemModifier;
-import xyz.tehbrian.iteminator.util.Permissions;
+import xyz.tehbrian.iteminator.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;

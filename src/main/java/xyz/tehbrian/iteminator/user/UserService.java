@@ -4,7 +4,7 @@ import dev.tehbrian.tehlib.paper.user.PaperUserService;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import xyz.tehbrian.iteminator.util.Format;
-import xyz.tehbrian.iteminator.util.Permissions;
+import xyz.tehbrian.iteminator.Permissions;
 
 import java.util.UUID;
 
