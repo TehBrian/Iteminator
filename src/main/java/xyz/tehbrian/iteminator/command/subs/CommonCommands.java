@@ -56,7 +56,7 @@ public final class CommonCommands {
         .meta(CommandMeta.DESCRIPTION, "Set the amount.")
         .permission(Permissions.AMOUNT)
         .senderType(Player.class)
-        .argument(IntegerArgument.<CommandSender>newBuilder("amount").withMin(0).withMax(127))
+        .argument(IntegerArgument.<CommandSender>builder("amount").withMin(0).withMax(127))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> b.amount(c.get("amount")));
@@ -168,7 +168,7 @@ public final class CommonCommands {
         .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
         .senderType(Player.class)
         .argument(EnumArgument.of(ModernEnchantment.class, "type"))
-        .argument(IntegerArgument.<CommandSender>newBuilder("level").withMin(0).withMax(255))
+        .argument(IntegerArgument.<CommandSender>builder("level").withMin(0).withMax(255))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(
@@ -258,7 +258,7 @@ public final class CommonCommands {
     final var cLoreSet = cLore.literal("set")
         .meta(CommandMeta.DESCRIPTION, "Set a line of lore.")
         .senderType(Player.class)
-        .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
+        .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
         .argument(StringArgument.greedy("text"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -279,7 +279,7 @@ public final class CommonCommands {
     final var cLoreRemove = cLore.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a line of lore.")
         .senderType(Player.class)
-        .argument(IntegerArgument.<CommandSender>newBuilder("index").withMin(0))
+        .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> {
