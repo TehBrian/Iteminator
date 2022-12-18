@@ -58,6 +58,7 @@ import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
 import xyz.tehbrian.iteminator.Iteminator;
+import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.command.ModernEnchantment;
 import xyz.tehbrian.iteminator.command.ModernPotionEffectType;
 import xyz.tehbrian.iteminator.command.ModernPotionType;
@@ -65,7 +66,6 @@ import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.UserService;
 import xyz.tehbrian.iteminator.util.HeldItemModifier;
 import xyz.tehbrian.iteminator.util.ItemMetaRequiredTypes;
-import xyz.tehbrian.iteminator.Permissions;
 
 import java.util.List;
 import java.util.Map;

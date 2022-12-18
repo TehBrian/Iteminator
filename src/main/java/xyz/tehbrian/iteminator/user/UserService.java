@@ -3,8 +3,8 @@ package xyz.tehbrian.iteminator.user;
 import dev.tehbrian.tehlib.paper.user.PaperUserService;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import xyz.tehbrian.iteminator.util.Format;
 import xyz.tehbrian.iteminator.Permissions;
+import xyz.tehbrian.iteminator.util.Format;
 
 import java.util.UUID;
 

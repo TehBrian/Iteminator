@@ -12,14 +12,19 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.NodePath;
+import xyz.tehbrian.iteminator.Colors;
 import xyz.tehbrian.iteminator.Iteminator;
+import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.User;
 import xyz.tehbrian.iteminator.user.UserService;
-import xyz.tehbrian.iteminator.Colors;
-import xyz.tehbrian.iteminator.Permissions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class MetaCommands {
+
+  private static final String ROOT_NAME = "iteminator";
 
   private final Iteminator iteminator;
   private final UserService userService;
@@ -36,6 +41,24 @@ public final class MetaCommands {
     this.langConfig = langConfig;
   }
 
+  /**
+   * Prepend the root command name to non-empty, non-numerical queries that
+   * don't already have the root command at the start of the string.
+   *
+   * @param s the string
+   * @return the string with the root command name prepended
+   */
+  private static String prependRoot(final String s) {
+    if (!s.startsWith(ROOT_NAME) && !isInteger(s)) {
+      return ROOT_NAME + " " + s;
+    }
+    return s;
+  }
+
+  /**
+   * @param str a string
+   * @return whether the string can be parsed as an integer
+   */
   private static boolean isInteger(final String str) {
     try {
       Integer.parseInt(str);
@@ -76,16 +99,24 @@ public final class MetaCommands {
     );
 
     final var cHelp = parent.literal("help")
-        .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
-        .handler(c -> help.queryCommands(
-            // for usability, prepend "iteminator " to non-empty, non-numerical
-            // queries that don't already have the root command.
-            c.<String>getOptional("query").map(s -> {
-              if (!s.startsWith("iteminator") && !isInteger(s)) {
-                return "iteminator " + s;
+        .argument(StringArgument.<CommandSender>builder("query")
+            .greedy().asOptional()
+            .withSuggestionsProvider((c, input) -> {
+              final List<String> suggestions = new ArrayList<>();
+              final var helpTopic = commandManager.createCommandHelpHandler().queryRootIndex(c.getSender());
+              for (final var entry : helpTopic.getEntries()) {
+                // remove first word (root).
+                final String[] splitSyntax = entry.getSyntaxString().split(" ", 2);
+                if (splitSyntax.length < 2) {
+                  // if it was a suggestion for the root command itself.
+                  continue;
+                }
+                suggestions.add(splitSyntax[1]);
               }
-              return s;
-            }).orElse(""),
+              return suggestions;
+            }))
+        .handler(c -> help.queryCommands(
+            c.<String>getOptional("query").map(MetaCommands::prependRoot).orElse(""),
             c.getSender()
         ));
 

@@ -19,11 +19,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
+import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.command.ModernEnchantment;
 import xyz.tehbrian.iteminator.config.LangConfig;
 import xyz.tehbrian.iteminator.user.UserService;
 import xyz.tehbrian.iteminator.util.HeldItemModifier;
-import xyz.tehbrian.iteminator.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;
