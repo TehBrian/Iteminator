@@ -20,15 +20,19 @@ import java.util.regex.Pattern;
  */
 public final class ExceptionHandlers {
 
+  private static final Component PREFIX = Component.text("I| ").color(Colors.DARK_BLUE);
+
   public static final Function<Exception, Component> INVALID_SYNTAX =
-      e -> Component.text("Invalid command syntax. Correct syntax is: ", Colors.RED)
+      e -> PREFIX
+          .append(Component.text("Invalid command syntax. Correct syntax is: ", Colors.RED))
           .append(highlightSpecial(Component.text(
               String.format("/%s", ((InvalidSyntaxException) e).getCorrectSyntax()),
               Colors.LIGHT_GRAY
           )));
 
   public static final Function<Exception, Component> INVALID_SENDER =
-      e -> Component.text("Invalid command sender. You must be of type ", Colors.RED)
+      e -> PREFIX
+          .append(Component.text("Invalid command sender. You must be of type ", Colors.RED))
           .append(Component.text(
               ((InvalidCommandSenderException) e).getRequiredSender().getSimpleName(),
               Colors.LIGHT_GRAY
@@ -36,10 +40,12 @@ public final class ExceptionHandlers {
           .append(Component.text(" to run this command.", Colors.RED));
 
   public static final Function<Exception, Component> NO_PERMISSION =
-      e -> Component.text("You don't have permission to do that.", Colors.RED);
+      e -> PREFIX
+          .append(Component.text("You don't have permission to do that.", Colors.RED));
 
   public static final Function<Exception, Component> ARGUMENT_PARSE =
-      e -> Component.text("Invalid command argument: ", Colors.RED)
+      e -> PREFIX
+          .append(Component.text("Invalid command argument: ", Colors.RED))
           .append(getMessage(e.getCause()).colorIfAbsent(Colors.LIGHT_GRAY));
 
   public static final Function<Exception, Component> COMMAND_EXECUTION =
@@ -59,12 +65,12 @@ public final class ExceptionHandlers {
                 .append(Component.text("Click to copy", Colors.LIGHT_GRAY, TextDecoration.ITALIC))
         );
         final ClickEvent click = ClickEvent.copyToClipboard(stackTrace);
-        return Component.text()
+        return PREFIX.append(Component.text()
             .content("An internal error occurred while attempting to perform this command.")
             .color(Colors.RED)
             .hoverEvent(hover)
             .clickEvent(click)
-            .build();
+            .build());
       };
 
   private ExceptionHandlers() {
