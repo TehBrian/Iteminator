@@ -27,7 +27,7 @@ dependencies {
   implementation("broccolai.corn:corn-minecraft-paper:3.2.0")
   implementation("cloud.commandframework:cloud-minecraft-extras:1.8.0")
   implementation("com.google.inject:guice:5.1.0")
-  implementation("dev.tehbrian:tehlib-paper:0.3.1")
+  implementation("dev.tehbrian:tehlib-paper:0.4.2")
   implementation("org.spongepowered:configurate-yaml:4.1.2")
 
   testImplementation("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")

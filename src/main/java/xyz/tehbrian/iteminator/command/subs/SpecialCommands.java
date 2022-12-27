@@ -535,12 +535,12 @@ public final class SpecialCommands {
 //              FireworkEffectMeta.class
 //          );
 //        });
-
-//        commandManager.command(sFireworkEffectFlicker)
-//                .command(sFireworkEffectTrail)
-//                .command(sFireworkEffectType)
-//                .command(sFireworkEffectColorAdd)
-//                .command(sFireworkEffectFadeColorAdd);
+//
+//    commandManager.command(sFireworkEffectFlicker)
+//        .command(sFireworkEffectTrail)
+//        .command(sFireworkEffectType)
+//        .command(sFireworkEffectColorAdd)
+//        .command(sFireworkEffectFadeColorAdd);
 
     final var sFirework = parent.literal("firework")
         .meta(CommandMeta.DESCRIPTION, "Commands for Fireworks.")
