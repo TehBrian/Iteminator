@@ -42,6 +42,7 @@ public final class UserService extends PaperUserService<User> {
     return Format.plain(string);
   }
 
+  @SuppressWarnings("OptionalUsedAsFieldOrParameterType") // used for utility, not logic.
   public Component formatWithUserFormat(final Optional<String> string, final Player player) {
     if (string.isPresent()) {
       return this.formatWithUserFormat(string.get(), player);
