@@ -104,7 +104,6 @@ public final class SpecialCommands {
 
     final var sArmorStandShowArms = sArmorStand.literal("show-arms")
         .meta(CommandMeta.DESCRIPTION, "Set the show arms flag.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -118,7 +117,6 @@ public final class SpecialCommands {
 
     final var sArmorStandInvisible = sArmorStand.literal("invisible")
         .meta(CommandMeta.DESCRIPTION, "Set the invisible flag.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -132,7 +130,6 @@ public final class SpecialCommands {
 
     final var sArmorStandMarker = sArmorStand.literal("marker")
         .meta(CommandMeta.DESCRIPTION, "Set the marker flag.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -146,7 +143,6 @@ public final class SpecialCommands {
 
     final var sArmorStandNoBasePlate = sArmorStand.literal("no-base-plate")
         .meta(CommandMeta.DESCRIPTION, "Set the no base plate flag.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -160,7 +156,6 @@ public final class SpecialCommands {
 
     final var sArmorStandSmall = sArmorStand.literal("small")
         .meta(CommandMeta.DESCRIPTION, "Set the small flag.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -184,7 +179,6 @@ public final class SpecialCommands {
 
     final var sAxolotlBucketVariant = sAxolotlBucket.literal("variant")
         .meta(CommandMeta.DESCRIPTION, "Set the variant.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(Axolotl.Variant.class, "variant"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -207,7 +201,6 @@ public final class SpecialCommands {
 
     final var sBannerPatternAdd = sBannerPattern.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a pattern.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(DyeColor.class, "color"))
         .argument(EnumArgument.of(PatternType.class, "type"))
         .handler(c -> {
@@ -222,7 +215,6 @@ public final class SpecialCommands {
 
     final var sBannerPatternSet = sBannerPattern.literal("set")
         .meta(CommandMeta.DESCRIPTION, "Set a pattern.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
         .argument(EnumArgument.of(DyeColor.class, "color"))
         .argument(EnumArgument.of(PatternType.class, "type"))
@@ -246,7 +238,6 @@ public final class SpecialCommands {
 
     final var sBannerPatternRemove = sBannerPattern.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a pattern.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -268,7 +259,6 @@ public final class SpecialCommands {
 
     final var sBannerPatternClear = sBannerPattern.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the patterns.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -290,7 +280,6 @@ public final class SpecialCommands {
 
     final var sBookTitle = sBook.literal("title")
         .meta(CommandMeta.DESCRIPTION, "Set the title. Pass nothing to reset.")
-        .senderType(Player.class)
         .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -308,7 +297,6 @@ public final class SpecialCommands {
 
     final var sBookAuthor = sBook.literal("author")
         .meta(CommandMeta.DESCRIPTION, "Set the author. Pass nothing to reset.")
-        .senderType(Player.class)
         .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -326,7 +314,6 @@ public final class SpecialCommands {
 
     final var sBookGeneration = sBook.literal("generation")
         .meta(CommandMeta.DESCRIPTION, "Set the generation.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(BookMeta.Generation.class, "generation"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -340,7 +327,6 @@ public final class SpecialCommands {
 
     final var sBookEditable = sBook.literal("editable")
         .meta(CommandMeta.DESCRIPTION, "Set whether the book is editable.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -369,7 +355,6 @@ public final class SpecialCommands {
 
     final var sDamageableSet = sDamageable
         .meta(CommandMeta.DESCRIPTION, "Sets the damage.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("damage").asOptionalWithDefault(0).withMin(0))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -389,7 +374,6 @@ public final class SpecialCommands {
 
     final var sEnchantmentStorageAdd = sEnchantmentStorage.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a stored enchantment.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernEnchantment.class, "type"))
         .argument(IntegerArgument.<CommandSender>builder("level").withMin(0).withMax(255))
         .handler(c -> {
@@ -404,7 +388,6 @@ public final class SpecialCommands {
 
     final var sEnchantmentStorageRemove = sEnchantmentStorage.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a stored enchantment.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernEnchantment.class, "type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -418,7 +401,6 @@ public final class SpecialCommands {
 
     final var sEnchantmentStorageClear = sEnchantmentStorage.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the stored enchantments.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -439,7 +421,6 @@ public final class SpecialCommands {
 //
 //    final var sFireworkEffectFlicker = sFireworkEffect.literal("flicker")
 //        .meta(CommandMeta.DESCRIPTION, "Set whether the effect should flicker.")
-//        .senderType(Player.class)
 //        .argument(BooleanArgument.of("boolean"))
 //        .handler(c -> {
 //          final var sender = (Player) c.getSender();
@@ -456,7 +437,6 @@ public final class SpecialCommands {
 //
 //    final var sFireworkEffectTrail = sFireworkEffect.literal("trail")
 //        .meta(CommandMeta.DESCRIPTION, "Set whether the effect should trail.")
-//        .senderType(Player.class)
 //        .argument(BooleanArgument.of("boolean"))
 //        .handler(c -> {
 //          final var sender = (Player) c.getSender();
@@ -473,7 +453,6 @@ public final class SpecialCommands {
 //
 //    final var sFireworkEffectType = sFireworkEffect.literal("type")
 //        .meta(CommandMeta.DESCRIPTION, "Set the effect type.")
-//        .senderType(Player.class)
 //        .argument(EnumArgument.of(FireworkEffect.Type.class, "type"))
 //        .handler(c -> {
 //          final var sender = (Player) c.getSender();
@@ -492,7 +471,6 @@ public final class SpecialCommands {
 //
 //    final var sFireworkEffectColorAdd = sFireworkEffectColor.literal("add")
 //        .meta(CommandMeta.DESCRIPTION, "Add a color.")
-//        .senderType(Player.class)
 //        .argument(IntegerArgument.<CommandSender>builder("red").withMin(0).withMax(255))
 //        .argument(IntegerArgument.<CommandSender>builder("blue").withMin(0).withMax(255))
 //        .argument(IntegerArgument.<CommandSender>builder("green").withMin(0).withMax(255))
@@ -516,7 +494,6 @@ public final class SpecialCommands {
 //
 //    final var sFireworkEffectFadeColorAdd = sFireworkEffectFadeColor.literal("add")
 //        .meta(CommandMeta.DESCRIPTION, "Add a fade color.")
-//        .senderType(Player.class)
 //        .argument(IntegerArgument.<CommandSender>builder("red").withMin(0).withMax(255))
 //        .argument(IntegerArgument.<CommandSender>builder("blue").withMin(0).withMax(255))
 //        .argument(IntegerArgument.<CommandSender>builder("green").withMin(0).withMax(255))
@@ -548,7 +525,6 @@ public final class SpecialCommands {
 
     final var sFireworkPower = sFirework.literal("power")
         .meta(CommandMeta.DESCRIPTION, "Set the power.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("power").withMin(0).withMax(127))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -568,7 +544,6 @@ public final class SpecialCommands {
 //
 //        final var sItemFrameInvisible = sItemFrame.literal("invisible")
 //                .meta(CommandMeta.DESCRIPTION, "Set the invisible flag.")
-//                .senderType(Player.class)
 //                .argument(BooleanArgument.of("boolean"))
 //                .handler(c -> {
 //                    final var sender = (Player) c.getSender();
@@ -589,7 +564,6 @@ public final class SpecialCommands {
 //
 //        final var sItemFrameFixed = sItemFrame.literal("fixed")
 //                .meta(CommandMeta.DESCRIPTION, "Set the fixed flag.")
-//                .senderType(Player.class)
 //                .argument(BooleanArgument.of("boolean"))
 //                .handler(c -> {
 //                    final var sender = (Player) c.getSender();
@@ -619,7 +593,6 @@ public final class SpecialCommands {
 
     final var sLeatherArmorSet = sLeatherArmorColor
         .meta(CommandMeta.DESCRIPTION, "Set the armor's color.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("red").withMin(0).withMax(255))
         .argument(IntegerArgument.<CommandSender>builder("blue").withMin(0).withMax(255))
         .argument(IntegerArgument.<CommandSender>builder("green").withMin(0).withMax(255))
@@ -639,7 +612,6 @@ public final class SpecialCommands {
 
     final var sLeatherArmorReset = sLeatherArmorColor
         .meta(CommandMeta.DESCRIPTION, "Reset the armor's color.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -659,7 +631,6 @@ public final class SpecialCommands {
 
     final var sMapScaling = sMap.literal("scaling")
         .meta(CommandMeta.DESCRIPTION, "Set whether the map is scaling.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("scaling"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -673,7 +644,6 @@ public final class SpecialCommands {
 
     final var sMapLocationName = sMap.literal("location-name")
         .meta(CommandMeta.DESCRIPTION, "Set the map's location name. Pass nothing to reset.")
-        .senderType(Player.class)
         .argument(StringArgument.optional("name"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -689,7 +659,6 @@ public final class SpecialCommands {
 
     final var sMapColorSet = sMapColor
         .meta(CommandMeta.DESCRIPTION, "Set the map's color.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("red").withMin(0).withMax(255))
         .argument(IntegerArgument.<CommandSender>builder("blue").withMin(0).withMax(255))
         .argument(IntegerArgument.<CommandSender>builder("green").withMin(0).withMax(255))
@@ -709,7 +678,6 @@ public final class SpecialCommands {
 
     final var sMapColorReset = sMapColor
         .meta(CommandMeta.DESCRIPTION, "Reset the map's color.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -724,7 +692,6 @@ public final class SpecialCommands {
 
     final var sMapViewCenterX = sMapView.literal("center-x")
         .meta(CommandMeta.DESCRIPTION, "Set the map view's center x.")
-        .senderType(Player.class)
         .argument(IntegerArgument.of("x"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -739,7 +706,6 @@ public final class SpecialCommands {
 
     final var sMapViewCenterZ = sMapView.literal("center-z")
         .meta(CommandMeta.DESCRIPTION, "Set the map view's center z.")
-        .senderType(Player.class)
         .argument(IntegerArgument.of("z"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -754,7 +720,6 @@ public final class SpecialCommands {
 
     final var sMapViewScale = sMapView.literal("scale")
         .meta(CommandMeta.DESCRIPTION, "Set the map view's scale.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(MapView.Scale.class, "scale"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -769,7 +734,6 @@ public final class SpecialCommands {
 
     final var sMapViewLocked = sMapView.literal("locked")
         .meta(CommandMeta.DESCRIPTION, "Set whether the map view is locked.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -784,7 +748,6 @@ public final class SpecialCommands {
 
     final var sMapViewTrackingPosition = sMapView.literal("tracking-position")
         .meta(CommandMeta.DESCRIPTION, "Set whether the map view shows a position cursor.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -799,7 +762,6 @@ public final class SpecialCommands {
 
     final var sMapViewUnlimitedTracking = sMapView.literal("unlimited-tracking")
         .meta(CommandMeta.DESCRIPTION, "Set whether the map view shows off-screen cursors.")
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -832,7 +794,6 @@ public final class SpecialCommands {
 
     final var sPotionEffectAdd = sPotionEffect.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
         .argument(IntegerArgument.<CommandSender>builder("duration").withMin(0))
         .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(64))
@@ -861,7 +822,6 @@ public final class SpecialCommands {
 
     final var sPotionEffectRemove = sPotionEffect.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a custom effect.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -875,7 +835,6 @@ public final class SpecialCommands {
 
     final var sPotionEffectClear = sPotionEffect.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the custom effects.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -890,7 +849,6 @@ public final class SpecialCommands {
 
     final var sPotionColorSet = sPotionColor
         .meta(CommandMeta.DESCRIPTION, "Set the potion's color.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("red").withMin(0).withMax(255))
         .argument(IntegerArgument.<CommandSender>builder("blue").withMin(0).withMax(255))
         .argument(IntegerArgument.<CommandSender>builder("green").withMin(0).withMax(255))
@@ -910,7 +868,6 @@ public final class SpecialCommands {
 
     final var sPotionColorReset = sPotionColor
         .meta(CommandMeta.DESCRIPTION, "Reset the potion's color.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -923,7 +880,6 @@ public final class SpecialCommands {
 
     final var sPotionType = sPotion.literal("type")
         .meta(CommandMeta.DESCRIPTION, "Set the potion type.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernPotionType.class, "type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -948,7 +904,6 @@ public final class SpecialCommands {
 
     final var sRepairableCostSet = sRepairable.literal("cost")
         .meta(CommandMeta.DESCRIPTION, "Set the repair cost.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("cost").asOptionalWithDefault(0))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -968,7 +923,6 @@ public final class SpecialCommands {
 
     final var sSkullName = sSkull.literal("name")
         .meta(CommandMeta.DESCRIPTION, "Set the owning player by name.")
-        .senderType(Player.class)
         .argument(StringArgument.<CommandSender>builder("name")
             .withSuggestionsProvider((c, i) -> this.iteminator.getServer()
                 .getOnlinePlayers().stream().map(Player::getName).toList()))
@@ -1004,7 +958,6 @@ public final class SpecialCommands {
 
     final var sSuspiciousStewEffectAdd = sSuspiciousStewEffect.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
         .argument(IntegerArgument.<CommandSender>builder("duration").withMin(0))
         .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(64))
@@ -1033,7 +986,6 @@ public final class SpecialCommands {
 
     final var sSuspiciousStewEffectRemove = sSuspiciousStewEffect.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a custom effect.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -1047,7 +999,6 @@ public final class SpecialCommands {
 
     final var sSuspiciousStewEffectClear = sSuspiciousStewEffect.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the custom effects.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -1068,7 +1019,6 @@ public final class SpecialCommands {
 
     final var sTropicalFishBucketPattern = sTropicalFishBucket.literal("pattern")
         .meta(CommandMeta.DESCRIPTION, "Set the pattern.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(TropicalFish.Pattern.class, "pattern"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -1082,7 +1032,6 @@ public final class SpecialCommands {
 
     final var sTropicalFishBucketBodyColor = sTropicalFishBucket.literal("body-color")
         .meta(CommandMeta.DESCRIPTION, "Set the body color.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(DyeColor.class, "body_color"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -1096,7 +1045,6 @@ public final class SpecialCommands {
 
     final var sTropicalFishBucketPatternColor = sTropicalFishBucket.literal("pattern-color")
         .meta(CommandMeta.DESCRIPTION, "Set the pattern color.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(DyeColor.class, "pattern_color"))
         .handler(c -> {
           final var sender = (Player) c.getSender();

@@ -5,6 +5,7 @@ import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
 import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import xyz.tehbrian.iteminator.command.subs.CommonCommands;
 import xyz.tehbrian.iteminator.command.subs.MetaCommands;
 import xyz.tehbrian.iteminator.command.subs.SpecialCommands;
@@ -33,10 +34,13 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
     this.metaCommands.registerMeta(commandManager, cMain);
 
-    this.commonCommands.registerCommon(commandManager, cMain);
+    final var cCommon = cMain
+        .senderType(Player.class);
+    this.commonCommands.registerCommon(commandManager, cCommon);
 
     final var cSpecial = cMain.literal("special", "s")
-        .meta(CommandMeta.DESCRIPTION, "Commands special to a specific item type.");
+        .meta(CommandMeta.DESCRIPTION, "Commands special to specific item types.")
+        .senderType(Player.class);
     this.specialCommands.registerSpecial(commandManager, cSpecial);
   }
 

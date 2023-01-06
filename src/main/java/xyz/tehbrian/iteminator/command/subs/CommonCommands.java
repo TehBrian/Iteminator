@@ -55,7 +55,6 @@ public final class CommonCommands {
     final var cAmount = parent.literal("amount")
         .meta(CommandMeta.DESCRIPTION, "Set the amount.")
         .permission(Permissions.AMOUNT)
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("amount").withMin(0).withMax(127))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -65,7 +64,6 @@ public final class CommonCommands {
     final var cCustomModelData = parent.literal("custom-model-data")
         .meta(CommandMeta.DESCRIPTION, "Set the custom model data. Pass nothing to reset.")
         .permission(Permissions.CUSTOM_MODEL_DATA)
-        .senderType(Player.class)
         .argument(IntegerArgument.optional("data"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -75,7 +73,6 @@ public final class CommonCommands {
     final var cMaterial = parent.literal("material")
         .meta(CommandMeta.DESCRIPTION, "Set the material.")
         .permission(Permissions.MATERIAL)
-        .senderType(Player.class)
         .argument(MaterialArgument.of("material"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -111,7 +108,6 @@ public final class CommonCommands {
     final var cUnbreakable = parent.literal("unbreakable")
         .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
         .permission(Permissions.UNBREAKABLE)
-        .senderType(Player.class)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -132,7 +128,6 @@ public final class CommonCommands {
 
     final var cAttributeAdd = cAttribute.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add an attribute.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(Attribute.class, "attribute"))
         .argument(StringArgument.quoted("name"))
         .argument(DoubleArgument.of("amount"))
@@ -154,7 +149,6 @@ public final class CommonCommands {
 
     final var cAttributeRemove = cAttribute.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove an attribute.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(Attribute.class, "attribute"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -163,7 +157,6 @@ public final class CommonCommands {
 
     final var cAttributeClear = cAttribute.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the attributes.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> b.attributeModifiers(null));
@@ -180,7 +173,6 @@ public final class CommonCommands {
 
     final var cEnchantmentAdd = cEnchantment.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernEnchantment.class, "type"))
         .argument(IntegerArgument.<CommandSender>builder("level").withMin(0).withMax(255))
         .handler(c -> {
@@ -193,7 +185,6 @@ public final class CommonCommands {
 
     final var cEnchantmentRemove = cEnchantment.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove an enchantment.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ModernEnchantment.class, "type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -202,7 +193,6 @@ public final class CommonCommands {
 
     final var cEnchantmentClear = cEnchantment.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the enchantments.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> b.enchants(null));
@@ -219,7 +209,6 @@ public final class CommonCommands {
 
     final var cFlagsAdd = cFlags.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a flag.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ItemFlag.class, "flag"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -228,7 +217,6 @@ public final class CommonCommands {
 
     final var cFlagsRemove = cFlags.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a flag.")
-        .senderType(Player.class)
         .argument(EnumArgument.of(ItemFlag.class, "flag"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -237,7 +225,6 @@ public final class CommonCommands {
 
     final var cFlagsClear = cFlags.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the flags.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> b.flags(null));
@@ -254,7 +241,6 @@ public final class CommonCommands {
 
     final var cLoreAdd = cLore.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a line of lore.")
-        .senderType(Player.class)
         .argument(StringArgument.greedy("text"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -271,7 +257,6 @@ public final class CommonCommands {
 
     final var cLoreSet = cLore.literal("set")
         .meta(CommandMeta.DESCRIPTION, "Set a line of lore.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
         .argument(StringArgument.greedy("text"))
         .handler(c -> {
@@ -292,7 +277,6 @@ public final class CommonCommands {
 
     final var cLoreRemove = cLore.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a line of lore.")
-        .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -312,7 +296,6 @@ public final class CommonCommands {
 
     final var cLoreClear = cLore.literal("clear")
         .meta(CommandMeta.DESCRIPTION, "Clear the lore.")
-        .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> b.lore(null));

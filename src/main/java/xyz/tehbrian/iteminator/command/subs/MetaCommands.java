@@ -136,7 +136,7 @@ public final class MetaCommands {
         .permission(Permissions.FORMAT)
         .senderType(Player.class)
         .handler(c -> {
-          final Player sender = (Player) c.getSender();
+          final var sender = (Player) c.getSender();
           if (this.userService.getUser(sender).toggleFormatEnabled()) {
             sender.sendMessage(this.langConfig.c(NodePath.path("format", "enable")));
           } else {
@@ -147,11 +147,11 @@ public final class MetaCommands {
     final var cFormatFormattingType = cFormat
         .argument(EnumArgument.of(User.FormattingType.class, "formatting_type"))
         .handler(c -> {
-          final Player player = (Player) c.getSender();
+          final var sender = (Player) c.getSender();
           final User.FormattingType formattingType = c.get("formatting_type");
 
-          this.userService.getUser(player).formattingType(formattingType);
-          player.sendMessage(this.langConfig.c(
+          this.userService.getUser(sender).formattingType(formattingType);
+          sender.sendMessage(this.langConfig.c(
               NodePath.path("format", "set"),
               Placeholder.unparsed("formatting_type", formattingType.toString())
           ));
