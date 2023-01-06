@@ -12,7 +12,6 @@ import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.MapBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
 import broccolai.corn.paper.item.special.RepairableBuilder;
-import broccolai.corn.paper.item.special.SkullBuilder;
 import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.Command;
@@ -927,11 +926,9 @@ public final class SpecialCommands {
         .permission(Permissions.SKULL);
 
     final var sSkullName = sSkull.literal("name")
-        .meta(CommandMeta.DESCRIPTION, "Modify the owning player.");
-
-    final var sSkullNameSet = sSkullName.literal("set")
-        .meta(CommandMeta.DESCRIPTION, "Set the owning player.")
+        .meta(CommandMeta.DESCRIPTION, "Set the owning player. Pass nothing to reset.")
         .argument(StringArgument.<CommandSender>builder("name")
+            .asOptional()
             .withSuggestionsProvider((c, i) -> this.iteminator.getServer()
                 .getOnlinePlayers().stream().map(Player::getName).toList()))
         .handler(c -> {
@@ -945,7 +942,7 @@ public final class SpecialCommands {
                   // get offline player and calling mojang's api, and
                   // you know what actually worked? a deprecated method.
                   //noinspection deprecation
-                  skullMeta.setOwner(c.get("name"));
+                  skullMeta.setOwner(c.<String>getOptional("name").orElse(null));
                   i.setItemMeta(skullMeta);
                   return i;
                 } else {
@@ -956,21 +953,7 @@ public final class SpecialCommands {
           );
         });
 
-    final var sSkullNameReset = sSkullName.literal("reset")
-        .meta(CommandMeta.DESCRIPTION, "Reset the owning player.")
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          this.modifySpecial(
-              sender,
-              b -> b.owningPlayer(null),
-              SkullBuilder::of,
-              SkullMeta.class
-          );
-        });
-
-    commandManager
-        .command(sSkullNameSet)
-        .command(sSkullNameReset);
+    commandManager.command(sSkullName);
 
     final var sSuspiciousStew = parent.literal("suspicious-stew")
         .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
