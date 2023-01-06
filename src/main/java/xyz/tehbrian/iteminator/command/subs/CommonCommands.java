@@ -83,17 +83,29 @@ public final class CommonCommands {
         });
 
     final var cName = parent.literal("name")
-        .meta(CommandMeta.DESCRIPTION, "Set the name. Pass nothing to reset.")
-        .permission(Permissions.NAME)
-        .senderType(Player.class)
-        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
+        .meta(CommandMeta.DESCRIPTION, "Name-related commands.")
+        .permission(Permissions.NAME);
+
+    final var cNameSet = cName.literal("set")
+        .meta(CommandMeta.DESCRIPTION, "Set the name.")
+        .argument(StringArgument.greedy("text"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> {
-            final Optional<String> text = c.getOptional("text");
-            return text.map(s -> b.name(this.userService.formatWithUserFormat(s, sender)))
-                .orElseGet(() -> b.name(null));
-          });
+          HeldItemModifier.modify(sender, b -> b.name(this.userService.formatWithUserFormat(c.get("text"), sender)));
+        });
+
+    final var cNameReset = cName.literal("reset")
+        .meta(CommandMeta.DESCRIPTION, "Reset the name to default.")
+        .handler(c -> {
+          final var sender = (Player) c.getSender();
+          HeldItemModifier.modify(sender, b -> b.name(null));
+        });
+
+    final var cNameEmpty = cName.literal("empty")
+        .meta(CommandMeta.DESCRIPTION, "Set the name to an empty string.")
+        .handler(c -> {
+          final var sender = (Player) c.getSender();
+          HeldItemModifier.modify(sender, b -> b.name(Component.empty()));
         });
 
     final var cUnbreakable = parent.literal("unbreakable")
@@ -109,7 +121,9 @@ public final class CommonCommands {
     commandManager.command(cAmount)
         .command(cCustomModelData)
         .command(cMaterial)
-        .command(cName)
+        .command(cNameSet)
+        .command(cNameReset)
+        .command(cNameEmpty)
         .command(cUnbreakable);
 
     final var cAttribute = parent.literal("attribute")
