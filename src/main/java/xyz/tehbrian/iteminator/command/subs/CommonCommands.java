@@ -85,24 +85,20 @@ public final class CommonCommands {
 
     final var cNameSet = cName.literal("set")
         .meta(CommandMeta.DESCRIPTION, "Set the name.")
-        .argument(StringArgument.greedy("text"))
+        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
         .handler(c -> {
           final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.name(this.userService.formatWithUserFormat(c.get("text"), sender)));
+          HeldItemModifier.modify(
+              sender,
+              b -> b.name(this.userService.formatWithUserFormat(c.getOptional("text"), sender))
+          );
         });
 
     final var cNameReset = cName.literal("reset")
-        .meta(CommandMeta.DESCRIPTION, "Reset the name to default.")
+        .meta(CommandMeta.DESCRIPTION, "Reset the name to the item's default.")
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> b.name(null));
-        });
-
-    final var cNameEmpty = cName.literal("empty")
-        .meta(CommandMeta.DESCRIPTION, "Set the name to an empty string.")
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.name(Component.empty()));
         });
 
     final var cUnbreakable = parent.literal("unbreakable")
@@ -114,12 +110,12 @@ public final class CommonCommands {
           HeldItemModifier.modify(sender, b -> b.unbreakable(c.get("boolean")));
         });
 
-    commandManager.command(cAmount)
+    commandManager
+        .command(cAmount)
         .command(cCustomModelData)
         .command(cMaterial)
         .command(cNameSet)
         .command(cNameReset)
-        .command(cNameEmpty)
         .command(cUnbreakable);
 
     final var cAttribute = parent.literal("attribute")
@@ -241,7 +237,7 @@ public final class CommonCommands {
 
     final var cLoreAdd = cLore.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a line of lore.")
-        .argument(StringArgument.greedy("text"))
+        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> {
@@ -250,7 +246,7 @@ public final class CommonCommands {
                 .map(ArrayList::new)
                 .orElse(new ArrayList<>());
 
-            lore.add(this.userService.formatWithUserFormat(c.get("text"), sender));
+            lore.add(this.userService.formatWithUserFormat(c.getOptional("text"), sender));
             return b.lore(lore);
           });
         });
@@ -258,7 +254,7 @@ public final class CommonCommands {
     final var cLoreSet = cLore.literal("set")
         .meta(CommandMeta.DESCRIPTION, "Set a line of lore.")
         .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
-        .argument(StringArgument.greedy("text"))
+        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(sender, b -> {
@@ -270,7 +266,7 @@ public final class CommonCommands {
               return null;
             }
 
-            lore.set(line, this.userService.formatWithUserFormat(c.get("text"), sender));
+            lore.set(line, this.userService.formatWithUserFormat(c.getOptional("text"), sender));
             return b.lore(lore);
           });
         });

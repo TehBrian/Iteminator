@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import xyz.tehbrian.iteminator.Permissions;
 import xyz.tehbrian.iteminator.util.Format;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public final class UserService extends PaperUserService<User> {
@@ -24,6 +25,10 @@ public final class UserService extends PaperUserService<User> {
    * @return the string formatted with the user's formatting type
    */
   public Component formatWithUserFormat(final String string, final Player player) {
+    if (string.isEmpty()) {
+      return Component.empty();
+    }
+
     final User user = this.getUser(player.getUniqueId());
 
     if (player.hasPermission(Permissions.FORMAT) && user.formatEnabled()) {
@@ -35,6 +40,14 @@ public final class UserService extends PaperUserService<User> {
     }
 
     return Format.plain(string);
+  }
+
+  public Component formatWithUserFormat(final Optional<String> string, final Player player) {
+    if (string.isPresent()) {
+      return this.formatWithUserFormat(string.get(), player);
+    } else {
+      return Component.empty();
+    }
   }
 
 }

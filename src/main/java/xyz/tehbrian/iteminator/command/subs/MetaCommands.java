@@ -157,7 +157,8 @@ public final class MetaCommands {
           ));
         });
 
-    commandManager.command(cMain)
+    commandManager
+        .command(cMain)
         .command(cHelp)
         .command(cReload)
         .command(cFormat)

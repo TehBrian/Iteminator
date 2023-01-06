@@ -12,6 +12,7 @@ import broccolai.corn.paper.item.special.LeatherArmorBuilder;
 import broccolai.corn.paper.item.special.MapBuilder;
 import broccolai.corn.paper.item.special.PotionBuilder;
 import broccolai.corn.paper.item.special.RepairableBuilder;
+import broccolai.corn.paper.item.special.SkullBuilder;
 import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
 import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.Command;
@@ -70,7 +71,6 @@ import xyz.tehbrian.iteminator.util.ItemMetaRequiredTypes;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 
 public final class SpecialCommands {
@@ -167,7 +167,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sArmorStandShowArms)
+    commandManager
+        .command(sArmorStandShowArms)
         .command(sArmorStandInvisible)
         .command(sArmorStandMarker)
         .command(sArmorStandNoBasePlate)
@@ -269,7 +270,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sBannerPatternAdd)
+    commandManager
+        .command(sBannerPatternAdd)
         .command(sBannerPatternSet)
         .command(sBannerPatternRemove)
         .command(sBannerPatternClear);
@@ -285,11 +287,9 @@ public final class SpecialCommands {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
-              b -> {
-                final Optional<String> text = c.getOptional("text");
-                return text.map(s -> b.name(this.userService.formatWithUserFormat(s, sender)))
-                    .orElseGet(() -> b.name(null));
-              },
+              b -> c.<String>getOptional("text")
+                  .map(s -> b.title(this.userService.formatWithUserFormat(s, sender)))
+                  .orElseGet(() -> b.title(null)),
               BookBuilder::of,
               BookMeta.class
           );
@@ -302,11 +302,9 @@ public final class SpecialCommands {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
-              b -> {
-                final Optional<String> text = c.getOptional("text");
-                return text.map(s -> b.author(this.userService.formatWithUserFormat(s, sender)))
-                    .orElseGet(() -> b.author(null));
-              },
+              b -> c.<String>getOptional("text")
+                  .map(s -> b.author(this.userService.formatWithUserFormat(s, sender)))
+                  .orElseGet(() -> b.author(null)),
               BookBuilder::of,
               BookMeta.class
           );
@@ -344,7 +342,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sBookTitle)
+    commandManager
+        .command(sBookTitle)
         .command(sBookAuthor)
         .command(sBookGeneration)
         .command(sBookEditable);
@@ -411,7 +410,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sEnchantmentStorageAdd)
+    commandManager
+        .command(sEnchantmentStorageAdd)
         .command(sEnchantmentStorageRemove)
         .command(sEnchantmentStorageClear);
 
@@ -513,7 +513,8 @@ public final class SpecialCommands {
 //          );
 //        });
 //
-//    commandManager.command(sFireworkEffectFlicker)
+//    commandManager
+//        .command(sFireworkEffectFlicker)
 //        .command(sFireworkEffectTrail)
 //        .command(sFireworkEffectType)
 //        .command(sFireworkEffectColorAdd)
@@ -582,7 +583,8 @@ public final class SpecialCommands {
 //                    );
 //                });
 //
-//        commandManager.command(sItemFrameInvisible)
+//        commandManager
+//                .command(sItemFrameInvisible)
 //                .command(sItemFrameFixed);
 
     final var sLeatherArmor = parent.literal("leather-armor")
@@ -622,7 +624,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sLeatherArmorSet)
+    commandManager
+        .command(sLeatherArmorSet)
         .command(sLeatherArmorReset);
 
     final var sMap = parent.literal("map")
@@ -644,12 +647,12 @@ public final class SpecialCommands {
 
     final var sMapLocationName = sMap.literal("location-name")
         .meta(CommandMeta.DESCRIPTION, "Set the map's location name. Pass nothing to reset.")
-        .argument(StringArgument.optional("name"))
+        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
-              b -> b.locationName(c.<String>getOptional("name").orElse(null)),
+              b -> b.locationName(c.<String>getOptional("text").orElse(null)),
               MapBuilder::of,
               MapMeta.class
           );
@@ -774,7 +777,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sMapScaling)
+    commandManager
+        .command(sMapScaling)
         .command(sMapLocationName)
         .command(sMapColorSet)
         .command(sMapColorReset)
@@ -891,7 +895,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sPotionEffectAdd)
+    commandManager
+        .command(sPotionEffectAdd)
         .command(sPotionEffectRemove)
         .command(sPotionEffectClear)
         .command(sPotionColorSet)
@@ -922,7 +927,10 @@ public final class SpecialCommands {
         .permission(Permissions.SKULL);
 
     final var sSkullName = sSkull.literal("name")
-        .meta(CommandMeta.DESCRIPTION, "Set the owning player by name.")
+        .meta(CommandMeta.DESCRIPTION, "Modify the owning player.");
+
+    final var sSkullNameSet = sSkullName.literal("set")
+        .meta(CommandMeta.DESCRIPTION, "Set the owning player.")
         .argument(StringArgument.<CommandSender>builder("name")
             .withSuggestionsProvider((c, i) -> this.iteminator.getServer()
                 .getOnlinePlayers().stream().map(Player::getName).toList()))
@@ -939,15 +947,30 @@ public final class SpecialCommands {
                   //noinspection deprecation
                   skullMeta.setOwner(c.get("name"));
                   i.setItemMeta(skullMeta);
+                  return i;
                 } else {
                   this.sendWrongTypeMessage(sender, SkullMeta.class);
+                  return null;
                 }
-                return i;
               }
           );
         });
 
-    commandManager.command(sSkullName);
+    final var sSkullNameReset = sSkullName.literal("reset")
+        .meta(CommandMeta.DESCRIPTION, "Reset the owning player.")
+        .handler(c -> {
+          final var sender = (Player) c.getSender();
+          this.modifySpecial(
+              sender,
+              b -> b.owningPlayer(null),
+              SkullBuilder::of,
+              SkullMeta.class
+          );
+        });
+
+    commandManager
+        .command(sSkullNameSet)
+        .command(sSkullNameReset);
 
     final var sSuspiciousStew = parent.literal("suspicious-stew")
         .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
@@ -1009,7 +1032,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sSuspiciousStewEffectAdd)
+    commandManager
+        .command(sSuspiciousStewEffectAdd)
         .command(sSuspiciousStewEffectRemove)
         .command(sSuspiciousStewEffectClear);
 
@@ -1056,7 +1080,8 @@ public final class SpecialCommands {
           );
         });
 
-    commandManager.command(sTropicalFishBucketPattern)
+    commandManager
+        .command(sTropicalFishBucketPattern)
         .command(sTropicalFishBucketBodyColor)
         .command(sTropicalFishBucketPatternColor);
   }
