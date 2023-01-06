@@ -35,7 +35,7 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
 
     this.commonCommands.registerCommon(commandManager, cMain);
 
-    final var cSpecial = cMain.literal("special")
+    final var cSpecial = cMain.literal("special", "s")
         .meta(CommandMeta.DESCRIPTION, "Commands special to a specific item type.");
     this.specialCommands.registerSpecial(commandManager, cSpecial);
   }
