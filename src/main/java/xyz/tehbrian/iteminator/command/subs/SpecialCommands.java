@@ -947,7 +947,7 @@ public final class SpecialCommands {
         .permission(Permissions.REPAIRABLE);
 
     final var sRepairableCostSet = sRepairable.literal("cost")
-        .meta(CommandMeta.DESCRIPTION, "Sets the repair cost.")
+        .meta(CommandMeta.DESCRIPTION, "Set the repair cost.")
         .senderType(Player.class)
         .argument(IntegerArgument.<CommandSender>builder("cost").asOptionalWithDefault(0))
         .handler(c -> {
