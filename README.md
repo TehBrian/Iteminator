@@ -16,7 +16,7 @@ system in your hands.
 ## Features
 
 - Edit all item data. Seriously. All of it. This includes lore, attributes,
-  books, fireworks, and even tropical fish buckets.
+  books, banners, and even tropical fish buckets.
 - Use either [MiniMessage][MiniMessage] or legacy formatting to format text.
 - All plugin messages are easily configurable.
 
