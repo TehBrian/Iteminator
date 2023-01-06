@@ -800,7 +800,7 @@ public final class SpecialCommands {
         .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
         .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
         .argument(IntegerArgument.<CommandSender>builder("duration").withMin(0))
-        .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(64))
+        .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(255))
         .argument(BooleanArgument.optional("ambient", true))
         .argument(BooleanArgument.optional("particles", true))
         .handler(c -> {
@@ -983,7 +983,7 @@ public final class SpecialCommands {
         .meta(CommandMeta.DESCRIPTION, "Add a custom effect.")
         .argument(EnumArgument.of(ModernPotionEffectType.class, "type"))
         .argument(IntegerArgument.<CommandSender>builder("duration").withMin(0))
-        .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(64))
+        .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(255))
         .argument(BooleanArgument.optional("ambient", true))
         .argument(BooleanArgument.optional("particles", true))
         .handler(c -> {
