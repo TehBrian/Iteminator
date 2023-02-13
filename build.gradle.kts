@@ -3,7 +3,7 @@ plugins {
   id("com.github.johnrengelman.shadow") version "7.1.2"
   id("xyz.jpenilla.run-paper") version "2.0.1"
   id("net.kyori.indra.checkstyle") version "3.0.1"
-  id("com.github.ben-manes.versions") version "0.44.0"
+  id("com.github.ben-manes.versions") version "0.45.0"
 }
 
 group = "xyz.tehbrian"
@@ -32,7 +32,7 @@ dependencies {
 
   testImplementation("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
   testImplementation("org.junit.jupiter:junit-jupiter")
-  testImplementation(platform("org.junit:junit-bom:5.9.1"))
+  testImplementation(platform("org.junit:junit-bom:5.9.2"))
 }
 
 tasks {
