@@ -1,4 +1,5 @@
 # Iteminator
+
 A modern item editing plugin.
 
 * [Download](https://modrinth.com/plugin/iteminator)
@@ -8,6 +9,7 @@ A modern item editing plugin.
 ---
 
 ## About
+
 Iteminator is a fresh take on in-game Minecraft item editing. It offers a simple
 command UX powered by tab completion while still allowing you to modify all item
 data available. No cluttered, sludgy GUIs. Just the raw power of the game's item
