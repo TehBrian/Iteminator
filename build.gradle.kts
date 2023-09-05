@@ -6,7 +6,7 @@ plugins {
   id("com.github.ben-manes.versions") version "0.45.0"
 }
 
-group = "xyz.tehbrian"
+group = "dev.tehbrian"
 version = "0.4.0"
 description = "A modern item editing plugin."
 
