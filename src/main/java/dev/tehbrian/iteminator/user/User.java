@@ -1,7 +1,6 @@
 package dev.tehbrian.iteminator.user;
 
 import dev.tehbrian.iteminator.Permissions;
-import dev.tehbrian.tehlib.paper.user.PaperUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -9,7 +8,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 
-public final class User extends PaperUser {
+public final class User {
+
+  private final UUID uuid;
 
   private boolean formatEnabled;
   private FormattingType formattingType = FormattingType.LEGACY;
@@ -18,8 +19,7 @@ public final class User extends PaperUser {
    * @param uuid the unique identifier of the user
    */
   public User(final UUID uuid) {
-    super(uuid);
-
+    this.uuid = uuid;
     final Player player = Objects.requireNonNull(this.getPlayer());
     this.formatEnabled = player.hasPermission(Permissions.FORMAT);
   }

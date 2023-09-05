@@ -6,11 +6,10 @@ import com.google.inject.Inject;
 import dev.tehbrian.iteminator.command.subs.CommonCommands;
 import dev.tehbrian.iteminator.command.subs.MetaCommands;
 import dev.tehbrian.iteminator.command.subs.SpecialCommands;
-import dev.tehbrian.tehlib.paper.cloud.PaperCloudCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
+public final class IteminatorCommand {
 
   private final MetaCommands metaCommands;
   private final CommonCommands commonCommands;
@@ -27,7 +26,6 @@ public final class IteminatorCommand extends PaperCloudCommand<CommandSender> {
     this.specialCommands = specialCommands;
   }
 
-  @Override
   public void register(final PaperCommandManager<CommandSender> commandManager) {
     final var cMain = commandManager.commandBuilder("iteminator", "ia")
         .meta(CommandMeta.DESCRIPTION, "The main command for Iteminator.");
