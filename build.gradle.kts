@@ -17,7 +17,6 @@ java {
 repositories {
   mavenCentral()
   maven("https://repo.papermc.io/repository/maven-public/")
-  maven("https://repo.broccol.ai/releases/")
   maven("https://repo.thbn.me/releases/")
 }
 
