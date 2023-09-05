@@ -2,7 +2,7 @@ package dev.tehbrian.iteminator.command;
 
 import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
-import dev.tehbrian.iteminator.Colors;
+import dev.tehbrian.iteminator.Color;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -20,33 +20,33 @@ import java.util.regex.Pattern;
  */
 public final class ExceptionHandlers {
 
-  private static final Component PREFIX = Component.text("I| ").color(Colors.DARK_BLUE);
+  private static final Component PREFIX = Component.text("I| ").color(Color.DARK_BLUE);
 
   public static final Function<Exception, Component> INVALID_SYNTAX =
       e -> PREFIX
-          .append(Component.text("Invalid command syntax. Correct syntax is: ", Colors.RED))
+          .append(Component.text("Invalid command syntax. Correct syntax is: ", Color.RED))
           .append(highlightSpecial(Component.text(
               String.format("/%s", ((InvalidSyntaxException) e).getCorrectSyntax()),
-              Colors.LIGHT_GRAY
+              Color.LIGHT_GRAY
           )));
 
   public static final Function<Exception, Component> INVALID_SENDER =
       e -> PREFIX
-          .append(Component.text("Invalid command sender. You must be of type ", Colors.RED))
+          .append(Component.text("Invalid command sender. You must be of type ", Color.RED))
           .append(Component.text(
               ((InvalidCommandSenderException) e).getRequiredSender().getSimpleName(),
-              Colors.LIGHT_GRAY
+              Color.LIGHT_GRAY
           ))
-          .append(Component.text(" to run this command.", Colors.RED));
+          .append(Component.text(" to run this command.", Color.RED));
 
   public static final Function<Exception, Component> NO_PERMISSION =
       e -> PREFIX
-          .append(Component.text("You don't have permission to do that.", Colors.RED));
+          .append(Component.text("You don't have permission to do that.", Color.RED));
 
   public static final Function<Exception, Component> ARGUMENT_PARSE =
       e -> PREFIX
-          .append(Component.text("Invalid command argument: ", Colors.RED))
-          .append(getMessage(e.getCause()).colorIfAbsent(Colors.LIGHT_GRAY));
+          .append(Component.text("Invalid command argument: ", Color.RED))
+          .append(getMessage(e.getCause()).colorIfAbsent(Color.LIGHT_GRAY));
 
   public static final Function<Exception, Component> COMMAND_EXECUTION =
       e -> {
@@ -62,12 +62,12 @@ public final class ExceptionHandlers {
                 .append(Component.newline())
                 .append(Component.text(stackTrace))
                 .append(Component.newline())
-                .append(Component.text("Click to copy", Colors.LIGHT_GRAY, TextDecoration.ITALIC))
+                .append(Component.text("Click to copy", Color.LIGHT_GRAY, TextDecoration.ITALIC))
         );
         final ClickEvent click = ClickEvent.copyToClipboard(stackTrace);
         return PREFIX.append(Component.text()
             .content("An internal error occurred while attempting to perform this command.")
-            .color(Colors.RED)
+            .color(Color.RED)
             .hoverEvent(hover)
             .clickEvent(click)
             .build());
@@ -88,7 +88,7 @@ public final class ExceptionHandlers {
   private static Component highlightSpecial(final Component component) {
     return component.replaceText(config -> {
       config.match(SPECIAL_CHARACTERS);
-      config.replacement(match -> match.color(Colors.WHITE));
+      config.replacement(match -> match.color(Color.WHITE));
     });
   }
 

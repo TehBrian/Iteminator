@@ -1,6 +1,6 @@
 package dev.tehbrian.iteminator.user;
 
-import dev.tehbrian.iteminator.Permissions;
+import dev.tehbrian.iteminator.Permission;
 import dev.tehbrian.iteminator.util.Format;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -37,10 +37,10 @@ public final class UserService {
 
     final User user = this.getUser(player.getUniqueId());
 
-    if (player.hasPermission(Permissions.FORMAT) && user.formatEnabled()) {
-      if (user.formattingType() == User.FormattingType.LEGACY && player.hasPermission(Permissions.LEGACY)) {
+    if (player.hasPermission(Permission.FORMAT) && user.formatEnabled()) {
+      if (user.formattingType() == User.FormattingType.LEGACY && player.hasPermission(Permission.LEGACY)) {
         return Format.legacy(string);
-      } else if (user.formattingType() == User.FormattingType.MINIMESSAGE && player.hasPermission(Permissions.MINIMESSAGE)) {
+      } else if (user.formattingType() == User.FormattingType.MINIMESSAGE && player.hasPermission(Permission.MINIMESSAGE)) {
         return Format.miniMessage(string);
       }
     }

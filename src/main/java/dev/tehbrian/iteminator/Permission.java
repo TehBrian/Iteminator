@@ -3,7 +3,7 @@ package dev.tehbrian.iteminator;
 /**
  * Holds permission constants.
  */
-public final class Permissions {
+public final class Permission {
 
   public static final String ROOT = "iteminator";
   public static final String RELOAD = ROOT + ".reload";
@@ -40,7 +40,7 @@ public final class Permissions {
   public static final String SUSPICIOUS_STEW = SPECIAL + ".suspicious-stew";
   public static final String TROPICAL_FISH_BUCKET = SPECIAL + ".tropical-fish-bucket";
 
-  private Permissions() {
+  private Permission() {
   }
 
 }

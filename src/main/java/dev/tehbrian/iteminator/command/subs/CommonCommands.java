@@ -10,7 +10,7 @@ import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
-import dev.tehbrian.iteminator.Permissions;
+import dev.tehbrian.iteminator.Permission;
 import dev.tehbrian.iteminator.command.ModernEnchantment;
 import dev.tehbrian.iteminator.config.LangConfig;
 import dev.tehbrian.iteminator.user.UserService;
@@ -54,7 +54,7 @@ public final class CommonCommands {
   ) {
     final var cAmount = parent.literal("amount")
         .meta(CommandMeta.DESCRIPTION, "Set the amount.")
-        .permission(Permissions.AMOUNT)
+        .permission(Permission.AMOUNT)
         .argument(IntegerArgument.<CommandSender>builder("amount").withMin(0).withMax(127))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -63,7 +63,7 @@ public final class CommonCommands {
 
     final var cCustomModelData = parent.literal("custom-model-data")
         .meta(CommandMeta.DESCRIPTION, "Set the custom model data. Pass nothing to reset.")
-        .permission(Permissions.CUSTOM_MODEL_DATA)
+        .permission(Permission.CUSTOM_MODEL_DATA)
         .argument(IntegerArgument.optional("data"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -72,7 +72,7 @@ public final class CommonCommands {
 
     final var cMaterial = parent.literal("material")
         .meta(CommandMeta.DESCRIPTION, "Set the material.")
-        .permission(Permissions.MATERIAL)
+        .permission(Permission.MATERIAL)
         .argument(MaterialArgument.of("material"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -81,7 +81,7 @@ public final class CommonCommands {
 
     final var cName = parent.literal("name")
         .meta(CommandMeta.DESCRIPTION, "Name-related commands.")
-        .permission(Permissions.NAME);
+        .permission(Permission.NAME);
 
     final var cNameSet = cName.literal("set")
         .meta(CommandMeta.DESCRIPTION, "Set the name.")
@@ -103,7 +103,7 @@ public final class CommonCommands {
 
     final var cUnbreakable = parent.literal("unbreakable")
         .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
-        .permission(Permissions.UNBREAKABLE)
+        .permission(Permission.UNBREAKABLE)
         .argument(BooleanArgument.of("boolean"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
@@ -120,7 +120,7 @@ public final class CommonCommands {
 
     final var cAttribute = parent.literal("attribute")
         .meta(CommandMeta.DESCRIPTION, "Attribute-related commands.")
-        .permission(Permissions.ATTRIBUTE);
+        .permission(Permission.ATTRIBUTE);
 
     final var cAttributeAdd = cAttribute.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add an attribute.")
@@ -165,7 +165,7 @@ public final class CommonCommands {
 
     final var cEnchantment = parent.literal("enchantment")
         .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.")
-        .permission(Permissions.ENCHANTMENT);
+        .permission(Permission.ENCHANTMENT);
 
     final var cEnchantmentAdd = cEnchantment.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
@@ -201,7 +201,7 @@ public final class CommonCommands {
 
     final var cFlags = parent.literal("flags")
         .meta(CommandMeta.DESCRIPTION, "Flag-related commands.")
-        .permission(Permissions.FLAGS);
+        .permission(Permission.FLAGS);
 
     final var cFlagsAdd = cFlags.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a flag.")
@@ -233,7 +233,7 @@ public final class CommonCommands {
 
     final var cLore = parent.literal("lore")
         .meta(CommandMeta.DESCRIPTION, "Lore-related commands.")
-        .permission(Permissions.LORE);
+        .permission(Permission.LORE);
 
     final var cLoreAdd = cLore.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a line of lore.")

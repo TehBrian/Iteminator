@@ -8,9 +8,9 @@ import cloud.commandframework.minecraft.extras.AudienceProvider;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
-import dev.tehbrian.iteminator.Colors;
+import dev.tehbrian.iteminator.Color;
 import dev.tehbrian.iteminator.Iteminator;
-import dev.tehbrian.iteminator.Permissions;
+import dev.tehbrian.iteminator.Permission;
 import dev.tehbrian.iteminator.config.LangConfig;
 import dev.tehbrian.iteminator.user.User;
 import dev.tehbrian.iteminator.user.UserService;
@@ -90,11 +90,11 @@ public final class MetaCommands {
 
     help.setHelpColors(
         MinecraftHelp.HelpColors.of(
-            Colors.LIGHT_GRAY,
-            Colors.LIGHT_BLUE,
-            Colors.DARK_BLUE,
-            Colors.WHITE,
-            Colors.DARK_GRAY
+            Color.LIGHT_GRAY,
+            Color.LIGHT_BLUE,
+            Color.DARK_BLUE,
+            Color.WHITE,
+            Color.DARK_GRAY
         )
     );
 
@@ -122,7 +122,7 @@ public final class MetaCommands {
 
     final var cReload = parent.literal("reload")
         .meta(CommandMeta.DESCRIPTION, "Reload the plugin's config.")
-        .permission(Permissions.RELOAD)
+        .permission(Permission.RELOAD)
         .handler(c -> {
           if (this.iteminator.loadConfiguration()) {
             c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "success")));
@@ -133,7 +133,7 @@ public final class MetaCommands {
 
     final var cFormat = parent.literal("format")
         .meta(CommandMeta.DESCRIPTION, "Toggle your ability to format text.")
-        .permission(Permissions.FORMAT)
+        .permission(Permission.FORMAT)
         .senderType(Player.class)
         .handler(c -> {
           final var sender = (Player) c.getSender();

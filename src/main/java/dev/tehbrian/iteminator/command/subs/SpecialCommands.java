@@ -24,7 +24,7 @@ import cloud.commandframework.paper.PaperCommandManager;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.google.inject.Inject;
 import dev.tehbrian.iteminator.Iteminator;
-import dev.tehbrian.iteminator.Permissions;
+import dev.tehbrian.iteminator.Permission;
 import dev.tehbrian.iteminator.command.ModernEnchantment;
 import dev.tehbrian.iteminator.command.ModernPotionEffectType;
 import dev.tehbrian.iteminator.command.ModernPotionType;
@@ -99,7 +99,7 @@ public final class SpecialCommands {
   ) {
     final var sArmorStand = parent.literal("armor-stand")
         .meta(CommandMeta.DESCRIPTION, "Commands for Armor Stands.")
-        .permission(Permissions.ARMOR_STAND);
+        .permission(Permission.ARMOR_STAND);
 
     final var sArmorStandShowArms = sArmorStand.literal("show-arms")
         .meta(CommandMeta.DESCRIPTION, "Set the show arms flag.")
@@ -175,7 +175,7 @@ public final class SpecialCommands {
 
     final var sAxolotlBucket = parent.literal("axolotl-bucket")
         .meta(CommandMeta.DESCRIPTION, "Commands for Axolotl Buckets.")
-        .permission(Permissions.AXOLOTL_BUCKET);
+        .permission(Permission.AXOLOTL_BUCKET);
 
     final var sAxolotlBucketVariant = sAxolotlBucket.literal("variant")
         .meta(CommandMeta.DESCRIPTION, "Set the variant.")
@@ -194,7 +194,7 @@ public final class SpecialCommands {
 
     final var sBanner = parent.literal("banner")
         .meta(CommandMeta.DESCRIPTION, "Commands for Banners.")
-        .permission(Permissions.BANNER);
+        .permission(Permission.BANNER);
 
     final var sBannerPattern = sBanner.literal("pattern")
         .meta(CommandMeta.DESCRIPTION, "Modify the patterns.");
@@ -277,7 +277,7 @@ public final class SpecialCommands {
 
     final var sBook = parent.literal("book")
         .meta(CommandMeta.DESCRIPTION, "Commands for Books.")
-        .permission(Permissions.BOOK);
+        .permission(Permission.BOOK);
 
     final var sBookTitle = sBook.literal("title")
         .meta(CommandMeta.DESCRIPTION, "Set the title. Pass nothing to reset.")
@@ -349,7 +349,7 @@ public final class SpecialCommands {
 
     final var sDamageable = parent.literal("damage") // abnormal name because ends in "able"
         .meta(CommandMeta.DESCRIPTION, "Commands for Damageable items.")
-        .permission(Permissions.DAMAGEABLE);
+        .permission(Permission.DAMAGEABLE);
 
     final var sDamageableSet = sDamageable
         .meta(CommandMeta.DESCRIPTION, "Sets the damage.")
@@ -368,7 +368,7 @@ public final class SpecialCommands {
 
     final var sEnchantmentStorage = parent.literal("enchantment-storage")
         .meta(CommandMeta.DESCRIPTION, "Commands for Enchantment Storages.")
-        .permission(Permissions.ENCHANTMENT_STORAGE);
+        .permission(Permission.ENCHANTMENT_STORAGE);
 
     final var sEnchantmentStorageAdd = sEnchantmentStorage.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a stored enchantment.")
@@ -521,7 +521,7 @@ public final class SpecialCommands {
 
     final var sFirework = parent.literal("firework")
         .meta(CommandMeta.DESCRIPTION, "Commands for Fireworks.")
-        .permission(Permissions.FIREWORK);
+        .permission(Permission.FIREWORK);
 
     final var sFireworkPower = sFirework.literal("power")
         .meta(CommandMeta.DESCRIPTION, "Set the power.")
@@ -588,7 +588,7 @@ public final class SpecialCommands {
 
     final var sLeatherArmor = parent.literal("leather-armor")
         .meta(CommandMeta.DESCRIPTION, "Commands for Leather Armor.")
-        .permission(Permissions.LEATHER_ARMOR);
+        .permission(Permission.LEATHER_ARMOR);
 
     final var sLeatherArmorColor = sLeatherArmor.literal("color");
 
@@ -629,7 +629,7 @@ public final class SpecialCommands {
 
     final var sMap = parent.literal("map")
         .meta(CommandMeta.DESCRIPTION, "Commands for Maps.")
-        .permission(Permissions.MAP);
+        .permission(Permission.MAP);
 
     final var sMapScaling = sMap.literal("scaling")
         .meta(CommandMeta.DESCRIPTION, "Set whether the map is scaling.")
@@ -790,7 +790,7 @@ public final class SpecialCommands {
 
     final var sPotion = parent.literal("potion")
         .meta(CommandMeta.DESCRIPTION, "Commands for Potions.")
-        .permission(Permissions.POTION);
+        .permission(Permission.POTION);
 
     final var sPotionEffect = sPotion.literal("effect")
         .meta(CommandMeta.DESCRIPTION, "Modify the custom effects.");
@@ -904,7 +904,7 @@ public final class SpecialCommands {
 
     final var sRepairable = parent.literal("repair") // abnormal name because ends in "able"
         .meta(CommandMeta.DESCRIPTION, "Commands for Repairable items.")
-        .permission(Permissions.REPAIRABLE);
+        .permission(Permission.REPAIRABLE);
 
     final var sRepairableCostSet = sRepairable.literal("cost")
         .meta(CommandMeta.DESCRIPTION, "Set the repair cost.")
@@ -923,7 +923,7 @@ public final class SpecialCommands {
 
     final var sSkull = parent.literal("skull")
         .meta(CommandMeta.DESCRIPTION, "Commands for Skulls.")
-        .permission(Permissions.SKULL);
+        .permission(Permission.SKULL);
 
     final var sSkullName = sSkull.literal("name")
         .meta(CommandMeta.DESCRIPTION, "Set the owning player. Pass nothing to reset.")
@@ -957,7 +957,7 @@ public final class SpecialCommands {
 
     final var sSuspiciousStew = parent.literal("suspicious-stew")
         .meta(CommandMeta.DESCRIPTION, "Commands for Suspicious Stews.")
-        .permission(Permissions.SUSPICIOUS_STEW);
+        .permission(Permission.SUSPICIOUS_STEW);
 
     final var sSuspiciousStewEffect = sSuspiciousStew.literal("effect")
         .meta(CommandMeta.DESCRIPTION, "Modify the custom effects.");
@@ -1022,7 +1022,7 @@ public final class SpecialCommands {
 
     final var sTropicalFishBucket = parent.literal("tropical-fish-bucket")
         .meta(CommandMeta.DESCRIPTION, "Commands for Tropical Fish Buckets.")
-        .permission(Permissions.TROPICAL_FISH_BUCKET);
+        .permission(Permission.TROPICAL_FISH_BUCKET);
 
     final var sTropicalFishBucketPattern = sTropicalFishBucket.literal("pattern")
         .meta(CommandMeta.DESCRIPTION, "Set the pattern.")

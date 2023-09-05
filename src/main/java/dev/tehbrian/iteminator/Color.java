@@ -5,7 +5,7 @@ import net.kyori.adventure.text.format.TextColor;
 import java.util.Objects;
 
 // https://coolors.co/eeeeff-aaaabb-333344-88eeff-44aabb-dd5577
-public final class Colors {
+public final class Color {
 
   // yeah, I'm wrapping a non-parameter in Objects.requireNonNull. sue me.
   public static final TextColor WHITE = Objects.requireNonNull(TextColor.fromCSSHexString("#EEEEFF"));
@@ -15,7 +15,7 @@ public final class Colors {
   public static final TextColor DARK_BLUE = Objects.requireNonNull(TextColor.fromCSSHexString("#44AABB"));
   public static final TextColor RED = Objects.requireNonNull(TextColor.fromCSSHexString("#DD5577"));
 
-  private Colors() {
+  private Color() {
   }
 
 }
