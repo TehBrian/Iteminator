@@ -8,7 +8,6 @@ import cloud.commandframework.minecraft.extras.AudienceProvider;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
-import dev.tehbrian.iteminator.Color;
 import dev.tehbrian.iteminator.Iteminator;
 import dev.tehbrian.iteminator.Permission;
 import dev.tehbrian.iteminator.config.LangConfig;
@@ -29,6 +28,8 @@ public final class MetaCommands {
   private final Iteminator iteminator;
   private final UserService userService;
   private final LangConfig langConfig;
+
+  private MinecraftHelp<CommandSender> help;
 
   @Inject
   public MetaCommands(
@@ -83,20 +84,12 @@ public final class MetaCommands {
         ))
     );
 
-    final var help = new MinecraftHelp<>(
+    this.help = new MinecraftHelp<>(
         "/iteminator help",
         AudienceProvider.nativeAudience(), commandManager
     );
 
-    help.setHelpColors(
-        MinecraftHelp.HelpColors.of(
-            Color.LIGHT_GRAY,
-            Color.LIGHT_BLUE,
-            Color.DARK_BLUE,
-            Color.WHITE,
-            Color.DARK_GRAY
-        )
-    );
+    this.setHelpColors();
 
     final var cHelp = parent.literal("help")
         .argument(StringArgument.<CommandSender>builder("query")
@@ -125,6 +118,7 @@ public final class MetaCommands {
         .permission(Permission.RELOAD)
         .handler(c -> {
           if (this.iteminator.loadConfiguration()) {
+            this.setHelpColors();
             c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "success")));
           } else {
             c.getSender().sendMessage(this.langConfig.c(NodePath.path("reload", "fail")));
@@ -163,6 +157,18 @@ public final class MetaCommands {
         .command(cReload)
         .command(cFormat)
         .command(cFormatFormattingType);
+  }
+
+  private void setHelpColors() {
+    help.setHelpColors(
+        MinecraftHelp.HelpColors.of(
+            this.langConfig.color(NodePath.path("help-colors", "primary")),
+            this.langConfig.color(NodePath.path("help-colors", "highlight")),
+            this.langConfig.color(NodePath.path("help-colors", "alternate-highlight")),
+            this.langConfig.color(NodePath.path("help-colors", "text")),
+            this.langConfig.color(NodePath.path("help-colors", "accent"))
+        )
+    );
   }
 
 }

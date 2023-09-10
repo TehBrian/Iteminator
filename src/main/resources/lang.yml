@@ -7,6 +7,15 @@
 # Support
 # https://thbn.me/discord
 
+# Default Color Palette
+# #EEEEFF white
+# #AAAABB light gray
+# #333344 dark gray
+# #88EEFF light blue
+# #44AABB dark blue
+# #DD5577 red
+# https://coolors.co/eeeeff-aaaabb-333344-88eeff-44aabb-dd5577
+
 main: |-
   <#333344>I| <#AAAABB>-= <#44AABB>Iteminator</#44AABB> =-
   <#333344>I| <#EEEEFF>Running version <#88EEFF><version></#88EEFF>.
@@ -23,9 +32,6 @@ main: |-
   <#333344>I| <#EEEEFF>Reload plugin configuration with <#88EEFF><click:suggest_command:'/iteminator reload'>/iteminator reload</click></#88EEFF>.
   <#333344>I| <#EEEEFF>Explore commands with <#88EEFF><click:suggest_command:'/iteminator help'>/iteminator help</click></#88EEFF> or tab completion.
 
-wrong-type: "<#44AABB>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
-out-of-bounds: "<#44AABB>I| <#DD5577>That index is out of bounds."
-
 format:
   enable: "<#44AABB>I| <#EEEEFF>Enabled text formatting."
   disable: "<#44AABB>I| <#EEEEFF>Disabled text formatting."
@@ -34,3 +40,26 @@ format:
 reload:
   success: "<#44AABB>I| <#EEEEFF>The configuration has been successfully reloaded."
   fail: "<#44AABB>I| <#DD5577>Failed to load configuration, please check the console."
+
+error:
+  wrong-type: "<#44AABB>I| <#DD5577>The item must be of type <#88EEFF><type></#88EEFF>."
+  out-of-bounds: "<#44AABB>I| <#DD5577>That index is out of bounds."
+  invalid-syntax: "<#44AABB>I| <#DD5577>Invalid command syntax. Correct syntax is: <#AAAABB><syntax>"
+  invalid-syntax-special-color: "<#EEEEFF>"
+  invalid-sender: "<#44AABB>I| <#DD5577>Invalid command sender. You must be of type <#AAAABB><type></#AAAABB> to run this command."
+  no-permission: "<#44AABB>I| <#DD5577>You don't have permission to do that."
+  argument-parse: "<#44AABB>I| <#DD5577>Invalid command argument: <#AAAABB><cause>"
+  command-execution: "<#44AABB>I| <#DD5577>An internal error occurred while attempting to perform this command."
+  command-execution-hover: |-
+    <cause>
+
+    <stacktrace>
+
+    <#AAAABB><i>Click to copy.
+
+help-colors:
+  primary: "<#AAAABB>"
+  highlight: "<#88EEFF>"
+  alternate-highlight: "<#44AABB>"
+  text: "<#EEEEFF>"
+  accent: "<#333344>"

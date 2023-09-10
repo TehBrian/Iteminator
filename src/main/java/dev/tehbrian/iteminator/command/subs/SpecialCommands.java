@@ -225,7 +225,7 @@ public final class SpecialCommands {
               b -> {
                 final int index = c.<Integer>get("index");
                 if (b.patterns().size() <= index) {
-                  sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
+                  sender.sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
                   return null;
                 }
 
@@ -246,7 +246,7 @@ public final class SpecialCommands {
               b -> {
                 final int index = c.<Integer>get("index");
                 if (b.patterns().size() <= index) {
-                  sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
+                  sender.sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
                   return null;
                 }
 
@@ -1076,7 +1076,7 @@ public final class SpecialCommands {
     );
 
     return this.langConfig.c(
-        NodePath.path("wrong-type"),
+        NodePath.path("error", "wrong-type"),
         Placeholder.component("type", types)
     );
   }

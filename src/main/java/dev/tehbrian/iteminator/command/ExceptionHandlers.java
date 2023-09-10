@@ -2,12 +2,17 @@ package dev.tehbrian.iteminator.command;
 
 import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
-import dev.tehbrian.iteminator.Color;
+import com.google.inject.Inject;
+import dev.tehbrian.iteminator.config.LangConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.util.ComponentMessageThrowable;
+import org.slf4j.Logger;
+import org.spongepowered.configurate.NodePath;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -15,65 +20,80 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
- * Exception handlers that return Iteminator-styled components for use with
- * {@link cloud.commandframework.minecraft.extras.MinecraftExceptionHandler}
+ * Exception handlers for use with {@link cloud.commandframework.minecraft.extras.MinecraftExceptionHandler}.
  */
 public final class ExceptionHandlers {
 
-  private static final Component PREFIX = Component.text("I| ").color(Color.DARK_BLUE);
+  private final LangConfig langConfig;
+  private final Logger logger;
 
-  public static final Function<Exception, Component> INVALID_SYNTAX =
-      e -> PREFIX
-          .append(Component.text("Invalid command syntax. Correct syntax is: ", Color.RED))
-          .append(highlightSpecial(Component.text(
-              String.format("/%s", ((InvalidSyntaxException) e).getCorrectSyntax()),
-              Color.LIGHT_GRAY
-          )));
+  @Inject
+  public ExceptionHandlers(
+      final LangConfig langConfig,
+      final Logger logger
+  ) {
+    this.langConfig = langConfig;
+    this.logger = logger;
+  }
 
-  public static final Function<Exception, Component> INVALID_SENDER =
-      e -> PREFIX
-          .append(Component.text("Invalid command sender. You must be of type ", Color.RED))
-          .append(Component.text(
-              ((InvalidCommandSenderException) e).getRequiredSender().getSimpleName(),
-              Color.LIGHT_GRAY
-          ))
-          .append(Component.text(" to run this command.", Color.RED));
+  public Function<Exception, Component> invalidSyntax() {
+    return e -> this.langConfig.c(
+        NodePath.path("error", "invalid-syntax"),
+        Placeholder.component(
+            "syntax",
+            highlightSpecial(Component.text(String.format("/%s", ((InvalidSyntaxException) e).getCorrectSyntax())))
+        )
+    );
+  }
 
-  public static final Function<Exception, Component> NO_PERMISSION =
-      e -> PREFIX
-          .append(Component.text("You don't have permission to do that.", Color.RED));
+  public Function<Exception, Component> invalidSender() {
+    return e -> this.langConfig.c(
+        NodePath.path("error", "invalid-sender"),
+        Placeholder.unparsed(
+            "type",
+            ((InvalidCommandSenderException) e).getRequiredSender().getSimpleName()
+        )
+    );
+  }
 
-  public static final Function<Exception, Component> ARGUMENT_PARSE =
-      e -> PREFIX
-          .append(Component.text("Invalid command argument: ", Color.RED))
-          .append(getMessage(e.getCause()).colorIfAbsent(Color.LIGHT_GRAY));
+  public Function<Exception, Component> noPermission() {
+    return e -> this.langConfig.c(NodePath.path("error", "no-permission"));
+  }
 
-  public static final Function<Exception, Component> COMMAND_EXECUTION =
-      e -> {
-        final Throwable cause = e.getCause();
-        cause.printStackTrace();
+  public Function<Exception, Component> argumentParsing() {
+    return e -> this.langConfig.c(
+        NodePath.path("error", "argument-parse"),
+        Placeholder.component(
+            "cause",
+            getMessage(e.getCause())
+        )
+    );
+  }
 
-        final StringWriter writer = new StringWriter();
-        cause.printStackTrace(new PrintWriter(writer));
-        final String stackTrace = writer.toString().replaceAll("\t", "    ");
-        final HoverEvent<Component> hover = HoverEvent.showText(
-            Component.text()
-                .append(getMessage(cause))
-                .append(Component.newline())
-                .append(Component.text(stackTrace))
-                .append(Component.newline())
-                .append(Component.text("Click to copy", Color.LIGHT_GRAY, TextDecoration.ITALIC))
-        );
-        final ClickEvent click = ClickEvent.copyToClipboard(stackTrace);
-        return PREFIX.append(Component.text()
-            .content("An internal error occurred while attempting to perform this command.")
-            .color(Color.RED)
-            .hoverEvent(hover)
-            .clickEvent(click)
-            .build());
-      };
+  public Function<Exception, Component> commandExecution() {
+    return e -> {
+      final Throwable cause = e.getCause();
+      this.logger.warn("Uh oh.", cause);
 
-  private ExceptionHandlers() {
+      final StringWriter writer = new StringWriter();
+      cause.printStackTrace(new PrintWriter(writer));
+      final String stackTrace = writer.toString().replaceAll("\t", "    ");
+
+      final HoverEvent<Component> hover = HoverEvent.showText(
+          this.langConfig.c(
+              NodePath.path("error", "command-execution-hover"),
+              TagResolver.resolver(
+                  Placeholder.component("cause", getMessage(cause)),
+                  Placeholder.unparsed("stacktrace", stackTrace)
+              )
+          )
+      );
+      final ClickEvent click = ClickEvent.copyToClipboard(stackTrace);
+
+      return this.langConfig.c(NodePath.path("error", "command-execution"))
+          .hoverEvent(hover)
+          .clickEvent(click);
+    };
   }
 
   private static final Component NULL = Component.text("null");
@@ -85,10 +105,11 @@ public final class ExceptionHandlers {
 
   private static final Pattern SPECIAL_CHARACTERS = Pattern.compile("[^\\s\\w\\-]");
 
-  private static Component highlightSpecial(final Component component) {
+  private Component highlightSpecial(final Component component) {
+    final TextColor specialColor = this.langConfig.color(NodePath.path("error", "invalid-syntax-special-color"));
     return component.replaceText(config -> {
       config.match(SPECIAL_CHARACTERS);
-      config.replacement(match -> match.color(Color.WHITE));
+      config.replacement(match -> match.color(specialColor));
     });
   }
 

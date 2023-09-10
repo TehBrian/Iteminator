@@ -262,7 +262,7 @@ public final class CommonCommands {
 
             final int line = c.get("index");
             if (lore == null || lore.size() <= line) {
-              sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
+              sender.sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
               return null;
             }
 
@@ -281,7 +281,7 @@ public final class CommonCommands {
 
             final int line = c.get("index");
             if (lore == null || lore.size() <= line) {
-              sender.sendMessage(this.langConfig.c(NodePath.path("out-of-bounds")));
+              sender.sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
               return null;
             }
 

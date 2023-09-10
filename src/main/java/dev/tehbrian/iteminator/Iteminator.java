@@ -98,12 +98,14 @@ public final class Iteminator extends TehPlugin {
       return false;
     }
 
+    final ExceptionHandlers exceptionHandlers = this.injector.getInstance(ExceptionHandlers.class);
+
     new MinecraftExceptionHandler<CommandSender>()
-        .withHandler(MinecraftExceptionHandler.ExceptionType.ARGUMENT_PARSING, ExceptionHandlers.ARGUMENT_PARSE)
-        .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SENDER, ExceptionHandlers.INVALID_SENDER)
-        .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SYNTAX, ExceptionHandlers.INVALID_SYNTAX)
-        .withHandler(MinecraftExceptionHandler.ExceptionType.NO_PERMISSION, ExceptionHandlers.NO_PERMISSION)
-        .withHandler(MinecraftExceptionHandler.ExceptionType.COMMAND_EXECUTION, ExceptionHandlers.COMMAND_EXECUTION)
+        .withHandler(MinecraftExceptionHandler.ExceptionType.ARGUMENT_PARSING, exceptionHandlers.argumentParsing())
+        .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SENDER, exceptionHandlers.invalidSender())
+        .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SYNTAX, exceptionHandlers.invalidSyntax())
+        .withHandler(MinecraftExceptionHandler.ExceptionType.NO_PERMISSION, exceptionHandlers.noPermission())
+        .withHandler(MinecraftExceptionHandler.ExceptionType.COMMAND_EXECUTION, exceptionHandlers.commandExecution())
         .apply(this.commandManager, AudienceProvider.nativeAudience());
 
     this.injector.getInstance(IteminatorCommand.class).register(this.commandManager);
