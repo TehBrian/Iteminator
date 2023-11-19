@@ -802,6 +802,7 @@ public final class SpecialCommands {
         .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(255))
         .argument(BooleanArgument.optional("ambient", false))
         .argument(BooleanArgument.optional("particles", true))
+        .argument(BooleanArgument.optional("icon", true))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -813,7 +814,7 @@ public final class SpecialCommands {
                     c.<Integer>get("amplifier"),
                     c.<Boolean>get("ambient"),
                     c.<Boolean>get("particles"),
-                    c.<Boolean>get("particles") // in testing, icon and particles are equivalent
+                    c.<Boolean>get("icon")
                 );
 
                 return b.addCustomEffect(potionEffect, true);
@@ -969,6 +970,7 @@ public final class SpecialCommands {
         .argument(IntegerArgument.<CommandSender>builder("amplifier").withMin(0).withMax(255))
         .argument(BooleanArgument.optional("ambient", false))
         .argument(BooleanArgument.optional("particles", true))
+        .argument(BooleanArgument.optional("icon", true))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -980,7 +982,7 @@ public final class SpecialCommands {
                     c.<Integer>get("amplifier"),
                     c.<Boolean>get("ambient"),
                     c.<Boolean>get("particles"),
-                    c.<Boolean>get("particles") // in testing, icon and particles are equivalent
+                    c.<Boolean>get("icon")
                 );
 
                 return b.addCustomEffect(potionEffect, true);
