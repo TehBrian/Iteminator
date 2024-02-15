@@ -108,7 +108,7 @@ public final class MetaCommands {
               }
               return suggestions;
             }))
-        .handler(c -> help.queryCommands(
+        .handler(c -> this.help.queryCommands(
             c.<String>getOptional("query").map(MetaCommands::prependRoot).orElse(""),
             c.getSender()
         ));
@@ -160,7 +160,7 @@ public final class MetaCommands {
   }
 
   private void setHelpColors() {
-    help.setHelpColors(
+    this.help.setHelpColors(
         MinecraftHelp.HelpColors.of(
             this.langConfig.color(NodePath.path("help-colors", "primary")),
             this.langConfig.color(NodePath.path("help-colors", "highlight")),

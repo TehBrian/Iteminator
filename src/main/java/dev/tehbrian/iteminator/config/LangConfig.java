@@ -10,7 +10,7 @@ import org.spongepowered.configurate.NodePath;
 
 import java.nio.file.Path;
 
-public class LangConfig extends AbstractLangConfig<YamlConfigurateWrapper> {
+public final class LangConfig extends AbstractLangConfig<YamlConfigurateWrapper> {
 
   /**
    * @param dataFolder the data folder

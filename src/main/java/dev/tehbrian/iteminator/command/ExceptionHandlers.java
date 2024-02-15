@@ -41,7 +41,7 @@ public final class ExceptionHandlers {
         NodePath.path("error", "invalid-syntax"),
         Placeholder.component(
             "syntax",
-            highlightSpecial(Component.text(String.format("/%s", ((InvalidSyntaxException) e).getCorrectSyntax())))
+            this.highlightSpecial(Component.text(String.format("/%s", ((InvalidSyntaxException) e).getCorrectSyntax())))
         )
     );
   }
