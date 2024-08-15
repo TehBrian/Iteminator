@@ -1,13 +1,15 @@
 package dev.tehbrian.iteminator.util;
 
-import broccolai.corn.paper.item.AbstractPaperItemBuilder;
-import broccolai.corn.paper.item.PaperItemBuilder;
+import love.broccolai.corn.minecraft.item.AbstractItemBuilder;
+import love.broccolai.corn.minecraft.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Function;
+
+import static love.broccolai.corn.minecraft.item.ItemBuilder.itemBuilder;
 
 public final class HeldItemModifier {
 
@@ -26,7 +28,7 @@ public final class HeldItemModifier {
    * @throws IllegalArgumentException if the player's held item meta cannot
    *                                  be modified by the provided builder
    */
-  public static <T extends AbstractPaperItemBuilder<T, ?>> void modifySpecial(
+  public static <T extends AbstractItemBuilder<T, ?>> void modifySpecial(
       final Player player,
       final Function<T, @Nullable T> operator,
       final Function<ItemStack, T> builderCreator
@@ -50,10 +52,10 @@ public final class HeldItemModifier {
    */
   public static void modify(
       final Player player,
-      final Function<PaperItemBuilder, @Nullable PaperItemBuilder> operator
+      final Function<ItemBuilder, @Nullable ItemBuilder> operator
   ) {
     modifyItemStack(player, i -> {
-      final @Nullable PaperItemBuilder modifiedBuilder = operator.apply(PaperItemBuilder.of(i));
+      final @Nullable ItemBuilder modifiedBuilder = operator.apply(itemBuilder(i));
       if (modifiedBuilder == null) {
         return null;
       }

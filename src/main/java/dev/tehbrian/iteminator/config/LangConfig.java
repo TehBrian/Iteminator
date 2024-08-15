@@ -3,7 +3,7 @@ package dev.tehbrian.iteminator.config;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import dev.tehbrian.tehlib.paper.configurate.AbstractLangConfig;
-import dev.tehbrian.tehlib.paper.configurate.NoSuchValueAtPathInConfigException;
+import dev.tehbrian.tehlib.paper.configurate.NoSuchValueInConfigException;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.spongepowered.configurate.NodePath;
@@ -20,7 +20,7 @@ public final class LangConfig extends AbstractLangConfig<YamlConfigurateWrapper>
     super(new YamlConfigurateWrapper(dataFolder.resolve("lang.yml")));
   }
 
-  public TextColor color(final NodePath path) throws NoSuchValueAtPathInConfigException {
+  public TextColor color(final NodePath path) throws NoSuchValueInConfigException {
     return this.c(path, TagResolver.empty()).color();
   }
 

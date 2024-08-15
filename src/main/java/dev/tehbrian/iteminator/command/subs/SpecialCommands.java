@@ -1,37 +1,39 @@
 package dev.tehbrian.iteminator.command.subs;
 
-import broccolai.corn.paper.item.AbstractPaperItemBuilder;
-import broccolai.corn.paper.item.special.ArmorStandBuilder;
-import broccolai.corn.paper.item.special.AxolotlBucketBuilder;
-import broccolai.corn.paper.item.special.BannerBuilder;
-import broccolai.corn.paper.item.special.BookBuilder;
-import broccolai.corn.paper.item.special.DamageableBuilder;
-import broccolai.corn.paper.item.special.EnchantmentStorageBuilder;
-import broccolai.corn.paper.item.special.FireworkBuilder;
-import broccolai.corn.paper.item.special.LeatherArmorBuilder;
-import broccolai.corn.paper.item.special.MapBuilder;
-import broccolai.corn.paper.item.special.PotionBuilder;
-import broccolai.corn.paper.item.special.RepairableBuilder;
-import broccolai.corn.paper.item.special.SuspiciousStewBuilder;
-import broccolai.corn.paper.item.special.TropicalFishBucketBuilder;
 import cloud.commandframework.Command;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.google.inject.Inject;
 import dev.tehbrian.iteminator.Iteminator;
 import dev.tehbrian.iteminator.Permission;
-import dev.tehbrian.iteminator.command.ModernEnchantment;
+import dev.tehbrian.iteminator.command.ModernPatternType;
 import dev.tehbrian.iteminator.command.ModernPotionEffectType;
 import dev.tehbrian.iteminator.command.ModernPotionType;
 import dev.tehbrian.iteminator.config.LangConfig;
 import dev.tehbrian.iteminator.user.UserService;
 import dev.tehbrian.iteminator.util.HeldItemModifier;
 import dev.tehbrian.iteminator.util.ItemMetaRequiredTypes;
+import io.papermc.paper.potion.SuspiciousEffectEntry;
+import love.broccolai.corn.minecraft.item.AbstractItemBuilder;
+import love.broccolai.corn.minecraft.item.special.ArmorStandBuilder;
+import love.broccolai.corn.minecraft.item.special.AxolotlBucketBuilder;
+import love.broccolai.corn.minecraft.item.special.BannerBuilder;
+import love.broccolai.corn.minecraft.item.special.BookBuilder;
+import love.broccolai.corn.minecraft.item.special.DamageableBuilder;
+import love.broccolai.corn.minecraft.item.special.EnchantmentStorageBuilder;
+import love.broccolai.corn.minecraft.item.special.FireworkBuilder;
+import love.broccolai.corn.minecraft.item.special.LeatherArmorBuilder;
+import love.broccolai.corn.minecraft.item.special.MapBuilder;
+import love.broccolai.corn.minecraft.item.special.PotionBuilder;
+import love.broccolai.corn.minecraft.item.special.RepairableBuilder;
+import love.broccolai.corn.minecraft.item.special.SuspiciousStewBuilder;
+import love.broccolai.corn.minecraft.item.special.TropicalFishBucketBuilder;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -41,7 +43,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Player;
@@ -62,7 +63,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 import org.bukkit.map.MapView;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
@@ -109,7 +109,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.showArms(c.get("boolean")),
-              ArmorStandBuilder::of,
+              ArmorStandBuilder::armorStandBuilder,
               ArmorStandMeta.class
           );
         });
@@ -122,7 +122,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.invisible(c.get("boolean")),
-              ArmorStandBuilder::of,
+              ArmorStandBuilder::armorStandBuilder,
               ArmorStandMeta.class
           );
         });
@@ -135,7 +135,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.marker(c.get("boolean")),
-              ArmorStandBuilder::of,
+              ArmorStandBuilder::armorStandBuilder,
               ArmorStandMeta.class
           );
         });
@@ -148,7 +148,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.noBasePlate((c.get("boolean"))),
-              ArmorStandBuilder::of,
+              ArmorStandBuilder::armorStandBuilder,
               ArmorStandMeta.class
           );
         });
@@ -161,7 +161,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.small(c.get("boolean")),
-              ArmorStandBuilder::of,
+              ArmorStandBuilder::armorStandBuilder,
               ArmorStandMeta.class
           );
         });
@@ -185,7 +185,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.variant(c.get("variant")),
-              AxolotlBucketBuilder::of,
+              AxolotlBucketBuilder::axolotlBucketBuilder,
               AxolotlBucketMeta.class
           );
         });
@@ -202,13 +202,13 @@ public final class SpecialCommands {
     final var sBannerPatternAdd = sBannerPattern.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a pattern.")
         .argument(EnumArgument.of(DyeColor.class, "color"))
-        .argument(EnumArgument.of(PatternType.class, "type"))
+        .argument(EnumArgument.of(ModernPatternType.class, "type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
               b -> b.addPattern(new Pattern(c.get("color"), c.get("type"))),
-              BannerBuilder::of,
+              BannerBuilder::bannerBuilder,
               BannerMeta.class
           );
         });
@@ -217,7 +217,7 @@ public final class SpecialCommands {
         .meta(CommandMeta.DESCRIPTION, "Set a pattern.")
         .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
         .argument(EnumArgument.of(DyeColor.class, "color"))
-        .argument(EnumArgument.of(PatternType.class, "type"))
+        .argument(EnumArgument.of(ModernPatternType.class, "type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
@@ -229,9 +229,9 @@ public final class SpecialCommands {
                   return null;
                 }
 
-                return b.setPattern(index, new Pattern(c.get("color"), c.get("type")));
+                return b.pattern(index, new Pattern(c.get("color"), c.get("type")));
               },
-              BannerBuilder::of,
+              BannerBuilder::bannerBuilder,
               BannerMeta.class
           );
         });
@@ -252,7 +252,7 @@ public final class SpecialCommands {
 
                 return b.removePattern(index);
               },
-              BannerBuilder::of,
+              BannerBuilder::bannerBuilder,
               BannerMeta.class
           );
         });
@@ -264,7 +264,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.patterns(List.of()),
-              BannerBuilder::of,
+              BannerBuilder::bannerBuilder,
               BannerMeta.class
           );
         });
@@ -289,7 +289,7 @@ public final class SpecialCommands {
               b -> c.<String>getOptional("text")
                   .map(s -> b.title(this.userService.formatWithUserFormat(s, sender)))
                   .orElseGet(() -> b.title(null)),
-              BookBuilder::of,
+              BookBuilder::bookBuilder,
               BookMeta.class
           );
         });
@@ -304,7 +304,7 @@ public final class SpecialCommands {
               b -> c.<String>getOptional("text")
                   .map(s -> b.author(this.userService.formatWithUserFormat(s, sender)))
                   .orElseGet(() -> b.author(null)),
-              BookBuilder::of,
+              BookBuilder::bookBuilder,
               BookMeta.class
           );
         });
@@ -317,7 +317,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.generation(c.get("generation")),
-              BookBuilder::of,
+              BookBuilder::bookBuilder,
               BookMeta.class
           );
         });
@@ -336,7 +336,7 @@ public final class SpecialCommands {
                   return b.material(Material.WRITTEN_BOOK);
                 }
               },
-              BookBuilder::of,
+              BookBuilder::bookBuilder,
               BookMeta.class
           );
         });
@@ -359,7 +359,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.damage(c.get("damage")),
-              DamageableBuilder::of,
+              DamageableBuilder::damageableBuilder,
               Damageable.class
           );
         });
@@ -372,27 +372,27 @@ public final class SpecialCommands {
 
     final var sEnchantmentStorageAdd = sEnchantmentStorage.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add a stored enchantment.")
-        .argument(EnumArgument.of(ModernEnchantment.class, "type"))
+        .argument(EnchantmentArgument.of("type"))
         .argument(IntegerArgument.<CommandSender>builder("level").withMin(0).withMax(255))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
-              b -> b.addStoredEnchant(c.<ModernEnchantment>get("type").unwrap(), c.<Integer>get("level")),
-              EnchantmentStorageBuilder::of,
+              b -> b.addStoredEnchant(c.get("type"), c.<Integer>get("level")),
+              EnchantmentStorageBuilder::enchantmentStorageBuilder,
               EnchantmentStorageMeta.class
           );
         });
 
     final var sEnchantmentStorageRemove = sEnchantmentStorage.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove a stored enchantment.")
-        .argument(EnumArgument.of(ModernEnchantment.class, "type"))
+        .argument(EnchantmentArgument.of("type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
-              b -> b.removeStoredEnchant(c.<ModernEnchantment>get("type").unwrap()),
-              EnchantmentStorageBuilder::of,
+              b -> b.removeStoredEnchant(c.get("type")),
+              EnchantmentStorageBuilder::enchantmentStorageBuilder,
               EnchantmentStorageMeta.class
           );
         });
@@ -404,7 +404,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.storedEnchants(Map.of()),
-              EnchantmentStorageBuilder::of,
+              EnchantmentStorageBuilder::enchantmentStorageBuilder,
               EnchantmentStorageMeta.class
           );
         });
@@ -429,7 +429,7 @@ public final class SpecialCommands {
 //                  this.fireworkEffectBuilder(b.fireworkEffect())
 //                      .flicker(c.<Boolean>get("boolean")).build()
 //              ),
-//              FireworkEffectBuilder::of,
+//              FireworkEffectBuilder::fireworkEffectBuilder,
 //              FireworkEffectMeta.class
 //          );
 //        });
@@ -445,7 +445,7 @@ public final class SpecialCommands {
 //                  this.fireworkEffectBuilder(b.fireworkEffect())
 //                      .trail(c.<Boolean>get("boolean")).build()
 //              ),
-//              FireworkEffectBuilder::of,
+//              FireworkEffectBuilder::fireworkEffectBuilder,
 //              FireworkEffectMeta.class
 //          );
 //        });
@@ -461,7 +461,7 @@ public final class SpecialCommands {
 //                  this.fireworkEffectBuilder(b.fireworkEffect())
 //                      .with(c.get("type")).build()
 //              ),
-//              FireworkEffectBuilder::of,
+//              FireworkEffectBuilder::fireworkEffectBuilder,
 //              FireworkEffectMeta.class
 //          );
 //        });
@@ -484,7 +484,7 @@ public final class SpecialCommands {
 //                      c.<Integer>get("blue")
 //                  )).build()
 //              ),
-//              FireworkEffectBuilder::of,
+//              FireworkEffectBuilder::fireworkEffectBuilder,
 //              FireworkEffectMeta.class
 //          );
 //        });
@@ -507,7 +507,7 @@ public final class SpecialCommands {
 //                      c.<Integer>get("blue")
 //                  )).build()
 //              ),
-//              FireworkEffectBuilder::of,
+//              FireworkEffectBuilder::fireworkEffectBuilder,
 //              FireworkEffectMeta.class
 //          );
 //        });
@@ -531,7 +531,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.power(c.<Integer>get("power")),
-              FireworkBuilder::of,
+              FireworkBuilder::fireworkBuilder,
               FireworkMeta.class
           );
         });
@@ -606,7 +606,7 @@ public final class SpecialCommands {
                   c.<Integer>get("green"),
                   c.<Integer>get("blue")
               )),
-              LeatherArmorBuilder::of,
+              LeatherArmorBuilder::leatherArmorBuilder,
               LeatherArmorMeta.class
           );
         });
@@ -618,7 +618,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.color(null),
-              LeatherArmorBuilder::of,
+              LeatherArmorBuilder::leatherArmorBuilder,
               LeatherArmorMeta.class
           );
         });
@@ -639,20 +639,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.scaling(c.<Boolean>get("scaling")),
-              MapBuilder::of,
-              MapMeta.class
-          );
-        });
-
-    final var sMapLocationName = sMap.literal("location-name")
-        .meta(CommandMeta.DESCRIPTION, "Set the map's location name. Pass nothing to reset.")
-        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          this.modifySpecial(
-              sender,
-              b -> b.locationName(c.<String>getOptional("text").orElse(null)),
-              MapBuilder::of,
+              MapBuilder::mapBuilder,
               MapMeta.class
           );
         });
@@ -673,7 +660,7 @@ public final class SpecialCommands {
                   c.<Integer>get("green"),
                   c.<Integer>get("blue")
               )),
-              MapBuilder::of,
+              MapBuilder::mapBuilder,
               MapMeta.class
           );
         });
@@ -685,7 +672,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.color(null),
-              MapBuilder::of,
+              MapBuilder::mapBuilder,
               MapMeta.class
           );
         });
@@ -778,7 +765,6 @@ public final class SpecialCommands {
 
     commandManager
         .command(sMapScaling)
-        .command(sMapLocationName)
         .command(sMapColorSet)
         .command(sMapColorReset)
         .command(sMapViewCenterX)
@@ -819,7 +805,7 @@ public final class SpecialCommands {
 
                 return b.addCustomEffect(potionEffect, true);
               },
-              PotionBuilder::of,
+              PotionBuilder::potionBuilder,
               PotionMeta.class
           );
         });
@@ -832,7 +818,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.removeCustomEffect(c.<ModernPotionEffectType>get("type").unwrap()),
-              PotionBuilder::of,
+              PotionBuilder::potionBuilder,
               PotionMeta.class
           );
         });
@@ -844,7 +830,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.customEffects(null),
-              PotionBuilder::of,
+              PotionBuilder::potionBuilder,
               PotionMeta.class
           );
         });
@@ -865,7 +851,7 @@ public final class SpecialCommands {
                   c.<Integer>get("green"),
                   c.<Integer>get("blue")
               )),
-              PotionBuilder::of,
+              PotionBuilder::potionBuilder,
               PotionMeta.class
           );
         });
@@ -877,7 +863,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.color(null),
-              PotionBuilder::of,
+              PotionBuilder::potionBuilder,
               PotionMeta.class
           );
         });
@@ -889,8 +875,8 @@ public final class SpecialCommands {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
-              b -> b.basePotionData(new PotionData(c.<ModernPotionType>get("type").unwrap())),
-              PotionBuilder::of,
+              b -> b.basePotionType(c.<ModernPotionType>get("type").unwrap()),
+              PotionBuilder::potionBuilder,
               PotionMeta.class
           );
         });
@@ -915,7 +901,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.repairCost(c.get("cost")),
-              RepairableBuilder::of,
+              RepairableBuilder::repairableBuilder,
               Repairable.class
           );
         });
@@ -937,7 +923,7 @@ public final class SpecialCommands {
           HeldItemModifier.modifyItemStack(
               sender,
               i -> {
-                if (i.getItemMeta() instanceof SkullMeta skullMeta) {
+                if (i.getItemMeta() instanceof final SkullMeta skullMeta) {
                   // fuk th polic
                   // i spent like 50 trillion hours fiddling with
                   // get offline player and calling mojang's api, and
@@ -975,19 +961,11 @@ public final class SpecialCommands {
           final var sender = (Player) c.getSender();
           this.modifySpecial(
               sender,
-              b -> {
-                final var potionEffect = new PotionEffect(
-                    c.<ModernPotionEffectType>get("type").unwrap(),
-                    c.<Integer>get("duration"),
-                    c.<Integer>get("amplifier"),
-                    c.<Boolean>get("ambient"),
-                    c.<Boolean>get("particles"),
-                    c.<Boolean>get("icon")
-                );
-
-                return b.addCustomEffect(potionEffect, true);
-              },
-              SuspiciousStewBuilder::of,
+              b -> b.addCustomEffect(SuspiciousEffectEntry.create(
+                  c.<ModernPotionEffectType>get("type").unwrap(),
+                  c.<Integer>get("duration")
+              ), true),
+              SuspiciousStewBuilder::suspiciousStewBuilder,
               SuspiciousStewMeta.class
           );
         });
@@ -1000,7 +978,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.removeCustomEffect(c.<ModernPotionEffectType>get("type").unwrap()),
-              SuspiciousStewBuilder::of,
+              SuspiciousStewBuilder::suspiciousStewBuilder,
               SuspiciousStewMeta.class
           );
         });
@@ -1012,7 +990,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.customEffects(null),
-              SuspiciousStewBuilder::of,
+              SuspiciousStewBuilder::suspiciousStewBuilder,
               SuspiciousStewMeta.class
           );
         });
@@ -1034,7 +1012,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.pattern(c.get("pattern")),
-              TropicalFishBucketBuilder::of,
+              TropicalFishBucketBuilder::tropicalFishBucketBuilder,
               TropicalFishBucketMeta.class
           );
         });
@@ -1047,7 +1025,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.bodyColor(c.get("body_color")),
-              TropicalFishBucketBuilder::of,
+              TropicalFishBucketBuilder::tropicalFishBucketBuilder,
               TropicalFishBucketMeta.class
           );
         });
@@ -1060,7 +1038,7 @@ public final class SpecialCommands {
           this.modifySpecial(
               sender,
               b -> b.patternColor(c.get("pattern_color")),
-              TropicalFishBucketBuilder::of,
+              TropicalFishBucketBuilder::tropicalFishBucketBuilder,
               TropicalFishBucketMeta.class
           );
         });
@@ -1096,7 +1074,7 @@ public final class SpecialCommands {
    * @param metaType       the meta type to get the required types from
    * @param <T>            the builder type
    */
-  private <T extends AbstractPaperItemBuilder<T, ?>> void modifySpecial(
+  private <T extends AbstractItemBuilder<T, ?>> void modifySpecial(
       final Player player, final Function<T, @Nullable T> operator,
       final Function<ItemStack, T> builderCreator, final Class<? extends ItemMeta> metaType
   ) {
@@ -1123,7 +1101,7 @@ public final class SpecialCommands {
           }
           return b;
         },
-        MapBuilder::of,
+        MapBuilder::mapBuilder,
         MapMeta.class
     );
   }

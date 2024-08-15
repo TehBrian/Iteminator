@@ -6,21 +6,23 @@ import cloud.commandframework.arguments.standard.DoubleArgument;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
 import cloud.commandframework.bukkit.parsers.MaterialArgument;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
 import dev.tehbrian.iteminator.Permission;
-import dev.tehbrian.iteminator.command.ModernEnchantment;
 import dev.tehbrian.iteminator.config.LangConfig;
 import dev.tehbrian.iteminator.user.UserService;
 import dev.tehbrian.iteminator.util.HeldItemModifier;
 import net.kyori.adventure.text.Component;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.NodePath;
@@ -28,7 +30,6 @@ import org.spongepowered.configurate.NodePath;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public final class CommonCommands {
 
@@ -133,11 +134,10 @@ public final class CommonCommands {
           final var sender = (Player) c.getSender();
 
           final var modifier = new AttributeModifier(
-              UUID.randomUUID(), // let's hope for no collision! :D
-              c.get("name"),
+              new NamespacedKey("iteminator", c.get("name")),
               c.<Double>get("amount"),
               c.get("operation"),
-              c.getOrDefault("equipment_slot", null)
+              c.getOrDefault("equipment_slot", EquipmentSlotGroup.ANY)
           );
 
           HeldItemModifier.modify(sender, b -> b.addAttributeModifier(c.get("attribute"), modifier));
@@ -169,22 +169,22 @@ public final class CommonCommands {
 
     final var cEnchantmentAdd = cEnchantment.literal("add")
         .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
-        .argument(EnumArgument.of(ModernEnchantment.class, "type"))
+        .argument(EnchantmentArgument.of("type"))
         .argument(IntegerArgument.<CommandSender>builder("level").withMin(0).withMax(255))
         .handler(c -> {
           final var sender = (Player) c.getSender();
           HeldItemModifier.modify(
               sender,
-              b -> b.addEnchant(c.<ModernEnchantment>get("type").unwrap(), c.<Integer>get("level"))
+              b -> b.addEnchant(c.get("type"), c.<Integer>get("level"))
           );
         });
 
     final var cEnchantmentRemove = cEnchantment.literal("remove")
         .meta(CommandMeta.DESCRIPTION, "Remove an enchantment.")
-        .argument(EnumArgument.of(ModernEnchantment.class, "type"))
+        .argument(EnchantmentArgument.of("type"))
         .handler(c -> {
           final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.removeEnchant(c.<ModernEnchantment>get("type").unwrap()));
+          HeldItemModifier.modify(sender, b -> b.removeEnchant(c.get("type")));
         });
 
     final var cEnchantmentClear = cEnchantment.literal("clear")
