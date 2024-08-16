@@ -538,53 +538,58 @@ public final class SpecialCommands {
 
     commandManager.command(sFireworkPower);
 
-//        final var sItemFrame = parent.literal("item-frame")
-//                .meta(CommandMeta.DESCRIPTION, "Commands for Item Frames.")
-//                .permission(Permissions.ITEM_FRAME);
+//    final var sItemFrame = parent.literal("item-frame")
+//        .meta(CommandMeta.DESCRIPTION, "Commands for Item Frames.")
+//        .permission(Permission.ITEM_FRAME);
 //
-//        final var sItemFrameInvisible = sItemFrame.literal("invisible")
-//                .meta(CommandMeta.DESCRIPTION, "Set the invisible flag.")
-//                .argument(BooleanArgument.of("boolean"))
-//                .handler(c -> {
-//                    final var sender = (Player) c.getSender();
-//                    HeldItemModifier.modifyItemStack(
-//                            sender,
-//                            i -> {
-//                                final var builder = BlockStateBuilder.of(i);
-//                                if (builder.blockState() instanceof ItemFrame frame) {
-//                                    frame.setVisible(!c.<Boolean>get("boolean"));
-//                                    return builder.blockState((BlockState) frame).build();
-//                                } else {
-//                                    sender.sendMessage(this.generateWrongTypeMessage(List.of(Material.ITEM_FRAME)));
-//                                    return null;
-//                                }
-//                            }
-//                    );
-//                });
+//    final var sItemFrameInvisible = sItemFrame.literal("invisible")
+//        .meta(CommandMeta.DESCRIPTION, "Set the invisible flag.")
+//        .argument(BooleanArgument.of("boolean"))
+//        .handler(c -> {
+//          final var sender = (Player) c.getSender();
+//          HeldItemModifier.modifyItemStack(
+//              sender,
+//              i -> {
+//                final var meta = i.getItemMeta();
+//                if (meta instanceof final ItemFrameMeta itemFrame) {
+//                  itemFrame.setInvisible(c.<Boolean>get("boolean"));
+//                  i.setItemMeta(itemFrame);
+//                  return i;
+//                } else {
+//                  sender.sendMessage(this.generateWrongTypeMessage(List.of(
+//                      Material.ITEM_FRAME,
+//                      Material.GLOW_ITEM_FRAME
+//                  )));
+//                  return null;
+//                }
+//              }
+//          );
+//        });
+
+//    final var sItemFrameFixed = sItemFrame.literal("fixed")
+//        .meta(CommandMeta.DESCRIPTION, "Set the fixed flag.")
+//        .argument(BooleanArgument.of("boolean"))
+//        .handler(c -> {
+//          final var sender = (Player) c.getSender();
+//          HeldItemModifier.modifyItemStack(
+//              sender,
+//              i -> {
+//                final var meta = i.getItemMeta();
+//                if (meta instanceof final ItemFrameMeta itemFrame) {
+//                  itemFrame.setFixed(c.<Boolean>get("boolean"));
+//                  i.setItemMeta(itemFrame);
+//                  return i;
+//                } else {
+//                  sender.sendMessage(this.generateWrongTypeMessage(List.of(Material.ITEM_FRAME, Material.GLOW_ITEM_FRAME)));
+//                  return null;
+//                }
+//              }
+//          );
+//        });
 //
-//        final var sItemFrameFixed = sItemFrame.literal("fixed")
-//                .meta(CommandMeta.DESCRIPTION, "Set the fixed flag.")
-//                .argument(BooleanArgument.of("boolean"))
-//                .handler(c -> {
-//                    final var sender = (Player) c.getSender();
-//                    HeldItemModifier.modifyItemStack(
-//                            sender,
-//                            i -> {
-//                                final var builder = BlockDataBuilder.of(i);
-//                                if (builder.blockData(Material.ITEM_FRAME) instanceof ItemFrame frame) {
-//                                    frame.setFixed(!c.<Boolean>get("boolean"));
-//                                    return builder.blockData((BlockData) frame).build();
-//                                } else {
-//                                    sender.sendMessage(this.generateWrongTypeMessage(List.of(Material.ITEM_FRAME)));
-//                                    return null;
-//                                }
-//                            }
-//                    );
-//                });
-//
-//        commandManager
-//                .command(sItemFrameInvisible)
-//                .command(sItemFrameFixed);
+//    commandManager
+//        .command(sItemFrameInvisible)
+//        .command(sItemFrameFixed);
 
     final var sLeatherArmor = parent.literal("leather-armor")
         .meta(CommandMeta.DESCRIPTION, "Commands for Leather Armor.")
