@@ -3,7 +3,7 @@
 A modern item editing plugin.
 
 * [Download](https://modrinth.com/plugin/iteminator)
-* [Discord](https://thbn.me/discord)
+* [Discord](https://tehbrian.dev/discord)
 * [Donate](https://github.com/sponsors/TehBrian) <3
 
 ---
@@ -19,11 +19,10 @@ system in your hands.
 
 - Edit all item data. Seriously. All of it. This includes lore, attributes,
   books, banners, and even tropical fish buckets.
-- Use either [MiniMessage][MiniMessage] or legacy formatting to format text.
+- Use either [MiniMessage](https://docs.adventure.kyori.net/minimessage.html
+) or legacy formatting to format text.
 - All plugin messages are easily configurable.
-
-[MiniMessage]: https://docs.adventure.kyori.net/minimessage.html
-
+ 
 ## Screenshots
 
 ![text shown when running /iteminator](assets/iteminator-command.png)
