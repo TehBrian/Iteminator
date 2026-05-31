@@ -5,7 +5,7 @@ website: https://github.com/TehBrian/Iteminator
 
 version: ${version}
 main: dev.tehbrian.iteminator.Iteminator
-api-version: 1.21
+api-version: "26.1.2"
 
 permissions:
   iteminator.format:
