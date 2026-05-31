@@ -1,307 +1,259 @@
 package dev.tehbrian.iteminator.command.subs;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.arguments.standard.BooleanArgument;
-import cloud.commandframework.arguments.standard.DoubleArgument;
-import cloud.commandframework.arguments.standard.EnumArgument;
-import cloud.commandframework.arguments.standard.IntegerArgument;
-import cloud.commandframework.arguments.standard.StringArgument;
-import cloud.commandframework.bukkit.parsers.EnchantmentArgument;
-import cloud.commandframework.bukkit.parsers.MaterialArgument;
-import cloud.commandframework.meta.CommandMeta;
-import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.Inject;
 import dev.tehbrian.iteminator.Permission;
+import dev.tehbrian.iteminator.command.EnumEquipmentSlotGroup;
 import dev.tehbrian.iteminator.config.LangConfig;
 import dev.tehbrian.iteminator.user.UserService;
-import dev.tehbrian.iteminator.util.HeldItemModifier;
+import io.leangen.geantyref.TypeToken;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.spongepowered.configurate.NodePath;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static dev.tehbrian.iteminator.util.HeldItemModifier.modify;
+import static org.incendo.cloud.bukkit.parser.MaterialParser.materialParser;
+import static org.incendo.cloud.component.DefaultValue.constant;
+import static org.incendo.cloud.description.Description.description;
+import static org.incendo.cloud.paper.parser.RegistryEntryParser.registryEntryParser;
+import static org.incendo.cloud.parser.standard.BooleanParser.booleanParser;
+import static org.incendo.cloud.parser.standard.DoubleParser.doubleParser;
+import static org.incendo.cloud.parser.standard.EnumParser.enumParser;
+import static org.incendo.cloud.parser.standard.IntegerParser.integerParser;
+import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
+import static org.incendo.cloud.parser.standard.StringParser.quotedStringParser;
+
 public final class CommonCommands {
 
-  private final UserService userService;
-  private final LangConfig langConfig;
+	private final UserService userService;
+	private final LangConfig langConfig;
 
-  @Inject
-  public CommonCommands(
-      final UserService userService,
-      final LangConfig langConfig
-  ) {
-    this.userService = userService;
-    this.langConfig = langConfig;
-  }
+	@Inject
+	public CommonCommands(
+			final UserService userService,
+			final LangConfig langConfig
+	) {
+		this.userService = userService;
+		this.langConfig = langConfig;
+	}
 
-  /**
-   * @param commandManager the manager to register the commands to
-   * @param parent         the command to register the subcommands under
-   */
-  public void registerCommon(
-      final PaperCommandManager<CommandSender> commandManager,
-      final Command.Builder<CommandSender> parent
-  ) {
-    final var cAmount = parent.literal("amount")
-        .meta(CommandMeta.DESCRIPTION, "Set the amount.")
-        .permission(Permission.AMOUNT)
-        .argument(IntegerArgument.<CommandSender>builder("amount").withMin(0).withMax(127))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.amount(c.get("amount")));
-        });
+	public static Player sender(final CommandContext<PlayerSource> c) {
+		return c.sender().source();
+	}
 
-    final var cCustomModelData = parent.literal("custom-model-data")
-        .meta(CommandMeta.DESCRIPTION, "Set the custom model data. Pass nothing to reset.")
-        .permission(Permission.CUSTOM_MODEL_DATA)
-        .argument(IntegerArgument.optional("data"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.customModelData(c.<Integer>getOptional("data").orElse(null)));
-        });
+	/**
+	 * @param commandManager the manager to register the commands to
+	 * @param parent         the command to register the subcommands under
+	 */
+	public void registerCommon(
+			final PaperCommandManager<Source> commandManager,
+			final Command.Builder<PlayerSource> parent
+	) {
+		final var cAmount = parent.literal("amount")
+				.commandDescription(description("Set the amount."))
+				.permission(Permission.AMOUNT)
+				.required("amount", integerParser(0, 99))
+				.handler(c -> modify(sender(c), b -> b.amount(c.get("amount"))));
 
-    final var cMaterial = parent.literal("material")
-        .meta(CommandMeta.DESCRIPTION, "Set the material.")
-        .permission(Permission.MATERIAL)
-        .argument(MaterialArgument.of("material"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.material(c.get("material")));
-        });
+		final var cCustomModelData = parent.literal("custom-model-data")
+				.commandDescription(description("Set the custom model data. Pass nothing to reset."))
+				.permission(Permission.CUSTOM_MODEL_DATA)
+				.optional("data", integerParser())
+				.handler(c -> modify(sender(c), b -> b.customModelData(c.getOrDefault("data", null))));
 
-    final var cName = parent.literal("name")
-        .meta(CommandMeta.DESCRIPTION, "Name-related commands.")
-        .permission(Permission.NAME);
+		final var cMaterial = parent.literal("material")
+				.commandDescription(description("Set the material."))
+				.permission(Permission.MATERIAL)
+				.required("material", materialParser())
+				.handler(c -> modify(sender(c), b -> b.material(c.get("material"))));
 
-    final var cNameSet = cName.literal("set")
-        .meta(CommandMeta.DESCRIPTION, "Set the name.")
-        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(
-              sender,
-              b -> b.name(this.userService.formatWithUserFormat(c.getOptional("text"), sender))
-          );
-        });
+		final var cName = parent.literal("name")
+				.commandDescription(description("Name-related commands."))
+				.permission(Permission.NAME);
 
-    final var cNameReset = cName.literal("reset")
-        .meta(CommandMeta.DESCRIPTION, "Reset the name to the item's default.")
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.name(null));
-        });
+		final var cNameSet = cName.literal("set")
+				.commandDescription(description("Set the name."))
+				.optional("text", greedyStringParser(), constant(""))
+				.handler(c -> modify(
+						sender(c),
+						b -> b.name(this.userService.formatWithUserFormat(c.get("text"), sender(c)))
+				));
 
-    final var cUnbreakable = parent.literal("unbreakable")
-        .meta(CommandMeta.DESCRIPTION, "Set the unbreakable flag.")
-        .permission(Permission.UNBREAKABLE)
-        .argument(BooleanArgument.of("boolean"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.unbreakable(c.get("boolean")));
-        });
+		final var cNameReset = cName.literal("reset")
+				.commandDescription(description("Reset the name to the item's default."))
+				.handler(c -> modify(sender(c), b -> b.name(null)));
 
-    commandManager
-        .command(cAmount)
-        .command(cCustomModelData)
-        .command(cMaterial)
-        .command(cNameSet)
-        .command(cNameReset)
-        .command(cUnbreakable);
+		final var cUnbreakable = parent.literal("unbreakable")
+				.commandDescription(description("Set the unbreakable flag."))
+				.permission(Permission.UNBREAKABLE)
+				.required("value", booleanParser())
+				.handler(c -> modify(sender(c), b -> b.unbreakable(c.get("boolean"))));
 
-    final var cAttribute = parent.literal("attribute")
-        .meta(CommandMeta.DESCRIPTION, "Attribute-related commands.")
-        .permission(Permission.ATTRIBUTE);
+		commandManager
+				.command(cAmount)
+				.command(cCustomModelData)
+				.command(cMaterial)
+				.command(cNameSet)
+				.command(cNameReset)
+				.command(cUnbreakable);
 
-    final var cAttributeAdd = cAttribute.literal("add")
-        .meta(CommandMeta.DESCRIPTION, "Add an attribute.")
-        .argument(EnumArgument.of(Attribute.class, "attribute"))
-        .argument(StringArgument.quoted("name"))
-        .argument(DoubleArgument.of("amount"))
-        .argument(EnumArgument.of(AttributeModifier.Operation.class, "operation"))
-        .argument(EnumArgument.optional(EquipmentSlot.class, "equipment_slot"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
+		final var cAttribute = parent.literal("attribute")
+				.commandDescription(description("Attribute-related commands."))
+				.permission(Permission.ATTRIBUTE);
 
-          final var modifier = new AttributeModifier(
-              new NamespacedKey("iteminator", c.get("name")),
-              c.<Double>get("amount"),
-              c.get("operation"),
-              c.getOrDefault("equipment_slot", EquipmentSlotGroup.ANY)
-          );
+		final var cAttributeAdd = cAttribute.literal("add")
+				.commandDescription(description("Add an attribute."))
+				.required("attribute", registryEntryParser(RegistryKey.ATTRIBUTE, TypeToken.get(Attribute.class)))
+				.required("name", quotedStringParser())
+				.required("amount", doubleParser())
+				.required("operation", enumParser(AttributeModifier.Operation.class))
+				.optional("equipment_slot", enumParser(EnumEquipmentSlotGroup.class), constant(EnumEquipmentSlotGroup.ANY))
+				.handler(c -> {
+					final var modifier = new AttributeModifier(
+							new NamespacedKey("iteminator", c.get("name")),
+							c.get("amount"),
+							c.get("operation"),
+							c.<EnumEquipmentSlotGroup>get("equipment_slot").get()
+					);
 
-          HeldItemModifier.modify(sender, b -> b.addAttributeModifier(c.get("attribute"), modifier));
-        });
+					modify(sender(c), b -> b.addAttributeModifier(c.get("attribute"), modifier));
+				});
 
-    final var cAttributeRemove = cAttribute.literal("remove")
-        .meta(CommandMeta.DESCRIPTION, "Remove an attribute.")
-        .argument(EnumArgument.of(Attribute.class, "attribute"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.removeAttributeModifier(c.<Attribute>get("attribute")));
-        });
+		final var cAttributeRemove = cAttribute.literal("remove")
+				.commandDescription(description("Remove an attribute."))
+				.required("attribute", registryEntryParser(RegistryKey.ATTRIBUTE, TypeToken.get(Attribute.class)))
+				.handler(c -> modify(sender(c), b -> b.removeAttributeModifier(c.get("attribute"))));
 
-    final var cAttributeClear = cAttribute.literal("clear")
-        .meta(CommandMeta.DESCRIPTION, "Clear the attributes.")
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.attributeModifiers(null));
-        });
+		final var cAttributeClear = cAttribute.literal("clear")
+				.commandDescription(description("Clear the attributes."))
+				.handler(c -> modify(sender(c), b -> b.attributeModifiers(null)));
 
-    commandManager
-        .command(cAttributeAdd)
-        .command(cAttributeRemove)
-        .command(cAttributeClear);
+		commandManager
+				.command(cAttributeAdd)
+				.command(cAttributeRemove)
+				.command(cAttributeClear);
 
-    final var cEnchantment = parent.literal("enchantment")
-        .meta(CommandMeta.DESCRIPTION, "Enchantment-related commands.")
-        .permission(Permission.ENCHANTMENT);
+		final var cEnchantment = parent.literal("enchantment")
+				.commandDescription(description("Enchantment-related commands."))
+				.permission(Permission.ENCHANTMENT);
 
-    final var cEnchantmentAdd = cEnchantment.literal("add")
-        .meta(CommandMeta.DESCRIPTION, "Add an enchantment.")
-        .argument(EnchantmentArgument.of("type"))
-        .argument(IntegerArgument.<CommandSender>builder("level").withMin(0).withMax(255))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(
-              sender,
-              b -> b.addEnchant(c.get("type"), c.<Integer>get("level"))
-          );
-        });
+		final var cEnchantmentAdd = cEnchantment.literal("add")
+				.commandDescription(description("Add an enchantment."))
+				.required("type", registryEntryParser(RegistryKey.ENCHANTMENT, TypeToken.get(Enchantment.class)))
+				.required("level", integerParser(0, 255))
+				.handler(c -> modify(sender(c), b -> b.addEnchant(c.get("type"), c.get("level"))));
 
-    final var cEnchantmentRemove = cEnchantment.literal("remove")
-        .meta(CommandMeta.DESCRIPTION, "Remove an enchantment.")
-        .argument(EnchantmentArgument.of("type"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.removeEnchant(c.get("type")));
-        });
+		final var cEnchantmentRemove = cEnchantment.literal("remove")
+				.commandDescription(description("Remove an enchantment."))
+				.required("type", registryEntryParser(RegistryKey.ENCHANTMENT, TypeToken.get(Enchantment.class)))
+				.handler(c -> modify(sender(c), b -> b.removeEnchant(c.get("type"))));
 
-    final var cEnchantmentClear = cEnchantment.literal("clear")
-        .meta(CommandMeta.DESCRIPTION, "Clear the enchantments.")
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.enchants(null));
-        });
+		final var cEnchantmentClear = cEnchantment.literal("clear")
+				.commandDescription(description("Clear the enchantments."))
+				.handler(c -> modify(sender(c), b -> b.enchants(null)));
 
-    commandManager
-        .command(cEnchantmentAdd)
-        .command(cEnchantmentRemove)
-        .command(cEnchantmentClear);
+		commandManager
+				.command(cEnchantmentAdd)
+				.command(cEnchantmentRemove)
+				.command(cEnchantmentClear);
 
-    final var cFlags = parent.literal("flags")
-        .meta(CommandMeta.DESCRIPTION, "Flag-related commands.")
-        .permission(Permission.FLAGS);
+		final var cFlags = parent.literal("flags")
+				.commandDescription(description("Flag-related commands."))
+				.permission(Permission.FLAGS);
 
-    final var cFlagsAdd = cFlags.literal("add")
-        .meta(CommandMeta.DESCRIPTION, "Add a flag.")
-        .argument(EnumArgument.of(ItemFlag.class, "flag"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.addFlag(c.<ItemFlag>get("flag")));
-        });
+		final var cFlagsAdd = cFlags.literal("add")
+				.commandDescription(description("Add a flag."))
+				.required("flag", enumParser(ItemFlag.class))
+				.handler(c -> modify(sender(c), b -> b.addFlag(c.get("flag"))));
 
-    final var cFlagsRemove = cFlags.literal("remove")
-        .meta(CommandMeta.DESCRIPTION, "Remove a flag.")
-        .argument(EnumArgument.of(ItemFlag.class, "flag"))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.removeFlag(c.<ItemFlag>get("flag")));
-        });
+		final var cFlagsRemove = cFlags.literal("remove")
+				.commandDescription(description("Remove a flag."))
+				.required("flag", enumParser(ItemFlag.class))
+				.handler(c -> modify(sender(c), b -> b.removeFlag(c.get("flag"))));
 
-    final var cFlagsClear = cFlags.literal("clear")
-        .meta(CommandMeta.DESCRIPTION, "Clear the flags.")
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.flags(null));
-        });
+		final var cFlagsClear = cFlags.literal("clear")
+				.commandDescription(description("Clear the flags."))
+				.handler(c -> modify(sender(c), b -> b.flags(null)));
 
-    commandManager
-        .command(cFlagsAdd)
-        .command(cFlagsRemove)
-        .command(cFlagsClear);
+		commandManager
+				.command(cFlagsAdd)
+				.command(cFlagsRemove)
+				.command(cFlagsClear);
 
-    final var cLore = parent.literal("lore")
-        .meta(CommandMeta.DESCRIPTION, "Lore-related commands.")
-        .permission(Permission.LORE);
+		final var cLore = parent.literal("lore")
+				.commandDescription(description("Lore-related commands."))
+				.permission(Permission.LORE);
 
-    final var cLoreAdd = cLore.literal("add")
-        .meta(CommandMeta.DESCRIPTION, "Add a line of lore.")
-        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> {
-            final List<Component> lore = Optional
-                .ofNullable(b.lore())
-                .map(ArrayList::new)
-                .orElse(new ArrayList<>());
+		final var cLoreAdd = cLore.literal("add")
+				.commandDescription(description("Add a line of lore."))
+				.optional("text", greedyStringParser(), constant(""))
+				.handler(c -> modify(
+						sender(c), b -> {
+							final List<Component> lore = Optional.ofNullable(b.lore()).map(ArrayList::new).orElse(new ArrayList<>());
+							lore.add(this.userService.formatWithUserFormat(c.get("text"), sender(c)));
+							return b.lore(lore);
+						}
+				));
 
-            lore.add(this.userService.formatWithUserFormat(c.getOptional("text"), sender));
-            return b.lore(lore);
-          });
-        });
+		final var cLoreSet = cLore.literal("set")
+				.commandDescription(description("Set a line of lore."))
+				.required("index", integerParser(0))
+				.optional("text", greedyStringParser(), constant(""))
+				.handler(c -> modify(
+						sender(c), b -> {
+							final @Nullable List<Component> lore = b.lore();
+							final int line = c.get("index");
+							if (lore == null || lore.size() <= line) {
+								sender(c).sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
+								return null;
+							}
 
-    final var cLoreSet = cLore.literal("set")
-        .meta(CommandMeta.DESCRIPTION, "Set a line of lore.")
-        .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
-        .argument(StringArgument.optional("text", StringArgument.StringMode.GREEDY))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> {
-            final @Nullable List<Component> lore = b.lore();
+							lore.set(line, this.userService.formatWithUserFormat(c.get("text"), sender(c)));
+							return b.lore(lore);
+						}
+				));
 
-            final int line = c.get("index");
-            if (lore == null || lore.size() <= line) {
-              sender.sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
-              return null;
-            }
+		final var cLoreRemove = cLore.literal("remove")
+				.commandDescription(description("Remove a line of lore."))
+				.required("index", integerParser(0))
+				.handler(c -> modify(
+						sender(c), b -> {
+							final @Nullable List<Component> lore = b.lore();
+							final int line = c.get("index");
+							if (lore == null || lore.size() <= line) {
+								sender(c).sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
+								return null;
+							}
 
-            lore.set(line, this.userService.formatWithUserFormat(c.getOptional("text"), sender));
-            return b.lore(lore);
-          });
-        });
+							lore.remove(line);
+							return b.lore(lore);
+						}
+				));
 
-    final var cLoreRemove = cLore.literal("remove")
-        .meta(CommandMeta.DESCRIPTION, "Remove a line of lore.")
-        .argument(IntegerArgument.<CommandSender>builder("index").withMin(0))
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> {
-            final @Nullable List<Component> lore = b.lore();
+		final var cLoreClear = cLore.literal("clear")
+				.commandDescription(description("Clear the lore."))
+				.handler(c -> modify(sender(c), b -> b.lore(null)));
 
-            final int line = c.get("index");
-            if (lore == null || lore.size() <= line) {
-              sender.sendMessage(this.langConfig.c(NodePath.path("error", "out-of-bounds")));
-              return null;
-            }
-
-            lore.remove(line);
-            return b.lore(lore);
-          });
-        });
-
-    final var cLoreClear = cLore.literal("clear")
-        .meta(CommandMeta.DESCRIPTION, "Clear the lore.")
-        .handler(c -> {
-          final var sender = (Player) c.getSender();
-          HeldItemModifier.modify(sender, b -> b.lore(null));
-        });
-
-    commandManager
-        .command(cLoreAdd)
-        .command(cLoreSet)
-        .command(cLoreRemove)
-        .command(cLoreClear);
-  }
+		commandManager
+				.command(cLoreAdd)
+				.command(cLoreSet)
+				.command(cLoreRemove)
+				.command(cLoreClear);
+	}
 
 }

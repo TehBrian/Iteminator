@@ -23,7 +23,7 @@ system in your hands.
 - All plugin messages are easily configurable.
 
 [MiniMessage]: https://docs.papermc.io/adventure/minimessage/
- 
+
 ## Screenshots
 
 ![text shown when running /iteminator](assets/iteminator-command.png)
