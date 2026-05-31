@@ -30,9 +30,10 @@ dependencies {
   implementation("dev.tehbrian:tehlib-paper:0.6.0")
   implementation("org.spongepowered:configurate-yaml:4.2.0")
 
-  testImplementation("io.papermc.paper:paper-api:26.1.2.build.+")
-  testImplementation("org.junit.jupiter:junit-jupiter")
-  testImplementation(platform("org.junit:junit-bom:6.1.0"))
+	testImplementation("io.papermc.paper:paper-api:26.1.2.build.+")
+	testImplementation("org.junit.jupiter:junit-jupiter")
+	testImplementation(platform("org.junit:junit-bom:6.1.0"))
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks {
