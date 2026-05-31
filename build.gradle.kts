@@ -26,6 +26,7 @@ dependencies {
 	implementation("love.broccolai.corn:corn-minecraft:4.0.0-SNAPSHOT")
 	implementation("org.incendo:cloud-paper:2.0.0-beta.15")
 	implementation("org.incendo:cloud-minecraft-extras:2.0.0-beta.15")
+	implementation("org.bstats:bstats-bukkit:3.2.1")
 	implementation("com.google.inject:guice:7.0.0")
 	implementation("dev.tehbrian:agna-paper:1.0.1")
 	implementation("org.spongepowered:configurate-yaml:4.2.0")
@@ -73,16 +74,16 @@ tasks {
 				"com.google.inject",
 				"com.google.j2objc",
 				"com.google.thirdparty",
-				"dev.tehbrian.tehlib",
+				"dev.tehbrian.agna",
 				"io.leangen",
 				"jakarta.inject",
 				"javax.annotation",
-				"net.kyori.examination",
+				"net.kyori.option",
 				"org.aopalliance",
+				"org.bstats",
 				"org.checkerframework",
 				"org.incendo",
 				"org.spongepowered",
-				"org.yaml",
 		)
 	}
 

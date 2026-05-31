@@ -2,14 +2,14 @@ package dev.tehbrian.iteminator;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import dev.tehbrian.agna.paper.PluginUtils;
+import dev.tehbrian.agna.paper.configurate.ConfigLoader;
+import dev.tehbrian.agna.paper.configurate.ConfigLoader.Loadable;
 import dev.tehbrian.iteminator.command.ExceptionHandlers;
 import dev.tehbrian.iteminator.command.IteminatorCommand;
 import dev.tehbrian.iteminator.config.LangConfig;
 import dev.tehbrian.iteminator.inject.PluginModule;
 import dev.tehbrian.iteminator.inject.SingletonModule;
-import dev.tehbrian.agna.paper.configurate.ConfigLoader;
-import dev.tehbrian.agna.paper.configurate.ConfigLoader.Loadable;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.incendo.cloud.exception.ArgumentParseException;
@@ -28,6 +28,8 @@ import static org.incendo.cloud.execution.ExecutionCoordinator.simpleCoordinator
 import static org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper.simpleSenderMapper;
 
 public final class Iteminator extends JavaPlugin {
+
+	private static final int BSTATS_PLUGIN_ID = 31731;
 
 	private @MonotonicNonNull PaperCommandManager<Source> commandManager;
 	private @MonotonicNonNull Injector injector;
@@ -53,7 +55,11 @@ public final class Iteminator extends JavaPlugin {
 
 		if (!this.setupCommands()) {
 			disableSelf(this);
+			return;
 		}
+
+		// initialize bStats.
+		Metrics _ = new Metrics(this, BSTATS_PLUGIN_ID);
 	}
 
 	/**
