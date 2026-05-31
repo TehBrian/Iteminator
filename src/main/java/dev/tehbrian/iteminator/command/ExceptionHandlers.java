@@ -82,7 +82,7 @@ public final class ExceptionHandlers {
 	public MessageFactory<Source, CommandExecutionException> commandExecution() {
 		return (a, e) -> {
 			final Throwable cause = e.exception().getCause();
-			this.logger.warn("Uh oh.", cause);
+			this.logger.warn("An exception occurred during command execution", cause);
 
 			final StringWriter writer = new StringWriter();
 			cause.printStackTrace(new PrintWriter(writer));
