@@ -2,8 +2,8 @@ package dev.tehbrian.iteminator.config;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import dev.tehbrian.tehlib.paper.configurate.AbstractLangConfig;
-import dev.tehbrian.tehlib.paper.configurate.NoSuchValueInConfigException;
+import dev.tehbrian.agna.paper.configurate.AbstractLangConfig;
+import dev.tehbrian.agna.paper.configurate.NoSuchValueInConfigException;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.spongepowered.configurate.NodePath;

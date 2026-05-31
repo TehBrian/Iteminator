@@ -2,14 +2,15 @@ package dev.tehbrian.iteminator;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import dev.tehbrian.agna.paper.PluginUtils;
 import dev.tehbrian.iteminator.command.ExceptionHandlers;
 import dev.tehbrian.iteminator.command.IteminatorCommand;
 import dev.tehbrian.iteminator.config.LangConfig;
 import dev.tehbrian.iteminator.inject.PluginModule;
 import dev.tehbrian.iteminator.inject.SingletonModule;
-import dev.tehbrian.tehlib.paper.TehPlugin;
-import dev.tehbrian.tehlib.paper.configurate.ConfigLoader;
-import dev.tehbrian.tehlib.paper.configurate.ConfigLoader.Loadable;
+import dev.tehbrian.agna.paper.configurate.ConfigLoader;
+import dev.tehbrian.agna.paper.configurate.ConfigLoader.Loadable;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.incendo.cloud.exception.ArgumentParseException;
 import org.incendo.cloud.exception.CommandExecutionException;
@@ -22,10 +23,11 @@ import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.List;
 
+import static dev.tehbrian.agna.paper.PluginUtils.disableSelf;
 import static org.incendo.cloud.execution.ExecutionCoordinator.simpleCoordinator;
 import static org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper.simpleSenderMapper;
 
-public final class Iteminator extends TehPlugin {
+public final class Iteminator extends JavaPlugin {
 
 	private @MonotonicNonNull PaperCommandManager<Source> commandManager;
 	private @MonotonicNonNull Injector injector;
@@ -39,18 +41,18 @@ public final class Iteminator extends TehPlugin {
 			);
 		} catch (final Exception e) {
 			this.getSLF4JLogger().error("Something went wrong while creating the injector. Disabling plugin");
-			this.disableSelf();
+			disableSelf(this);
 			this.getSLF4JLogger().error("Printing stack trace. Please send this to the developers", e);
 			return;
 		}
 
 		if (!this.loadConfiguration()) {
-			this.disableSelf();
+			disableSelf(this);
 			return;
 		}
 
 		if (!this.setupCommands()) {
-			this.disableSelf();
+			disableSelf(this);
 		}
 	}
 
