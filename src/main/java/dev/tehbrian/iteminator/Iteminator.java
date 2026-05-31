@@ -2,6 +2,7 @@ package dev.tehbrian.iteminator;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import dev.tehbrian.agna.paper.UpdateChecker;
 import dev.tehbrian.agna.paper.configurate.ConfigLoader;
 import dev.tehbrian.agna.paper.configurate.ConfigLoader.Loadable;
 import dev.tehbrian.iteminator.command.ExceptionHandlers;
@@ -60,6 +61,8 @@ public final class Iteminator extends JavaPlugin {
 
 		// initialize bStats.
 		Metrics _ = new Metrics(this, BSTATS_PLUGIN_ID);
+
+		new UpdateChecker(this, "iteminator").checkForUpdates();
 	}
 
 	/**
