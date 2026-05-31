@@ -12,33 +12,33 @@ import java.nio.file.Path;
 @SuppressWarnings("unused")
 public final class PluginModule extends AbstractModule {
 
-  private final Iteminator iteminator;
+	private final Iteminator iteminator;
 
-  public PluginModule(final Iteminator iteminator) {
-    this.iteminator = iteminator;
-  }
+	public PluginModule(final Iteminator iteminator) {
+		this.iteminator = iteminator;
+	}
 
-  @Override
-  protected void configure() {
-    this.bind(Iteminator.class).toInstance(this.iteminator);
-    this.bind(JavaPlugin.class).toInstance(this.iteminator);
-  }
+	@Override
+	protected void configure() {
+		this.bind(Iteminator.class).toInstance(this.iteminator);
+		this.bind(JavaPlugin.class).toInstance(this.iteminator);
+	}
 
-  /**
-   * @return the plugin's SLF4J logger
-   */
-  @Provides
-  public Logger provideSLF4JLogger() {
-    return this.iteminator.getSLF4JLogger();
-  }
+	/**
+	 * @return the plugin's SLF4J logger
+	 */
+	@Provides
+	public Logger provideSLF4JLogger() {
+		return this.iteminator.getSLF4JLogger();
+	}
 
-  /**
-   * @return the plugin's data folder
-   */
-  @Provides
-  @Named("dataFolder")
-  public Path provideDataFolder() {
-    return this.iteminator.getDataFolder().toPath();
-  }
+	/**
+	 * @return the plugin's data folder
+	 */
+	@Provides
+	@Named("dataFolder")
+	public Path provideDataFolder() {
+		return this.iteminator.getDataFolder().toPath();
+	}
 
 }

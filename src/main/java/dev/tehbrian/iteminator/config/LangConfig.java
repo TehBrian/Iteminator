@@ -12,16 +12,16 @@ import java.nio.file.Path;
 
 public final class LangConfig extends AbstractLangConfig<YamlConfigurateWrapper> {
 
-  /**
-   * @param dataFolder the data folder
-   */
-  @Inject
-  public LangConfig(final @Named("dataFolder") Path dataFolder) {
-    super(new YamlConfigurateWrapper(dataFolder.resolve("lang.yml")));
-  }
+	/**
+	 * @param dataFolder the data folder
+	 */
+	@Inject
+	public LangConfig(final @Named("dataFolder") Path dataFolder) {
+		super(new YamlConfigurateWrapper(dataFolder.resolve("lang.yml")));
+	}
 
-  public TextColor color(final NodePath path) throws NoSuchValueInConfigException {
-    return this.c(path, TagResolver.empty()).color();
-  }
+	public TextColor color(final NodePath path) throws NoSuchValueInConfigException {
+		return this.c(path, TagResolver.empty()).color();
+	}
 
 }
