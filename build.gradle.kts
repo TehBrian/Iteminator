@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
 	compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
-	implementation("love.broccolai.corn:corn-minecraft:4.0.0-SNAPSHOT")
+	implementation("love.broccolai.corn:corn-minecraft:4.1.0-SNAPSHOT")
 	implementation("org.incendo:cloud-paper:2.0.0-beta.15")
 	implementation("org.incendo:cloud-minecraft-extras:2.0.0-beta.15")
 	implementation("org.bstats:bstats-bukkit:3.2.1")
