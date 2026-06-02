@@ -1,18 +1,18 @@
 package dev.tehbrian.iteminator.config;
 
 import dev.tehbrian.agna.configurate.ConfigurateWrapper;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
 import java.nio.file.Path;
 
-public class YamlConfigurateWrapper extends ConfigurateWrapper<YamlConfigurationLoader> {
+public class HoconConfigurateWrapper extends ConfigurateWrapper<HoconConfigurationLoader> {
 
 	/**
 	 * @param filePath the file path for the config
 	 */
-	public YamlConfigurateWrapper(final Path filePath) {
+	public HoconConfigurateWrapper(final Path filePath) {
 		super(
-				filePath, YamlConfigurationLoader.builder()
+				filePath, HoconConfigurationLoader.builder()
 						.path(filePath)
 						.build()
 		);
@@ -22,7 +22,7 @@ public class YamlConfigurateWrapper extends ConfigurateWrapper<YamlConfiguration
 	 * @param filePath the file path for the config
 	 * @param loader   the loader
 	 */
-	public YamlConfigurateWrapper(final Path filePath, final YamlConfigurationLoader loader) {
+	public HoconConfigurateWrapper(final Path filePath, final HoconConfigurationLoader loader) {
 		super(filePath, loader);
 	}
 

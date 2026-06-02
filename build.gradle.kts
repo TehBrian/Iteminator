@@ -29,7 +29,7 @@ dependencies {
 	implementation("org.bstats:bstats-bukkit:3.2.1")
 	implementation("com.google.inject:guice:7.0.0")
 	implementation("dev.tehbrian:agna-paper:1.0.1")
-	implementation("org.spongepowered:configurate-yaml:4.2.0")
+	implementation("org.spongepowered:configurate-hocon:4.2.0")
 
 	testImplementation("io.papermc.paper:paper-api:26.1.2.build.+")
 	testImplementation("org.junit.jupiter:junit-jupiter")
