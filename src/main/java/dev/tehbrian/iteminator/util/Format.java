@@ -11,7 +11,7 @@ public final class Format {
 	}
 
 	/**
-	 * @param string the Legacy-formatted string
+	 * @param string the legacy-formatted string
 	 * @return the string as a component
 	 */
 	public static Component legacy(final String string) {

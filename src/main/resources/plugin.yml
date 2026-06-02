@@ -12,7 +12,7 @@ permissions:
     description: Permission to format text.
     default: true
   iteminator.format.legacy:
-    description: Permission to use the Legacy formatting type.
+    description: Permission to use the legacy formatting type.
     default: true
   iteminator.format.minimessage:
     description: Permission to use the MiniMessage formatting type.

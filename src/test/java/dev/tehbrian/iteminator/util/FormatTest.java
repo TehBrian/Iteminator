@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FormatTest {
 
-	private static final String TEST_STRING = "<red>We're using <gold>MiniMessage</gold> format, but &1now &9we're using &b&lLegacy!";
+	private static final String TEST_STRING = "<red>We're using <gold>MiniMessage</gold> format, but &1now &9we're using &b&llegacy!";
 
 	@Test
 	public void legacy() {
