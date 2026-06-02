@@ -70,7 +70,7 @@ public final class Iteminator extends JavaPlugin {
 	 */
 	public boolean loadConfiguration() {
 		return new ConfigLoader(this).load(List.of(
-				Loadable.of("lang.yml", this.injector.getInstance(LangConfig.class))
+				Loadable.ofVersioned("lang.hocon", this.injector.getInstance(LangConfig.class), 1)
 		));
 	}
 
