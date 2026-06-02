@@ -5,7 +5,7 @@
 # https://github.com/TehBrian/Iteminator
 
 # Support
-# https://thbn.me/discord
+# https://tehbrian.dev/discord
 
 # Default Color Palette
 # #EEEEFF white
@@ -20,9 +20,9 @@ main: """<#333344>I| <#AAAABB>-= <#44AABB>Iteminator</#44AABB> =-
 <#333344>I| <#EEEEFF>Running version <#88EEFF><version></#88EEFF>.
 <#333344>I| <#EEEEFF>Made with <#DD5577><3</#DD5577> by <#88EEFF>TehBrian</#88EEFF>.
 <#333344>I|
-<#333344>I| <#EEEEFF>Discord: <#88EEFF><u><hover:show_text:'https://thbn.me/discord
+<#333344>I| <#EEEEFF>Discord: <#88EEFF><u><hover:show_text:'https://tehbrian.dev/discord
 
-Click to open.'><click:open_url:'https://thbn.me/discord'>thbn.me/discord</click></hover></u></#88EEFF>.
+Click to open.'><click:open_url:'https://tehbrian.dev/discord'>tehbrian.dev/discord</click></hover></u></#88EEFF>.
 <#333344>I| <#EEEEFF>Modrinth: <#88EEFF><u><hover:show_text:'https://modrinth.com/plugin/iteminator
 
 Click to open in your handy dandy web browser.'><click:open_url:'https://modrinth.com/plugin/iteminator'>modrinth.com/plugin/iteminator</click></hover></u></#88EEFF>.
