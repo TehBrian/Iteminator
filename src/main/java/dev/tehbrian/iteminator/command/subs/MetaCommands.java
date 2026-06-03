@@ -138,7 +138,7 @@ public final class MetaCommands {
 					this.userService.getUser(sender).formattingType(formattingType);
 					sender.sendMessage(this.langConfig.c(
 							NodePath.path("format", "set"),
-							Placeholder.unparsed("formatting_type", formattingType.toString())
+							Placeholder.unparsed("formatting_type", formattingType.getHumanString())
 					));
 				});
 

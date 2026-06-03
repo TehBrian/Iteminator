@@ -70,8 +70,18 @@ public final class User {
 	}
 
 	public enum FormattingType {
-		LEGACY,
-		MINIMESSAGE
+		LEGACY("legacy"),
+		MINIMESSAGE("MiniMessage");
+
+		private final String humanString;
+
+		FormattingType(final String humanString) {
+			this.humanString = humanString;
+		}
+
+		public String getHumanString() {
+			return this.humanString;
+		}
 	}
 
 }
