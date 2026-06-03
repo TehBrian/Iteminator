@@ -9,9 +9,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.paper.util.sender.Source;
 
-import static com.google.common.base.Predicates.alwaysTrue;
 import static dev.tehbrian.iteminator.util.HeldItemModifier.modify;
-import static dev.tehbrian.iteminator.util.HeldItemModifier.modifyRaw;
 import static org.incendo.cloud.description.Description.description;
 import static org.incendo.cloud.paper.parser.RegistryEntryParser.registryEntryParser;
 import static org.incendo.cloud.parser.standard.IntegerParser.integerParser;
@@ -39,13 +37,9 @@ public final class ItemStackCommands {
 				.commandDescription(description("Set the type."))
 				.permission(Permission.TYPE)
 				.required("type", registryEntryParser(RegistryKey.ITEM, TypeToken.get(ItemType.class)))
-				.handler(c -> modifyRaw(
-						c, i -> {
-							final var item = c.<ItemType>get("type").createItemStack();
-							item.copyDataFrom(i, alwaysTrue());
-							return item;
-						}
-				));
+				.handler(c -> {
+					modify(c, i -> i.type(c.get("type")));
+				});
 
 		commandManager
 				.command(cAmount)

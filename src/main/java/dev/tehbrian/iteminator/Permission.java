@@ -14,12 +14,14 @@ public final class Permission {
 	public static final String MINIMESSAGE = FORMAT + ".minimessage";
 
 	public static final String ITEM = ROOT + ".item";
-
 	public static final String AMOUNT = ITEM + ".amount";
-	public static final String CUSTOM_MODEL_DATA = ITEM + ".custom-model-data";
 	public static final String TYPE = ITEM + ".type";
-	public static final String CUSTOM_NAME = ITEM + ".custom-name";
 	public static final String UNBREAKABLE = ITEM + ".unbreakable";
+	public static final String CUSTOM_NAME = ITEM + ".custom-name";
+	public static final String ITEM_NAME = ITEM + ".item-name";
+	public static final String DAMAGE_TYPE = ITEM + ".damage-type";
+
+	public static final String CUSTOM_MODEL_DATA = ITEM + ".custom-model-data";
 
 	public static final String ATTRIBUTE = ITEM + ".attribute";
 	public static final String ENCHANTMENT = ITEM + ".enchantment";
@@ -42,6 +44,7 @@ public final class Permission {
 	public static final String SKULL = ITEM + ".skull";
 	public static final String SUSPICIOUS_STEW = ITEM + ".suspicious-stew";
 	public static final String TROPICAL_FISH_BUCKET = ITEM + ".tropical-fish-bucket";
+
 
 	private Permission() {
 	}
