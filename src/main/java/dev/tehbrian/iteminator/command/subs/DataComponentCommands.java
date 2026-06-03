@@ -11,10 +11,8 @@ import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.paper.util.sender.Source;
 
 import static dev.tehbrian.iteminator.util.HeldItemModifier.modify;
-import static dev.tehbrian.iteminator.util.HeldItemModifier.modifyRaw;
 import static org.incendo.cloud.component.DefaultValue.constant;
 import static org.incendo.cloud.description.Description.description;
-import static org.incendo.cloud.parser.standard.IntegerParser.integerParser;
 import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -67,10 +65,10 @@ public final class DataComponentCommands {
 		final var cSetCustomName = cSet.literal("custom-name")
 				.commandDescription(description("Set custom name."))
 				.permission(Permission.CUSTOM_NAME)
-				.optional("custom-name", greedyStringParser(), constant(""))
+				.optional("value", greedyStringParser(), constant(""))
 				.handler(c -> modify(
 						c, i -> i.setCustomName(
-								this.userService.formatWithUserFormat(c.get("custom-name"), c.sender().source())
+								this.userService.formatWithUserFormat(c.get("value"), c.sender().source())
 						)
 				));
 
@@ -84,13 +82,36 @@ public final class DataComponentCommands {
 				.permission(Permission.CUSTOM_NAME)
 				.handler(c -> modify(c, ItemModifier::resetCustomName));
 
+		final var cSetItemName = cSet.literal("item-name")
+				.commandDescription(description("Set name."))
+				.permission(Permission.CUSTOM_NAME)
+				.optional("value", greedyStringParser(), constant(""))
+				.handler(c -> modify(
+						c, i -> i.setItemName(
+								this.userService.formatWithUserFormat(c.get("value"), c.sender().source())
+						)
+				));
+
+		final var cUnsetItemName = cUnset.literal("item-name")
+				.commandDescription(description("Unset name."))
+				.permission(Permission.CUSTOM_NAME)
+				.handler(c -> modify(c, ItemModifier::unsetItemName));
+
+		final var cResetItemName = cReset.literal("item-name")
+				.commandDescription(description("Reset name."))
+				.permission(Permission.CUSTOM_NAME)
+				.handler(c -> modify(c, ItemModifier::resetItemName));
+
 		commandManager
 				.command(cSetUnbreakable)
 				.command(cUnsetUnbreakable)
 				.command(cResetUnbreakable)
 				.command(cSetCustomName)
 				.command(cUnsetCustomName)
-				.command(cResetCustomName);
+				.command(cResetCustomName)
+				.command(cSetItemName)
+				.command(cUnsetItemName)
+				.command(cResetItemName);
 	}
 
 }

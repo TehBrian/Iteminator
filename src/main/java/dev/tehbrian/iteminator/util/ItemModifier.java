@@ -81,7 +81,7 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import java.util.List;
 
 @SuppressWarnings({"UnstableApiUsage", "unused"})
-public class ItemModifier {
+public final class ItemModifier {
 
 	private final ItemStack item;
 
