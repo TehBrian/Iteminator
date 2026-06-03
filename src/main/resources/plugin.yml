@@ -7,7 +7,12 @@ version: ${version}
 main: dev.tehbrian.iteminator.Iteminator
 api-version: "26.1.2"
 
+# TODO: update permissions
 permissions:
+  iteminator.reload:
+    description: Permission to run /iteminator reload.
+    default: op
+
   iteminator.format:
     description: Permission to format text.
     default: true
@@ -16,22 +21,25 @@ permissions:
     default: true
   iteminator.format.minimessage:
     description: Permission to use the MiniMessage formatting type.
-    default: op
-  iteminator.reload:
-    description: Permission to run /iteminator reload.
-    default: op
+    default: true
 
+  iteminator.item:
+    description: Permission to run item-related commands.
+    default: true
   iteminator.amount:
     description: Permission to run /iteminator amount.
     default: true
   iteminator.custom-model-data:
     description: Permission to run /iteminator custom-model-data.
     default: true
-  iteminator.material:
-    description: Permission to run /iteminator material.
+  iteminator.type:
+    description: Permission to run /iteminator type.
     default: true
-  iteminator.name:
-    description: Permission to run /iteminator name.
+  iteminator.custom-name:
+    description: Permission to run /iteminator custom-name.
+    default: true
+  iteminator.item-name:
+    description: Permission to run /iteminator item-name.
     default: true
   iteminator.unbreakable:
     description: Permission to run /iteminator unbreakable.

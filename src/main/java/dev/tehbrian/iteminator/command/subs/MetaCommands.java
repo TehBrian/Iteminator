@@ -12,6 +12,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.paper.util.sender.Source;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.NodePath;
 
 import static org.incendo.cloud.component.DefaultValue.constant;
@@ -29,7 +30,7 @@ public final class MetaCommands {
 	private final UserService userService;
 	private final LangConfig langConfig;
 
-	private MinecraftHelp<Source> help;
+	private @Nullable MinecraftHelp<Source> help;
 
 	@Inject
 	public MetaCommands(
@@ -73,7 +74,7 @@ public final class MetaCommands {
 	 * @param commandManager the manager to register the commands to
 	 * @param parent         the command to register the subcommands under
 	 */
-	public void registerMeta(
+	public void register(
 			final PaperCommandManager<Source> commandManager,
 			final Command.Builder<Source> parent
 	) {

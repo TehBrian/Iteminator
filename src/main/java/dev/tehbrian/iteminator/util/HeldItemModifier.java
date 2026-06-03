@@ -1,48 +1,27 @@
 package dev.tehbrian.iteminator.util;
 
-import love.broccolai.corn.minecraft.item.AbstractItemBuilder;
-import love.broccolai.corn.minecraft.item.ItemBuilder;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.function.Function;
 
-import static love.broccolai.corn.minecraft.item.ItemBuilder.itemBuilder;
+import static dev.tehbrian.iteminator.util.ItemModifier.itemModifier;
 
 public final class HeldItemModifier {
 
 	private HeldItemModifier() {
 	}
 
-	/**
-	 * I am most certainly going to the deepest, darkest level of programmer hell
-	 * for this terribleness. At least I don't have to re-type the same thing
-	 * everywhere! \_o¬o_/
-	 *
-	 * @param player         the player to target
-	 * @param operator       the operator to apply to the item in the main hand
-	 * @param builderCreator a function that creates the builder
-	 * @param <T>            the builder type
-	 * @throws IllegalArgumentException if the player's held item meta cannot
-	 *                                  be modified by the provided builder
-	 */
-	public static <T extends AbstractItemBuilder<T, ?>> void modifySpecial(
-			final Player player,
-			final Function<T, @Nullable T> operator,
-			final Function<ItemStack, T> builderCreator
-	) throws IllegalArgumentException {
-		modifyItemStack(
-				player, i -> {
-					final T builder = builderCreator.apply(i);
-					final @Nullable T modifiedBuilder = operator.apply(builder);
-					if (modifiedBuilder == null) {
-						return null;
-					}
-					return modifiedBuilder.build();
-				}
-		);
+	public static void modify(
+			final CommandContext<PlayerSource> context,
+			final Function<ItemModifier, @Nullable ItemModifier> operator
+	) {
+		modify(context.sender().source(), operator);
 	}
 
 	/**
@@ -54,17 +33,25 @@ public final class HeldItemModifier {
 	 */
 	public static void modify(
 			final Player player,
-			final Function<ItemBuilder, @Nullable ItemBuilder> operator
+			final Function<ItemModifier, @Nullable ItemModifier> operator
 	) {
-		modifyItemStack(
+		modifyRaw(
 				player, i -> {
-					final @Nullable ItemBuilder modifiedBuilder = operator.apply(itemBuilder(i));
-					if (modifiedBuilder == null) {
+					final @Nullable ItemModifier modifier = operator.apply(itemModifier(i));
+					if (modifier == null) {
 						return null;
 					}
-					return modifiedBuilder.build();
+
+					return modifier.yank();
 				}
 		);
+	}
+
+	public static void modifyRaw(
+			final CommandContext<PlayerSource> context,
+			final Function<ItemStack, @Nullable ItemStack> operator
+	) {
+		modifyRaw(context.sender().source(), operator);
 	}
 
 	/**
@@ -74,19 +61,23 @@ public final class HeldItemModifier {
 	 * @param player   the player to target
 	 * @param operator the operator to apply to the item in the main hand
 	 */
-	public static void modifyItemStack(
+	public static void modifyRaw(
 			final Player player,
 			final Function<ItemStack, @Nullable ItemStack> operator
 	) {
 		final PlayerInventory inventory = player.getInventory();
 		final ItemStack item = inventory.getItemInMainHand();
-		if (item.getItemMeta() == null) { // it's air and therefore cannot be modified
+
+		if (item.getType().equals(Material.AIR)) {
+			// it's air and therefore cannot be modified.
 			return;
 		}
+
 		final @Nullable ItemStack modifiedItem = operator.apply(item);
 		if (modifiedItem == null) {
 			return;
 		}
+
 		inventory.setItemInMainHand(modifiedItem);
 	}
 

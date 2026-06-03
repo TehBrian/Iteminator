@@ -1,4 +1,4 @@
-package dev.tehbrian.iteminator.command.subs;
+package dev.tehbrian.iteminator.command;
 
 import org.incendo.cloud.help.result.CommandEntry;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
