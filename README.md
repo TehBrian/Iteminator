@@ -1,5 +1,8 @@
 # Iteminator
 
+[![License](https://img.shields.io/github/license/TehBrian/Iteminator)](LICENSE.md)
+[![Chat](https://img.shields.io/discord/791861916314239006)](https://tehbrian.dev/discord)
+
 A modern item editing plugin.
 
 * [Download](https://modrinth.com/plugin/iteminator)
