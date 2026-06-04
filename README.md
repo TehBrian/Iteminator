@@ -13,22 +13,25 @@ A modern item editing plugin.
 
 ## About
 
-Iteminator is a fresh take on in-game Minecraft item editing. It offers a simple
-command UX powered by tab completion while still allowing you to modify all item
-data available. No cluttered, sludgy GUIs. Just the raw power of the game's item
-system in your hands.
+Iteminator is a fresh take on in-game Minecraft item editing.
+
+It offers a simple command UX powered by tab completion while still allowing
+you to leverage the full power of Minecraft's item component system.
+
+No cluttered, sludgy GUIs. Just the raw power of the game's item system at
+your fingertips.
 
 ## Features
 
-- Edit all item data. Seriously. All of it. This includes lore, attributes,
-  books, banners, and even tropical fish buckets.
+- Edit all item components. Seriously. All of them. This includes lore, attribute
+  modifiers, books, banners, and even tropical fish buckets.
 - Use either [MiniMessage][MiniMessage] or legacy formatting to format text.
-- All plugin messages are easily configurable.
+- All plugin messages are configurable.
 
 [MiniMessage]: https://docs.papermc.io/adventure/minimessage/
 
 ## Screenshots
 
-![text shown when running /iteminator](assets/iteminator-command.png)
+![message shown when running /iteminator](assets/iteminator-command.png)
 ![tab completion for common commands](assets/tab-complete-common.png)
 ![tab completion for special commands](assets/tab-complete-special.png)
