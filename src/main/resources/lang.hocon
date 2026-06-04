@@ -1,15 +1,15 @@
 # Iteminator
 # by TehBrian
 #
-# Download
+# Download @ Modrinth
 # https://modrinth.com/plugin/iteminator
 #
-# Support
+# Support @ Discord
 # https://tehbrian.dev/discord
 #
-# Source
+# Source @ GitHub
 # https://github.com/TehBrian/Iteminator
-
+#
 # Default Color Palette
 # #EEEEFF white
 # #AAAABB light gray
@@ -18,6 +18,9 @@
 # #44AABB dark blue
 # #DD5577 red
 # https://coolors.co/eeeeff-aaaabb-333344-88eeff-44aabb-dd5577
+
+# No touch!
+version: 1
 
 main: """<#333344>I| <#AAAABB>-= <#44AABB>Iteminator</#44AABB> =-
 <#333344>I| <#EEEEFF>Running version <#88EEFF><version></#88EEFF>.
