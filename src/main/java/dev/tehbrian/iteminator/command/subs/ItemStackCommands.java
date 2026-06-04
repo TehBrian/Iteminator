@@ -27,7 +27,7 @@ public final class ItemStackCommands {
 	) {
 		final var cAmount = parent.literal("amount")
 				.commandDescription(description("Set the amount."))
-				.permission(Permission.AMOUNT)
+				.permission(Permission.EDIT)
 				.required("amount", integerParser(0, 99))
 				.handler(c -> {
 					modify(c, i -> i.amount(c.get("amount")));
@@ -35,7 +35,7 @@ public final class ItemStackCommands {
 
 		final var cType = parent.literal("type")
 				.commandDescription(description("Set the type."))
-				.permission(Permission.TYPE)
+				.permission(Permission.EDIT)
 				.required("type", registryEntryParser(RegistryKey.ITEM, TypeToken.get(ItemType.class)))
 				.handler(c -> {
 					modify(c, i -> i.type(c.get("type")));

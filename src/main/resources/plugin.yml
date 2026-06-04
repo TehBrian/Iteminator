@@ -25,21 +25,3 @@ permissions:
   iteminator.edit:
     description: Permission to edit items.
     default: true
-  iteminator.edit.amount:
-    description: Permission to edit amount.
-    default: true
-  iteminator.edit.type:
-    description: Permission to edit type.
-    default: true
-  iteminator.edit.unbreakable:
-    description: Permission to edit unbreakable.
-    default: true
-  iteminator.edit.custom-name:
-    description: Permission to edit custom name.
-    default: true
-  iteminator.edit.item-name:
-    description: Permission to edit item name.
-    default: true
-  iteminator.edit.damage-type:
-    description: Permission to edit damage type.
-    default: true
