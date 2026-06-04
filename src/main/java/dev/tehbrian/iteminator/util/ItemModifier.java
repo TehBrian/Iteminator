@@ -69,8 +69,12 @@ public final class ItemModifier {
 		return this;
 	}
 
-	public <T> ItemModifier modify(final DataComponentType.Valued<T> type, final Function<@Nullable T, T> operator) {
-		return this.set(type, operator.apply(this.get(type)));
+	public <T> ItemModifier modify(final DataComponentType.Valued<T> type, final Function<@Nullable T, @Nullable T> operator) {
+		final T data = operator.apply(this.get(type));
+		if (data == null) {
+			return this;
+		}
+		return this.set(type, data);
 	}
 
 }
