@@ -29,13 +29,18 @@ public final class IteminatorCommand {
 
 	public void register(final PaperCommandManager<Source> commandManager) {
 		final var cMain = commandManager.commandBuilder("iteminator", "ia")
-				.commandDescription(description("Edit modern items with ease."));
+				.commandDescription(description("Access the Iteminator."));
 
 		this.metaCommands.register(commandManager, cMain);
 
-		final var cPlayer = cMain.senderType(PlayerSource.class);
-		this.itemStackCommands.register(commandManager, cPlayer);
-		this.dataComponentCommands.register(commandManager, cPlayer);
+		final var cEdit = cMain.literal("edit")
+				.commandDescription(description("Edit commands with ease."))
+				.senderType(PlayerSource.class);
+
+		this.itemStackCommands.register(commandManager, cEdit);
+		this.dataComponentCommands.register(commandManager, cEdit);
+
+		commandManager.commandBuilder("ie").proxies(cEdit.build());
 	}
 
 }

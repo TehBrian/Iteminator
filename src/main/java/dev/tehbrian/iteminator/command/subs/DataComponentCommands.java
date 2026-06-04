@@ -11,7 +11,6 @@ import org.bukkit.damage.DamageType;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.PaperCommandManager;
-import org.incendo.cloud.paper.parser.RegistryEntryParser;
 import org.incendo.cloud.paper.parser.RegistryEntryParser.RegistryEntry;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.paper.util.sender.Source;
@@ -56,91 +55,86 @@ public final class DataComponentCommands {
 			final PaperCommandManager<Source> commandManager,
 			final Command.Builder<PlayerSource> parent
 	) {
-		final var cSet = parent.literal("set")
-				.commandDescription(description("Set a data component."));
+		final var cUnbreakable = parent.literal("unbreakable")
+				.commandDescription(description("Edit unbreakable."))
+				.permission(Permission.UNBREAKABLE);
 
-		final var cUnset = parent.literal("unset")
-				.commandDescription(description("Unset a data component."));
-
-		final var cReset = parent.literal("reset")
-				.commandDescription(description("Reset a data component."));
-
-		final var cSetUnbreakable = cSet.literal("unbreakable")
+		final var cUnbreakableSet = cUnbreakable.literal("set")
 				.commandDescription(description("Set unbreakable."))
-				.permission(Permission.UNBREAKABLE)
 				.handler(c -> modify(c, i -> i.set(UNBREAKABLE)));
 
-		final var cUnsetUnbreakable = cUnset.literal("unbreakable")
+		final var cUnbreakableUnset = cUnbreakable.literal("unset")
 				.commandDescription(description("Unset unbreakable."))
-				.permission(Permission.UNBREAKABLE)
 				.handler(c -> modify(c, i -> i.unset(UNBREAKABLE)));
 
-		final var cResetUnbreakable = cReset.literal("unbreakable")
+		final var cUnbreakableReset = cUnbreakable.literal("reset")
 				.commandDescription(description("Reset unbreakable."))
-				.permission(Permission.UNBREAKABLE)
 				.handler(c -> modify(c, i -> i.reset(UNBREAKABLE)));
 
-		final var cSetCustomName = cSet.literal("custom-name")
-				.commandDescription(description("Set custom name."))
-				.permission(Permission.CUSTOM_NAME)
-				.optional("value", greedyStringParser(), constant(""))
-				.handler(c -> modify(c, i -> i.set(CUSTOM_NAME, userFormat(c, c.get("value")))));
+		final var cCustomName = parent.literal("custom-name")
+				.commandDescription(description("Edit custom name."))
+				.permission(Permission.CUSTOM_NAME);
 
-		final var cUnsetCustomName = cUnset.literal("custom-name")
+		final var cCustomNameSet = cCustomName.literal("set")
+				.commandDescription(description("Set custom name."))
+				.optional("value", greedyStringParser(), constant(""))
+				.handler(c -> modify(c, i -> i.set(CUSTOM_NAME, this.userFormat(c, c.get("value")))));
+
+		final var cCustomNameUnset = cCustomName.literal("unset")
 				.commandDescription(description("Unset custom name."))
-				.permission(Permission.CUSTOM_NAME)
 				.handler(c -> modify(c, i -> i.unset(CUSTOM_NAME)));
 
-		final var cResetCustomName = cReset.literal("custom-name")
+		final var cCustomNameReset = cCustomName.literal("reset")
 				.commandDescription(description("Reset custom name."))
-				.permission(Permission.CUSTOM_NAME)
 				.handler(c -> modify(c, i -> i.reset(CUSTOM_NAME)));
 
-		final var cSetItemName = cSet.literal("item-name")
-				.commandDescription(description("Set item name."))
-				.permission(Permission.ITEM_NAME)
-				.optional("value", greedyStringParser(), constant(""))
-				.handler(c -> modify(c, i -> i.set(ITEM_NAME, userFormat(c, c.get("value")))));
+		final var cItemName = parent.literal("item-name")
+				.commandDescription(description("Edit item name."))
+				.permission(Permission.ITEM_NAME);
 
-		final var cUnsetItemName = cUnset.literal("item-name")
+		final var cItemNameSet = cItemName.literal("set")
+				.commandDescription(description("Set item name."))
+				.optional("value", greedyStringParser(), constant(""))
+				.handler(c -> modify(c, i -> i.set(ITEM_NAME, this.userFormat(c, c.get("value")))));
+
+		final var cItemNameUnset = cItemName.literal("unset")
 				.commandDescription(description("Unset item name."))
-				.permission(Permission.ITEM_NAME)
 				.handler(c -> modify(c, i -> i.unset(ITEM_NAME)));
 
-		final var cResetItemName = cReset.literal("item-name")
+		final var cItemNameReset = cItemName.literal("reset")
 				.commandDescription(description("Reset item name."))
-				.permission(Permission.ITEM_NAME)
 				.handler(c -> modify(c, i -> i.reset(ITEM_NAME)));
 
-		final var cSetDamageType = cSet.literal("damage-type")
+		final var cDamageType = parent.literal("damage-type")
+				.commandDescription(description("Edit damage type."))
+				.permission(Permission.DAMAGE_TYPE);
+
+		final var cDamageTypeSet = cDamageType.literal("set")
 				.commandDescription(description("Set damage type."))
-				.permission(Permission.DAMAGE_TYPE)
 				.required("value", registryEntryParser(RegistryKey.DAMAGE_TYPE, TypeToken.get(DamageType.class)))
 				.handler(c -> modify(c, i -> i.set(DAMAGE_TYPE, c.<RegistryEntry<DamageType>>get("value").value())));
 
-		final var cUnsetDamageType = cUnset.literal("damage-type")
+		final var cDamageTypeUnset = cDamageType.literal("unset")
 				.commandDescription(description("Unset damage type."))
-				.permission(Permission.DAMAGE_TYPE)
 				.handler(c -> modify(c, i -> i.unset(DAMAGE_TYPE)));
 
-		final var cResetDamageType = cReset.literal("damage-type")
+		final var cDamageTypeReset = cDamageType.literal("reset")
 				.commandDescription(description("Reset damage type."))
-				.permission(Permission.DAMAGE_TYPE)
 				.handler(c -> modify(c, i -> i.reset(DAMAGE_TYPE)));
 
 		commandManager
-				.command(cSetUnbreakable)
-				.command(cUnsetUnbreakable)
-				.command(cResetUnbreakable)
-				.command(cSetCustomName)
-				.command(cUnsetCustomName)
-				.command(cResetCustomName)
-				.command(cSetItemName)
-				.command(cUnsetItemName)
-				.command(cResetItemName)
-				.command(cSetDamageType)
-				.command(cUnsetDamageType)
-				.command(cResetDamageType);
+				.command(cUnbreakableSet)
+				.command(cUnbreakableUnset)
+				.command(cUnbreakableReset)
+				.command(cCustomNameSet)
+				.command(cCustomNameUnset)
+				.command(cCustomNameReset)
+				.command(cItemNameSet)
+				.command(cItemNameUnset)
+				.command(cItemNameReset)
+				.command(cDamageTypeSet)
+				.command(cDamageTypeUnset)
+				.command(cDamageTypeReset);
 	}
 
 }
