@@ -11,6 +11,8 @@ import org.bukkit.damage.DamageType;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.parser.RegistryEntryParser;
+import org.incendo.cloud.paper.parser.RegistryEntryParser.RegistryEntry;
 import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.incendo.cloud.paper.util.sender.Source;
 
@@ -114,7 +116,7 @@ public final class DataComponentCommands {
 				.commandDescription(description("Set damage type."))
 				.permission(Permission.DAMAGE_TYPE)
 				.required("value", registryEntryParser(RegistryKey.DAMAGE_TYPE, TypeToken.get(DamageType.class)))
-				.handler(c -> modify(c, i -> i.set(DAMAGE_TYPE, c.get("value"))));
+				.handler(c -> modify(c, i -> i.set(DAMAGE_TYPE, c.<RegistryEntry<DamageType>>get("value").value())));
 
 		final var cUnsetDamageType = cUnset.literal("damage-type")
 				.commandDescription(description("Unset damage type."))
