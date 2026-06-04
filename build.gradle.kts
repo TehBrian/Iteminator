@@ -18,17 +18,15 @@ repositories {
 	mavenCentral()
 	maven("https://repo.papermc.io/repository/maven-public/")
 	maven("https://repo.tehbrian.dev/releases/")
-	maven("https://repo.broccol.ai/snapshots/")
 }
 
 dependencies {
 	compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
-	implementation("love.broccolai.corn:corn-minecraft:4.1.0-SNAPSHOT")
 	implementation("org.incendo:cloud-paper:2.0.0-beta.15")
 	implementation("org.incendo:cloud-minecraft-extras:2.0.0-beta.15")
 	implementation("org.bstats:bstats-bukkit:3.2.1")
 	implementation("com.google.inject:guice:7.0.0")
-	implementation("dev.tehbrian:agna-paper:1.0.1")
+	implementation("dev.tehbrian:agna-paper:1.0.6")
 	implementation("org.spongepowered:configurate-hocon:4.2.0")
 
 	testImplementation("io.papermc.paper:paper-api:26.1.2.build.+")
